@@ -1,0 +1,3 @@
+/home/vika/Рабочий стол/ppois/lab1/task2/out/build/turing/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
+/home/vika/Рабочий стол/ppois/lab1/task2/out/build/turing/_deps/googletest-subbuild/CMakeFiles/edit_cache.dir
+/home/vika/Рабочий стол/ppois/lab1/task2/out/build/turing/_deps/googletest-subbuild/CMakeFiles/rebuild_cache.dir

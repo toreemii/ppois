@@ -1,0 +1,64 @@
+Start testing: Oct 03 23:51 +03
+----------------------------------------------------------
+1/1 Testing: AllTests
+1/1 Test: AllTests
+Command: "/home/vika/Рабочий стол/ppois/lab1/task2/tests"
+Directory: /home/vika/Рабочий стол/ppois/lab1/task2
+"AllTests" start time: Oct 03 23:51 +03
+Output:
+----------------------------------------------------------
+[==========] Running 15 tests from 3 test suites.
+[----------] Global test environment set-up.
+[----------] 8 tests from TuringMachineTest
+[ RUN      ] TuringMachineTest.SingleIteration
+[       OK ] TuringMachineTest.SingleIteration (0 ms)
+[ RUN      ] TuringMachineTest.MultipleIterations
+[       OK ] TuringMachineTest.MultipleIterations (0 ms)
+[ RUN      ] TuringMachineTest.NoMatchingRule
+[       OK ] TuringMachineTest.NoMatchingRule (0 ms)
+[ RUN      ] TuringMachineTest.MoveRight
+[       OK ] TuringMachineTest.MoveRight (0 ms)
+[ RUN      ] TuringMachineTest.MoveLeft
+[       OK ] TuringMachineTest.MoveLeft (0 ms)
+[ RUN      ] TuringMachineTest.ConstructorAndRead
+[       OK ] TuringMachineTest.ConstructorAndRead (0 ms)
+[ RUN      ] TuringMachineTest.AddElement
+[       OK ] TuringMachineTest.AddElement (0 ms)
+[ RUN      ] TuringMachineTest.SetElementAndState
+[       OK ] TuringMachineTest.SetElementAndState (0 ms)
+[----------] 8 tests from TuringMachineTest (0 ms total)
+
+[----------] 6 tests from RulesTableTest
+[ RUN      ] RulesTableTest.MultipleRules
+[       OK ] RulesTableTest.MultipleRules (0 ms)
+[ RUN      ] RulesTableTest.PrintTable
+[       OK ] RulesTableTest.PrintTable (0 ms)
+[ RUN      ] RulesTableTest.DeleteRuleEmptyTable
+[       OK ] RulesTableTest.DeleteRuleEmptyTable (0 ms)
+[ RUN      ] RulesTableTest.DeleteRule
+Подходящего правила нет.
+[       OK ] RulesTableTest.DeleteRule (0 ms)
+[ RUN      ] RulesTableTest.AddAndFindRule
+[       OK ] RulesTableTest.AddAndFindRule (0 ms)
+[ RUN      ] RulesTableTest.RuleNotFound
+Подходящего правила нет.
+[       OK ] RulesTableTest.RuleNotFound (0 ms)
+[----------] 6 tests from RulesTableTest (0 ms total)
+
+[----------] 1 test from InputCheckTest
+[ RUN      ] InputCheckTest.InputIntValid
+[       OK ] InputCheckTest.InputIntValid (0 ms)
+[----------] 1 test from InputCheckTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 15 tests from 3 test suites ran. (0 ms total)
+[  PASSED  ] 15 tests.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"AllTests" end time: Oct 03 23:51 +03
+"AllTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 03 23:51 +03

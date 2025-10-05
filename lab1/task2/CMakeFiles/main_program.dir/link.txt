@@ -1,0 +1,1 @@
+/usr/bin/c++ -g -fprofile-arcs -ftest-coverage -g -O0  -fprofile-arcs -lgcov CMakeFiles/main_program.dir/main.cpp.o CMakeFiles/main_program.dir/TuringMachine.cpp.o CMakeFiles/main_program.dir/RulesTable.cpp.o CMakeFiles/main_program.dir/InputCheck.cpp.o CMakeFiles/main_program.dir/Menu.cpp.o -o main_program 

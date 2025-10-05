@@ -1,0 +1,1705 @@
+\doxysection{gmock-\/matchers-\/arithmetic\+\_\+test.cc}
+\hypertarget{gmock-matchers-arithmetic__test_8cc_source}{}\label{gmock-matchers-arithmetic__test_8cc_source}\index{googletest/googlemock/test/gmock-\/matchers-\/arithmetic\_test.cc@{googletest/googlemock/test/gmock-\/matchers-\/arithmetic\_test.cc}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ 2007,\ Google\ Inc.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ All\ rights\ reserved.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ Redistribution\ and\ use\ in\ source\ and\ binary\ forms,\ with\ or\ without}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ modification,\ are\ permitted\ provided\ that\ the\ following\ conditions\ are}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ met:}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ \ \ \ *\ Redistributions\ of\ source\ code\ must\ retain\ the\ above\ copyright}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ notice,\ this\ list\ of\ conditions\ and\ the\ following\ disclaimer.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ \ \ \ *\ Redistributions\ in\ binary\ form\ must\ reproduce\ the\ above}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ copyright\ notice,\ this\ list\ of\ conditions\ and\ the\ following\ disclaimer}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ in\ the\ documentation\ and/or\ other\ materials\ provided\ with\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ distribution.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ \ \ \ \ *\ Neither\ the\ name\ of\ Google\ Inc.\ nor\ the\ names\ of\ its}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ contributors\ may\ be\ used\ to\ endorse\ or\ promote\ products\ derived\ from}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ this\ software\ without\ specific\ prior\ written\ permission.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\ THIS\ SOFTWARE\ IS\ PROVIDED\ BY\ THE\ COPYRIGHT\ HOLDERS\ AND\ CONTRIBUTORS}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ "{}AS\ IS"{}\ AND\ ANY\ EXPRESS\ OR\ IMPLIED\ WARRANTIES,\ INCLUDING,\ BUT\ NOT}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ LIMITED\ TO,\ THE\ IMPLIED\ WARRANTIES\ OF\ MERCHANTABILITY\ AND\ FITNESS\ FOR}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\ A\ PARTICULAR\ PURPOSE\ ARE\ DISCLAIMED.\ IN\ NO\ EVENT\ SHALL\ THE\ COPYRIGHT}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ OWNER\ OR\ CONTRIBUTORS\ BE\ LIABLE\ FOR\ ANY\ DIRECT,\ INDIRECT,\ INCIDENTAL,}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ SPECIAL,\ EXEMPLARY,\ OR\ CONSEQUENTIAL\ DAMAGES\ (INCLUDING,\ BUT\ NOT}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\ LIMITED\ TO,\ PROCUREMENT\ OF\ SUBSTITUTE\ GOODS\ OR\ SERVICES;\ LOSS\ OF\ USE,}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\ DATA,\ OR\ PROFITS;\ OR\ BUSINESS\ INTERRUPTION)\ HOWEVER\ CAUSED\ AND\ ON\ ANY}}
+\DoxyCodeLine{00026\ \textcolor{comment}{//\ THEORY\ OF\ LIABILITY,\ WHETHER\ IN\ CONTRACT,\ STRICT\ LIABILITY,\ OR\ TORT}}
+\DoxyCodeLine{00027\ \textcolor{comment}{//\ (INCLUDING\ NEGLIGENCE\ OR\ OTHERWISE)\ ARISING\ IN\ ANY\ WAY\ OUT\ OF\ THE\ USE}}
+\DoxyCodeLine{00028\ \textcolor{comment}{//\ OF\ THIS\ SOFTWARE,\ EVEN\ IF\ ADVISED\ OF\ THE\ POSSIBILITY\ OF\ SUCH\ DAMAGE.}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{//\ Google\ Mock\ -\/\ a\ framework\ for\ writing\ C++\ mock\ classes.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{//}}
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ This\ file\ tests\ some\ commonly\ used\ argument\ matchers.}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ <ostream>}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#include\ "{}gmock/gmock.h"{}}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#include\ "{}test/gmock-\/matchers\_test.h"{}}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#include\ "{}gtest/gtest.h"{}}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{comment}{//\ Silence\ warning\ C4244:\ 'initializing':\ conversion\ from\ 'int'\ to\ 'short',}}
+\DoxyCodeLine{00045\ \textcolor{comment}{//\ possible\ loss\ of\ data\ and\ C4100,\ unreferenced\ local\ parameter}}
+\DoxyCodeLine{00046\ GTEST\_DISABLE\_MSC\_WARNINGS\_PUSH\_(4244\ 4100)}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ namespace\ testing\ \{}
+\DoxyCodeLine{00049\ \textcolor{keyword}{namespace\ }gmock\_matchers\_test\ \{}
+\DoxyCodeLine{00050\ \textcolor{keyword}{namespace\ }\{}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ typedef\ ::std::tuple<long,\ int>\ Tuple2;\ \ \textcolor{comment}{//\ NOLINT}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \textcolor{comment}{//\ Tests\ that\ Eq()\ matches\ a\ 2-\/tuple\ where\ the\ first\ field\ ==\ the}}
+\DoxyCodeLine{00055\ \textcolor{comment}{//\ second\ field.}}
+\DoxyCodeLine{00056\ TEST(Eq2Test,\ MatchesEqualArguments)\ \{}
+\DoxyCodeLine{00057\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Eq();}
+\DoxyCodeLine{00058\ \ \ EXPECT\_TRUE(m.Matches(Tuple2(5L,\ 5)));}
+\DoxyCodeLine{00059\ \ \ EXPECT\_FALSE(m.Matches(Tuple2(5L,\ 6)));}
+\DoxyCodeLine{00060\ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{comment}{//\ Tests\ that\ Eq()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00063\ TEST(Eq2Test,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00064\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Eq();}
+\DoxyCodeLine{00065\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ an\ equal\ pair"{}},\ Describe(m));}
+\DoxyCodeLine{00066\ \}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{comment}{//\ Tests\ that\ Ge()\ matches\ a\ 2-\/tuple\ where\ the\ first\ field\ >=\ the}}
+\DoxyCodeLine{00069\ \textcolor{comment}{//\ second\ field.}}
+\DoxyCodeLine{00070\ TEST(Ge2Test,\ MatchesGreaterThanOrEqualArguments)\ \{}
+\DoxyCodeLine{00071\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Ge();}
+\DoxyCodeLine{00072\ \ \ EXPECT\_TRUE(m.Matches(Tuple2(5L,\ 4)));}
+\DoxyCodeLine{00073\ \ \ EXPECT\_TRUE(m.Matches(Tuple2(5L,\ 5)));}
+\DoxyCodeLine{00074\ \ \ EXPECT\_FALSE(m.Matches(Tuple2(5L,\ 6)));}
+\DoxyCodeLine{00075\ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{comment}{//\ Tests\ that\ Ge()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00078\ TEST(Ge2Test,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00079\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Ge();}
+\DoxyCodeLine{00080\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ a\ pair\ where\ the\ first\ >=\ the\ second"{}},\ Describe(m));}
+\DoxyCodeLine{00081\ \}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{comment}{//\ Tests\ that\ Gt()\ matches\ a\ 2-\/tuple\ where\ the\ first\ field\ >\ the}}
+\DoxyCodeLine{00084\ \textcolor{comment}{//\ second\ field.}}
+\DoxyCodeLine{00085\ TEST(Gt2Test,\ MatchesGreaterThanArguments)\ \{}
+\DoxyCodeLine{00086\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Gt();}
+\DoxyCodeLine{00087\ \ \ EXPECT\_TRUE(m.Matches(Tuple2(5L,\ 4)));}
+\DoxyCodeLine{00088\ \ \ EXPECT\_FALSE(m.Matches(Tuple2(5L,\ 5)));}
+\DoxyCodeLine{00089\ \ \ EXPECT\_FALSE(m.Matches(Tuple2(5L,\ 6)));}
+\DoxyCodeLine{00090\ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{comment}{//\ Tests\ that\ Gt()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00093\ TEST(Gt2Test,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00094\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Gt();}
+\DoxyCodeLine{00095\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ a\ pair\ where\ the\ first\ >\ the\ second"{}},\ Describe(m));}
+\DoxyCodeLine{00096\ \}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \textcolor{comment}{//\ Tests\ that\ Le()\ matches\ a\ 2-\/tuple\ where\ the\ first\ field\ <=\ the}}
+\DoxyCodeLine{00099\ \textcolor{comment}{//\ second\ field.}}
+\DoxyCodeLine{00100\ TEST(Le2Test,\ MatchesLessThanOrEqualArguments)\ \{}
+\DoxyCodeLine{00101\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Le();}
+\DoxyCodeLine{00102\ \ \ EXPECT\_TRUE(m.Matches(Tuple2(5L,\ 6)));}
+\DoxyCodeLine{00103\ \ \ EXPECT\_TRUE(m.Matches(Tuple2(5L,\ 5)));}
+\DoxyCodeLine{00104\ \ \ EXPECT\_FALSE(m.Matches(Tuple2(5L,\ 4)));}
+\DoxyCodeLine{00105\ \}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \textcolor{comment}{//\ Tests\ that\ Le()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00108\ TEST(Le2Test,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00109\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Le();}
+\DoxyCodeLine{00110\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ a\ pair\ where\ the\ first\ <=\ the\ second"{}},\ Describe(m));}
+\DoxyCodeLine{00111\ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \textcolor{comment}{//\ Tests\ that\ Lt()\ matches\ a\ 2-\/tuple\ where\ the\ first\ field\ <\ the}}
+\DoxyCodeLine{00114\ \textcolor{comment}{//\ second\ field.}}
+\DoxyCodeLine{00115\ TEST(Lt2Test,\ MatchesLessThanArguments)\ \{}
+\DoxyCodeLine{00116\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Lt();}
+\DoxyCodeLine{00117\ \ \ EXPECT\_TRUE(m.Matches(Tuple2(5L,\ 6)));}
+\DoxyCodeLine{00118\ \ \ EXPECT\_FALSE(m.Matches(Tuple2(5L,\ 5)));}
+\DoxyCodeLine{00119\ \ \ EXPECT\_FALSE(m.Matches(Tuple2(5L,\ 4)));}
+\DoxyCodeLine{00120\ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \textcolor{comment}{//\ Tests\ that\ Lt()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00123\ TEST(Lt2Test,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00124\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Lt();}
+\DoxyCodeLine{00125\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ a\ pair\ where\ the\ first\ <\ the\ second"{}},\ Describe(m));}
+\DoxyCodeLine{00126\ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{comment}{//\ Tests\ that\ Ne()\ matches\ a\ 2-\/tuple\ where\ the\ first\ field\ !=\ the}}
+\DoxyCodeLine{00129\ \textcolor{comment}{//\ second\ field.}}
+\DoxyCodeLine{00130\ TEST(Ne2Test,\ MatchesUnequalArguments)\ \{}
+\DoxyCodeLine{00131\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Ne();}
+\DoxyCodeLine{00132\ \ \ EXPECT\_TRUE(m.Matches(Tuple2(5L,\ 6)));}
+\DoxyCodeLine{00133\ \ \ EXPECT\_TRUE(m.Matches(Tuple2(5L,\ 4)));}
+\DoxyCodeLine{00134\ \ \ EXPECT\_FALSE(m.Matches(Tuple2(5L,\ 5)));}
+\DoxyCodeLine{00135\ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \textcolor{comment}{//\ Tests\ that\ Ne()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00138\ TEST(Ne2Test,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00139\ \ \ Matcher<const\ Tuple2\&>\ m\ =\ Ne();}
+\DoxyCodeLine{00140\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ an\ unequal\ pair"{}},\ Describe(m));}
+\DoxyCodeLine{00141\ \}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ TEST(PairMatchBaseTest,\ WorksWithMoveOnly)\ \{}
+\DoxyCodeLine{00144\ \ \ \textcolor{keyword}{using\ }Pointers\ =\ std::tuple<std::unique\_ptr<int>,\ std::unique\_ptr<int>>;}
+\DoxyCodeLine{00145\ \ \ Matcher<Pointers>\ matcher\ =\ Eq();}
+\DoxyCodeLine{00146\ \ \ Pointers\ pointers;}
+\DoxyCodeLine{00147\ \ \ \textcolor{comment}{//\ Tested\ values\ don't\ matter;\ the\ point\ is\ that\ matcher\ does\ not\ copy\ the}}
+\DoxyCodeLine{00148\ \ \ \textcolor{comment}{//\ matched\ values.}}
+\DoxyCodeLine{00149\ \ \ EXPECT\_TRUE(matcher.Matches(pointers));}
+\DoxyCodeLine{00150\ \}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \textcolor{comment}{//\ Tests\ that\ IsNan()\ matches\ a\ NaN,\ with\ float.}}
+\DoxyCodeLine{00153\ TEST(IsNan,\ FloatMatchesNan)\ \{}
+\DoxyCodeLine{00154\ \ \ \textcolor{keywordtype}{float}\ quiet\_nan\ =\ std::numeric\_limits<float>::quiet\_NaN();}
+\DoxyCodeLine{00155\ \ \ \textcolor{keywordtype}{float}\ other\_nan\ =\ std::nanf(\textcolor{stringliteral}{"{}1"{}});}
+\DoxyCodeLine{00156\ \ \ \textcolor{keywordtype}{float}\ real\_value\ =\ 1.0f;}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ Matcher<float>\ m\ =\ IsNan();}
+\DoxyCodeLine{00159\ \ \ EXPECT\_TRUE(m.Matches(quiet\_nan));}
+\DoxyCodeLine{00160\ \ \ EXPECT\_TRUE(m.Matches(other\_nan));}
+\DoxyCodeLine{00161\ \ \ EXPECT\_FALSE(m.Matches(real\_value));}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ Matcher<float\&>\ m\_ref\ =\ IsNan();}
+\DoxyCodeLine{00164\ \ \ EXPECT\_TRUE(m\_ref.Matches(quiet\_nan));}
+\DoxyCodeLine{00165\ \ \ EXPECT\_TRUE(m\_ref.Matches(other\_nan));}
+\DoxyCodeLine{00166\ \ \ EXPECT\_FALSE(m\_ref.Matches(real\_value));}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ Matcher<const\ float\&>\ m\_cref\ =\ IsNan();}
+\DoxyCodeLine{00169\ \ \ EXPECT\_TRUE(m\_cref.Matches(quiet\_nan));}
+\DoxyCodeLine{00170\ \ \ EXPECT\_TRUE(m\_cref.Matches(other\_nan));}
+\DoxyCodeLine{00171\ \ \ EXPECT\_FALSE(m\_cref.Matches(real\_value));}
+\DoxyCodeLine{00172\ \}}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \textcolor{comment}{//\ Tests\ that\ IsNan()\ matches\ a\ NaN,\ with\ double.}}
+\DoxyCodeLine{00175\ TEST(IsNan,\ DoubleMatchesNan)\ \{}
+\DoxyCodeLine{00176\ \ \ \textcolor{keywordtype}{double}\ quiet\_nan\ =\ std::numeric\_limits<double>::quiet\_NaN();}
+\DoxyCodeLine{00177\ \ \ \textcolor{keywordtype}{double}\ other\_nan\ =\ std::nan(\textcolor{stringliteral}{"{}1"{}});}
+\DoxyCodeLine{00178\ \ \ \textcolor{keywordtype}{double}\ real\_value\ =\ 1.0;}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ Matcher<double>\ m\ =\ IsNan();}
+\DoxyCodeLine{00181\ \ \ EXPECT\_TRUE(m.Matches(quiet\_nan));}
+\DoxyCodeLine{00182\ \ \ EXPECT\_TRUE(m.Matches(other\_nan));}
+\DoxyCodeLine{00183\ \ \ EXPECT\_FALSE(m.Matches(real\_value));}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ Matcher<double\&>\ m\_ref\ =\ IsNan();}
+\DoxyCodeLine{00186\ \ \ EXPECT\_TRUE(m\_ref.Matches(quiet\_nan));}
+\DoxyCodeLine{00187\ \ \ EXPECT\_TRUE(m\_ref.Matches(other\_nan));}
+\DoxyCodeLine{00188\ \ \ EXPECT\_FALSE(m\_ref.Matches(real\_value));}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ Matcher<const\ double\&>\ m\_cref\ =\ IsNan();}
+\DoxyCodeLine{00191\ \ \ EXPECT\_TRUE(m\_cref.Matches(quiet\_nan));}
+\DoxyCodeLine{00192\ \ \ EXPECT\_TRUE(m\_cref.Matches(other\_nan));}
+\DoxyCodeLine{00193\ \ \ EXPECT\_FALSE(m\_cref.Matches(real\_value));}
+\DoxyCodeLine{00194\ \}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \textcolor{comment}{//\ Tests\ that\ IsNan()\ matches\ a\ NaN,\ with\ long\ double.}}
+\DoxyCodeLine{00197\ TEST(IsNan,\ LongDoubleMatchesNan)\ \{}
+\DoxyCodeLine{00198\ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ quiet\_nan\ =\ std::numeric\_limits<long\ double>::quiet\_NaN();}
+\DoxyCodeLine{00199\ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ other\_nan\ =\ std::nan(\textcolor{stringliteral}{"{}1"{}});}
+\DoxyCodeLine{00200\ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{double}\ real\_value\ =\ 1.0;}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ Matcher<long\ double>\ m\ =\ IsNan();}
+\DoxyCodeLine{00203\ \ \ EXPECT\_TRUE(m.Matches(quiet\_nan));}
+\DoxyCodeLine{00204\ \ \ EXPECT\_TRUE(m.Matches(other\_nan));}
+\DoxyCodeLine{00205\ \ \ EXPECT\_FALSE(m.Matches(real\_value));}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ Matcher<long\ double\&>\ m\_ref\ =\ IsNan();}
+\DoxyCodeLine{00208\ \ \ EXPECT\_TRUE(m\_ref.Matches(quiet\_nan));}
+\DoxyCodeLine{00209\ \ \ EXPECT\_TRUE(m\_ref.Matches(other\_nan));}
+\DoxyCodeLine{00210\ \ \ EXPECT\_FALSE(m\_ref.Matches(real\_value));}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ Matcher<const\ long\ double\&>\ m\_cref\ =\ IsNan();}
+\DoxyCodeLine{00213\ \ \ EXPECT\_TRUE(m\_cref.Matches(quiet\_nan));}
+\DoxyCodeLine{00214\ \ \ EXPECT\_TRUE(m\_cref.Matches(other\_nan));}
+\DoxyCodeLine{00215\ \ \ EXPECT\_FALSE(m\_cref.Matches(real\_value));}
+\DoxyCodeLine{00216\ \}}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \textcolor{comment}{//\ Tests\ that\ IsNan()\ works\ with\ Not.}}
+\DoxyCodeLine{00219\ TEST(IsNan,\ NotMatchesNan)\ \{}
+\DoxyCodeLine{00220\ \ \ Matcher<float>\ mf\ =\ Not(IsNan());}
+\DoxyCodeLine{00221\ \ \ EXPECT\_FALSE(mf.Matches(std::numeric\_limits<float>::quiet\_NaN()));}
+\DoxyCodeLine{00222\ \ \ EXPECT\_FALSE(mf.Matches(std::nanf(\textcolor{stringliteral}{"{}1"{}})));}
+\DoxyCodeLine{00223\ \ \ EXPECT\_TRUE(mf.Matches(1.0));}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ Matcher<double>\ md\ =\ Not(IsNan());}
+\DoxyCodeLine{00226\ \ \ EXPECT\_FALSE(md.Matches(std::numeric\_limits<double>::quiet\_NaN()));}
+\DoxyCodeLine{00227\ \ \ EXPECT\_FALSE(md.Matches(std::nan(\textcolor{stringliteral}{"{}1"{}})));}
+\DoxyCodeLine{00228\ \ \ EXPECT\_TRUE(md.Matches(1.0));}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ Matcher<long\ double>\ mld\ =\ Not(IsNan());}
+\DoxyCodeLine{00231\ \ \ EXPECT\_FALSE(mld.Matches(std::numeric\_limits<long\ double>::quiet\_NaN()));}
+\DoxyCodeLine{00232\ \ \ EXPECT\_FALSE(mld.Matches(std::nanl(\textcolor{stringliteral}{"{}1"{}})));}
+\DoxyCodeLine{00233\ \ \ EXPECT\_TRUE(mld.Matches(1.0));}
+\DoxyCodeLine{00234\ \}}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \textcolor{comment}{//\ Tests\ that\ IsNan()\ can\ describe\ itself.}}
+\DoxyCodeLine{00237\ TEST(IsNan,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00238\ \ \ Matcher<float>\ mf\ =\ IsNan();}
+\DoxyCodeLine{00239\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ NaN"{}},\ Describe(mf));}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ Matcher<double>\ md\ =\ IsNan();}
+\DoxyCodeLine{00242\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ NaN"{}},\ Describe(md));}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ Matcher<long\ double>\ mld\ =\ IsNan();}
+\DoxyCodeLine{00245\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ NaN"{}},\ Describe(mld));}
+\DoxyCodeLine{00246\ \}}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \textcolor{comment}{//\ Tests\ that\ IsNan()\ can\ describe\ itself\ with\ Not.}}
+\DoxyCodeLine{00249\ TEST(IsNan,\ CanDescribeSelfWithNot)\ \{}
+\DoxyCodeLine{00250\ \ \ Matcher<float>\ mf\ =\ Not(IsNan());}
+\DoxyCodeLine{00251\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ NaN"{}},\ Describe(mf));}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ Matcher<double>\ md\ =\ Not(IsNan());}
+\DoxyCodeLine{00254\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ NaN"{}},\ Describe(md));}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ Matcher<long\ double>\ mld\ =\ Not(IsNan());}
+\DoxyCodeLine{00257\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ NaN"{}},\ Describe(mld));}
+\DoxyCodeLine{00258\ \}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \textcolor{comment}{//\ Tests\ that\ FloatEq()\ matches\ a\ 2-\/tuple\ where}}
+\DoxyCodeLine{00261\ \textcolor{comment}{//\ FloatEq(first\ field)\ matches\ the\ second\ field.}}
+\DoxyCodeLine{00262\ TEST(FloatEq2Test,\ MatchesEqualArguments)\ \{}
+\DoxyCodeLine{00263\ \ \ typedef\ ::std::tuple<float,\ float>\ Tpl;}
+\DoxyCodeLine{00264\ \ \ Matcher<const\ Tpl\&>\ m\ =\ FloatEq();}
+\DoxyCodeLine{00265\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.0f,\ 1.0f)));}
+\DoxyCodeLine{00266\ \ \ EXPECT\_TRUE(m.Matches(Tpl(0.3f,\ 0.1f\ +\ 0.1f\ +\ 0.1f)));}
+\DoxyCodeLine{00267\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.1f,\ 1.0f)));}
+\DoxyCodeLine{00268\ \}}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \textcolor{comment}{//\ Tests\ that\ FloatEq()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00271\ TEST(FloatEq2Test,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00272\ \ \ Matcher<const\ ::std::tuple<float,\ float>\&>\ m\ =\ FloatEq();}
+\DoxyCodeLine{00273\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ an\ almost-\/equal\ pair"{}},\ Describe(m));}
+\DoxyCodeLine{00274\ \}}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \textcolor{comment}{//\ Tests\ that\ NanSensitiveFloatEq()\ matches\ a\ 2-\/tuple\ where}}
+\DoxyCodeLine{00277\ \textcolor{comment}{//\ NanSensitiveFloatEq(first\ field)\ matches\ the\ second\ field.}}
+\DoxyCodeLine{00278\ TEST(NanSensitiveFloatEqTest,\ MatchesEqualArgumentsWithNaN)\ \{}
+\DoxyCodeLine{00279\ \ \ typedef\ ::std::tuple<float,\ float>\ Tpl;}
+\DoxyCodeLine{00280\ \ \ Matcher<const\ Tpl\&>\ m\ =\ NanSensitiveFloatEq();}
+\DoxyCodeLine{00281\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.0f,\ 1.0f)));}
+\DoxyCodeLine{00282\ \ \ EXPECT\_TRUE(m.Matches(Tpl(std::numeric\_limits<float>::quiet\_NaN(),}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::numeric\_limits<float>::quiet\_NaN())));}
+\DoxyCodeLine{00284\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.1f,\ 1.0f)));}
+\DoxyCodeLine{00285\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.0f,\ std::numeric\_limits<float>::quiet\_NaN())));}
+\DoxyCodeLine{00286\ \ \ EXPECT\_FALSE(m.Matches(Tpl(std::numeric\_limits<float>::quiet\_NaN(),\ 1.0f)));}
+\DoxyCodeLine{00287\ \}}
+\DoxyCodeLine{00288\ }
+\DoxyCodeLine{00289\ \textcolor{comment}{//\ Tests\ that\ NanSensitiveFloatEq()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00290\ TEST(NanSensitiveFloatEqTest,\ CanDescribeSelfWithNaNs)\ \{}
+\DoxyCodeLine{00291\ \ \ Matcher<const\ ::std::tuple<float,\ float>\&>\ m\ =\ NanSensitiveFloatEq();}
+\DoxyCodeLine{00292\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ an\ almost-\/equal\ pair"{}},\ Describe(m));}
+\DoxyCodeLine{00293\ \}}
+\DoxyCodeLine{00294\ }
+\DoxyCodeLine{00295\ \textcolor{comment}{//\ Tests\ that\ DoubleEq()\ matches\ a\ 2-\/tuple\ where}}
+\DoxyCodeLine{00296\ \textcolor{comment}{//\ DoubleEq(first\ field)\ matches\ the\ second\ field.}}
+\DoxyCodeLine{00297\ TEST(DoubleEq2Test,\ MatchesEqualArguments)\ \{}
+\DoxyCodeLine{00298\ \ \ typedef\ ::std::tuple<double,\ double>\ Tpl;}
+\DoxyCodeLine{00299\ \ \ Matcher<const\ Tpl\&>\ m\ =\ DoubleEq();}
+\DoxyCodeLine{00300\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.0,\ 1.0)));}
+\DoxyCodeLine{00301\ \ \ EXPECT\_TRUE(m.Matches(Tpl(0.3,\ 0.1\ +\ 0.1\ +\ 0.1)));}
+\DoxyCodeLine{00302\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.1,\ 1.0)));}
+\DoxyCodeLine{00303\ \}}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \textcolor{comment}{//\ Tests\ that\ DoubleEq()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00306\ TEST(DoubleEq2Test,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00307\ \ \ Matcher<const\ ::std::tuple<double,\ double>\&>\ m\ =\ DoubleEq();}
+\DoxyCodeLine{00308\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ an\ almost-\/equal\ pair"{}},\ Describe(m));}
+\DoxyCodeLine{00309\ \}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \textcolor{comment}{//\ Tests\ that\ NanSensitiveDoubleEq()\ matches\ a\ 2-\/tuple\ where}}
+\DoxyCodeLine{00312\ \textcolor{comment}{//\ NanSensitiveDoubleEq(first\ field)\ matches\ the\ second\ field.}}
+\DoxyCodeLine{00313\ TEST(NanSensitiveDoubleEqTest,\ MatchesEqualArgumentsWithNaN)\ \{}
+\DoxyCodeLine{00314\ \ \ typedef\ ::std::tuple<double,\ double>\ Tpl;}
+\DoxyCodeLine{00315\ \ \ Matcher<const\ Tpl\&>\ m\ =\ NanSensitiveDoubleEq();}
+\DoxyCodeLine{00316\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.0f,\ 1.0f)));}
+\DoxyCodeLine{00317\ \ \ EXPECT\_TRUE(m.Matches(Tpl(std::numeric\_limits<double>::quiet\_NaN(),}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::numeric\_limits<double>::quiet\_NaN())));}
+\DoxyCodeLine{00319\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.1f,\ 1.0f)));}
+\DoxyCodeLine{00320\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.0f,\ std::numeric\_limits<double>::quiet\_NaN())));}
+\DoxyCodeLine{00321\ \ \ EXPECT\_FALSE(m.Matches(Tpl(std::numeric\_limits<double>::quiet\_NaN(),\ 1.0f)));}
+\DoxyCodeLine{00322\ \}}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \textcolor{comment}{//\ Tests\ that\ DoubleEq()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00325\ TEST(NanSensitiveDoubleEqTest,\ CanDescribeSelfWithNaNs)\ \{}
+\DoxyCodeLine{00326\ \ \ Matcher<const\ ::std::tuple<double,\ double>\&>\ m\ =\ NanSensitiveDoubleEq();}
+\DoxyCodeLine{00327\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ an\ almost-\/equal\ pair"{}},\ Describe(m));}
+\DoxyCodeLine{00328\ \}}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \textcolor{comment}{//\ Tests\ that\ FloatEq()\ matches\ a\ 2-\/tuple\ where}}
+\DoxyCodeLine{00331\ \textcolor{comment}{//\ FloatNear(first\ field,\ max\_abs\_error)\ matches\ the\ second\ field.}}
+\DoxyCodeLine{00332\ TEST(FloatNear2Test,\ MatchesEqualArguments)\ \{}
+\DoxyCodeLine{00333\ \ \ typedef\ ::std::tuple<float,\ float>\ Tpl;}
+\DoxyCodeLine{00334\ \ \ Matcher<const\ Tpl\&>\ m\ =\ FloatNear(0.5f);}
+\DoxyCodeLine{00335\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.0f,\ 1.0f)));}
+\DoxyCodeLine{00336\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.3f,\ 1.0f)));}
+\DoxyCodeLine{00337\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.8f,\ 1.0f)));}
+\DoxyCodeLine{00338\ \}}
+\DoxyCodeLine{00339\ }
+\DoxyCodeLine{00340\ \textcolor{comment}{//\ Tests\ that\ FloatNear()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00341\ TEST(FloatNear2Test,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00342\ \ \ Matcher<const\ ::std::tuple<float,\ float>\&>\ m\ =\ FloatNear(0.5f);}
+\DoxyCodeLine{00343\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ an\ almost-\/equal\ pair"{}},\ Describe(m));}
+\DoxyCodeLine{00344\ \}}
+\DoxyCodeLine{00345\ }
+\DoxyCodeLine{00346\ \textcolor{comment}{//\ Tests\ that\ NanSensitiveFloatNear()\ matches\ a\ 2-\/tuple\ where}}
+\DoxyCodeLine{00347\ \textcolor{comment}{//\ NanSensitiveFloatNear(first\ field)\ matches\ the\ second\ field.}}
+\DoxyCodeLine{00348\ TEST(NanSensitiveFloatNearTest,\ MatchesNearbyArgumentsWithNaN)\ \{}
+\DoxyCodeLine{00349\ \ \ typedef\ ::std::tuple<float,\ float>\ Tpl;}
+\DoxyCodeLine{00350\ \ \ Matcher<const\ Tpl\&>\ m\ =\ NanSensitiveFloatNear(0.5f);}
+\DoxyCodeLine{00351\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.0f,\ 1.0f)));}
+\DoxyCodeLine{00352\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.1f,\ 1.0f)));}
+\DoxyCodeLine{00353\ \ \ EXPECT\_TRUE(m.Matches(Tpl(std::numeric\_limits<float>::quiet\_NaN(),}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::numeric\_limits<float>::quiet\_NaN())));}
+\DoxyCodeLine{00355\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.6f,\ 1.0f)));}
+\DoxyCodeLine{00356\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.0f,\ std::numeric\_limits<float>::quiet\_NaN())));}
+\DoxyCodeLine{00357\ \ \ EXPECT\_FALSE(m.Matches(Tpl(std::numeric\_limits<float>::quiet\_NaN(),\ 1.0f)));}
+\DoxyCodeLine{00358\ \}}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \textcolor{comment}{//\ Tests\ that\ NanSensitiveFloatNear()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00361\ TEST(NanSensitiveFloatNearTest,\ CanDescribeSelfWithNaNs)\ \{}
+\DoxyCodeLine{00362\ \ \ Matcher<const\ ::std::tuple<float,\ float>\&>\ m\ =\ NanSensitiveFloatNear(0.5f);}
+\DoxyCodeLine{00363\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ an\ almost-\/equal\ pair"{}},\ Describe(m));}
+\DoxyCodeLine{00364\ \}}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \textcolor{comment}{//\ Tests\ that\ FloatEq()\ matches\ a\ 2-\/tuple\ where}}
+\DoxyCodeLine{00367\ \textcolor{comment}{//\ DoubleNear(first\ field,\ max\_abs\_error)\ matches\ the\ second\ field.}}
+\DoxyCodeLine{00368\ TEST(DoubleNear2Test,\ MatchesEqualArguments)\ \{}
+\DoxyCodeLine{00369\ \ \ typedef\ ::std::tuple<double,\ double>\ Tpl;}
+\DoxyCodeLine{00370\ \ \ Matcher<const\ Tpl\&>\ m\ =\ DoubleNear(0.5);}
+\DoxyCodeLine{00371\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.0,\ 1.0)));}
+\DoxyCodeLine{00372\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.3,\ 1.0)));}
+\DoxyCodeLine{00373\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.8,\ 1.0)));}
+\DoxyCodeLine{00374\ \}}
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00376\ \textcolor{comment}{//\ Tests\ that\ DoubleNear()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00377\ TEST(DoubleNear2Test,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00378\ \ \ Matcher<const\ ::std::tuple<double,\ double>\&>\ m\ =\ DoubleNear(0.5);}
+\DoxyCodeLine{00379\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ an\ almost-\/equal\ pair"{}},\ Describe(m));}
+\DoxyCodeLine{00380\ \}}
+\DoxyCodeLine{00381\ }
+\DoxyCodeLine{00382\ \textcolor{comment}{//\ Tests\ that\ NanSensitiveDoubleNear()\ matches\ a\ 2-\/tuple\ where}}
+\DoxyCodeLine{00383\ \textcolor{comment}{//\ NanSensitiveDoubleNear(first\ field)\ matches\ the\ second\ field.}}
+\DoxyCodeLine{00384\ TEST(NanSensitiveDoubleNearTest,\ MatchesNearbyArgumentsWithNaN)\ \{}
+\DoxyCodeLine{00385\ \ \ typedef\ ::std::tuple<double,\ double>\ Tpl;}
+\DoxyCodeLine{00386\ \ \ Matcher<const\ Tpl\&>\ m\ =\ NanSensitiveDoubleNear(0.5f);}
+\DoxyCodeLine{00387\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.0f,\ 1.0f)));}
+\DoxyCodeLine{00388\ \ \ EXPECT\_TRUE(m.Matches(Tpl(1.1f,\ 1.0f)));}
+\DoxyCodeLine{00389\ \ \ EXPECT\_TRUE(m.Matches(Tpl(std::numeric\_limits<double>::quiet\_NaN(),}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::numeric\_limits<double>::quiet\_NaN())));}
+\DoxyCodeLine{00391\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.6f,\ 1.0f)));}
+\DoxyCodeLine{00392\ \ \ EXPECT\_FALSE(m.Matches(Tpl(1.0f,\ std::numeric\_limits<double>::quiet\_NaN())));}
+\DoxyCodeLine{00393\ \ \ EXPECT\_FALSE(m.Matches(Tpl(std::numeric\_limits<double>::quiet\_NaN(),\ 1.0f)));}
+\DoxyCodeLine{00394\ \}}
+\DoxyCodeLine{00395\ }
+\DoxyCodeLine{00396\ \textcolor{comment}{//\ Tests\ that\ NanSensitiveDoubleNear()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00397\ TEST(NanSensitiveDoubleNearTest,\ CanDescribeSelfWithNaNs)\ \{}
+\DoxyCodeLine{00398\ \ \ Matcher<const\ ::std::tuple<double,\ double>\&>\ m\ =\ NanSensitiveDoubleNear(0.5f);}
+\DoxyCodeLine{00399\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}are\ an\ almost-\/equal\ pair"{}},\ Describe(m));}
+\DoxyCodeLine{00400\ \}}
+\DoxyCodeLine{00401\ }
+\DoxyCodeLine{00402\ \textcolor{comment}{//\ Tests\ that\ DistanceFrom()\ can\ describe\ itself\ properly.}}
+\DoxyCodeLine{00403\ TEST(DistanceFrom,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00404\ \ \ Matcher<double>\ m\ =\ DistanceFrom(1.5,\ Lt(0.1));}
+\DoxyCodeLine{00405\ \ \ EXPECT\_EQ(Describe(m),\ \textcolor{stringliteral}{"{}is\ <\ 0.1\ away\ from\ 1.5"{}});}
+\DoxyCodeLine{00406\ }
+\DoxyCodeLine{00407\ \ \ m\ =\ DistanceFrom(2.5,\ Gt(0.2));}
+\DoxyCodeLine{00408\ \ \ EXPECT\_EQ(Describe(m),\ \textcolor{stringliteral}{"{}is\ >\ 0.2\ away\ from\ 2.5"{}});}
+\DoxyCodeLine{00409\ \}}
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00411\ \textcolor{comment}{//\ Tests\ that\ DistanceFrom()\ can\ explain\ match\ failure.}}
+\DoxyCodeLine{00412\ TEST(DistanceFrom,\ CanExplainMatchFailure)\ \{}
+\DoxyCodeLine{00413\ \ \ Matcher<double>\ m\ =\ DistanceFrom(1.5,\ Lt(0.1));}
+\DoxyCodeLine{00414\ \ \ EXPECT\_EQ(Explain(m,\ 2.0),\ \textcolor{stringliteral}{"{}which\ is\ 0.5\ away\ from\ 1.5"{}});}
+\DoxyCodeLine{00415\ \}}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00417\ \textcolor{comment}{//\ Tests\ that\ DistanceFrom()\ matches\ a\ double\ that\ is\ within\ the\ given\ range\ of}}
+\DoxyCodeLine{00418\ \textcolor{comment}{//\ the\ given\ value.}}
+\DoxyCodeLine{00419\ TEST(DistanceFrom,\ MatchesDoubleWithinRange)\ \{}
+\DoxyCodeLine{00420\ \ \ \textcolor{keyword}{const}\ Matcher<double>\ m\ =\ DistanceFrom(0.5,\ Le(0.1));}
+\DoxyCodeLine{00421\ \ \ EXPECT\_TRUE(m.Matches(0.45));}
+\DoxyCodeLine{00422\ \ \ EXPECT\_TRUE(m.Matches(0.5));}
+\DoxyCodeLine{00423\ \ \ EXPECT\_TRUE(m.Matches(0.55));}
+\DoxyCodeLine{00424\ \ \ EXPECT\_FALSE(m.Matches(0.39));}
+\DoxyCodeLine{00425\ \ \ EXPECT\_FALSE(m.Matches(0.61));}
+\DoxyCodeLine{00426\ \}}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00428\ \textcolor{comment}{//\ Tests\ that\ DistanceFrom()\ matches\ a\ double\ reference\ that\ is\ within\ the\ given}}
+\DoxyCodeLine{00429\ \textcolor{comment}{//\ range\ of\ the\ given\ value.}}
+\DoxyCodeLine{00430\ TEST(DistanceFrom,\ MatchesDoubleRefWithinRange)\ \{}
+\DoxyCodeLine{00431\ \ \ \textcolor{keyword}{const}\ Matcher<const\ double\&>\ m\ =\ DistanceFrom(0.5,\ Le(0.1));}
+\DoxyCodeLine{00432\ \ \ EXPECT\_TRUE(m.Matches(0.45));}
+\DoxyCodeLine{00433\ \ \ EXPECT\_TRUE(m.Matches(0.5));}
+\DoxyCodeLine{00434\ \ \ EXPECT\_TRUE(m.Matches(0.55));}
+\DoxyCodeLine{00435\ \ \ EXPECT\_FALSE(m.Matches(0.39));}
+\DoxyCodeLine{00436\ \ \ EXPECT\_FALSE(m.Matches(0.61));}
+\DoxyCodeLine{00437\ \}}
+\DoxyCodeLine{00438\ }
+\DoxyCodeLine{00439\ \textcolor{comment}{//\ Tests\ that\ DistanceFrom()\ can\ be\ implicitly\ converted\ to\ a\ matcher\ depending}}
+\DoxyCodeLine{00440\ \textcolor{comment}{//\ on\ the\ type\ of\ the\ argument.}}
+\DoxyCodeLine{00441\ TEST(DistanceFrom,\ CanBeImplicitlyConvertedToMatcher)\ \{}
+\DoxyCodeLine{00442\ \ \ EXPECT\_THAT(0.58,\ DistanceFrom(0.5,\ Le(0.1)));}
+\DoxyCodeLine{00443\ \ \ EXPECT\_THAT(0.2,\ Not(DistanceFrom(0.5,\ Le(0.1))));}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ \ \ EXPECT\_THAT(0.58f,\ DistanceFrom(0.5f,\ Le(0.1f)));}
+\DoxyCodeLine{00446\ \ \ EXPECT\_THAT(0.7f,\ Not(DistanceFrom(0.5f,\ Le(0.1f))));}
+\DoxyCodeLine{00447\ \}}
+\DoxyCodeLine{00448\ }
+\DoxyCodeLine{00449\ \textcolor{comment}{//\ Tests\ that\ DistanceFrom()\ can\ be\ used\ on\ compatible\ types\ (i.e.\ not}}
+\DoxyCodeLine{00450\ \textcolor{comment}{//\ everything\ has\ to\ be\ of\ the\ same\ type).}}
+\DoxyCodeLine{00451\ TEST(DistanceFrom,\ CanBeUsedOnCompatibleTypes)\ \{}
+\DoxyCodeLine{00452\ \ \ EXPECT\_THAT(0.58,\ DistanceFrom(0.5,\ Le(0.1f)));}
+\DoxyCodeLine{00453\ \ \ EXPECT\_THAT(0.2,\ Not(DistanceFrom(0.5,\ Le(0.1f))));}
+\DoxyCodeLine{00454\ }
+\DoxyCodeLine{00455\ \ \ EXPECT\_THAT(0.58,\ DistanceFrom(0.5f,\ Le(0.1)));}
+\DoxyCodeLine{00456\ \ \ EXPECT\_THAT(0.2,\ Not(DistanceFrom(0.5f,\ Le(0.1))));}
+\DoxyCodeLine{00457\ }
+\DoxyCodeLine{00458\ \ \ EXPECT\_THAT(0.58,\ DistanceFrom(0.5f,\ Le(0.1f)));}
+\DoxyCodeLine{00459\ \ \ EXPECT\_THAT(0.2,\ Not(DistanceFrom(0.5f,\ Le(0.1f))));}
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ \ \ EXPECT\_THAT(0.58f,\ DistanceFrom(0.5,\ Le(0.1)));}
+\DoxyCodeLine{00462\ \ \ EXPECT\_THAT(0.2f,\ Not(DistanceFrom(0.5,\ Le(0.1))));}
+\DoxyCodeLine{00463\ }
+\DoxyCodeLine{00464\ \ \ EXPECT\_THAT(0.58f,\ DistanceFrom(0.5,\ Le(0.1f)));}
+\DoxyCodeLine{00465\ \ \ EXPECT\_THAT(0.2f,\ Not(DistanceFrom(0.5,\ Le(0.1f))));}
+\DoxyCodeLine{00466\ }
+\DoxyCodeLine{00467\ \ \ EXPECT\_THAT(0.58f,\ DistanceFrom(0.5f,\ Le(0.1)));}
+\DoxyCodeLine{00468\ \ \ EXPECT\_THAT(0.2f,\ Not(DistanceFrom(0.5f,\ Le(0.1))));}
+\DoxyCodeLine{00469\ \}}
+\DoxyCodeLine{00470\ }
+\DoxyCodeLine{00471\ \textcolor{comment}{//\ A\ 2-\/dimensional\ point.\ For\ testing\ using\ DistanceFrom()\ with\ a\ custom\ type}}
+\DoxyCodeLine{00472\ \textcolor{comment}{//\ that\ doesn't\ have\ a\ built-\/in\ distance\ function.}}
+\DoxyCodeLine{00473\ \textcolor{keyword}{class\ }Point\ \{}
+\DoxyCodeLine{00474\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00475\ \ \ Point(\textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ y)\ :\ x\_(x),\ y\_(y)\ \{\}}
+\DoxyCodeLine{00476\ \ \ \textcolor{keywordtype}{double}\ x()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ x\_;\ \}}
+\DoxyCodeLine{00477\ \ \ \textcolor{keywordtype}{double}\ y()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ y\_;\ \}}
+\DoxyCodeLine{00478\ }
+\DoxyCodeLine{00479\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00480\ \ \ \textcolor{keywordtype}{double}\ x\_;}
+\DoxyCodeLine{00481\ \ \ \textcolor{keywordtype}{double}\ y\_;}
+\DoxyCodeLine{00482\ \};}
+\DoxyCodeLine{00483\ }
+\DoxyCodeLine{00484\ \textcolor{comment}{//\ Returns\ the\ distance\ between\ two\ points.}}
+\DoxyCodeLine{00485\ \textcolor{keywordtype}{double}\ PointDistance(\textcolor{keyword}{const}\ Point\&\ lhs,\ \textcolor{keyword}{const}\ Point\&\ rhs)\ \{}
+\DoxyCodeLine{00486\ \ \ \textcolor{keywordflow}{return}\ std::sqrt(std::pow(lhs.x()\ -\/\ rhs.x(),\ 2)\ +}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pow(lhs.y()\ -\/\ rhs.y(),\ 2));}
+\DoxyCodeLine{00488\ \}}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \textcolor{comment}{//\ Tests\ that\ DistanceFrom()\ can\ be\ used\ on\ a\ type\ with\ a\ custom\ distance}}
+\DoxyCodeLine{00491\ \textcolor{comment}{//\ function.}}
+\DoxyCodeLine{00492\ TEST(DistanceFrom,\ CanBeUsedOnTypeWithCustomDistanceFunction)\ \{}
+\DoxyCodeLine{00493\ \ \ \textcolor{keyword}{const}\ Matcher<Point>\ m\ =}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ DistanceFrom(Point(0.5,\ 0.5),\ PointDistance,\ Le(0.1));}
+\DoxyCodeLine{00495\ \ \ EXPECT\_THAT(Point(0.45,\ 0.45),\ m);}
+\DoxyCodeLine{00496\ \ \ EXPECT\_THAT(Point(0.2,\ 0.45),\ Not(m));}
+\DoxyCodeLine{00497\ \}}
+\DoxyCodeLine{00498\ }
+\DoxyCodeLine{00499\ \textcolor{comment}{//\ A\ wrapper\ around\ a\ double\ value.\ For\ testing\ using\ DistanceFrom()\ with\ a}}
+\DoxyCodeLine{00500\ \textcolor{comment}{//\ custom\ type\ that\ has\ neither\ a\ built-\/in\ distance\ function\ nor\ a\ built-\/in}}
+\DoxyCodeLine{00501\ \textcolor{comment}{//\ distance\ comparator.}}
+\DoxyCodeLine{00502\ \textcolor{keyword}{class\ }Double\ \{}
+\DoxyCodeLine{00503\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00504\ \ \ \textcolor{keyword}{explicit}\ Double(\textcolor{keywordtype}{double}\ value)\ :\ value\_(value)\ \{\}}
+\DoxyCodeLine{00505\ \ \ Double(\textcolor{keyword}{const}\ Double\&\ other)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00506\ \ \ \textcolor{keywordtype}{double}\ value()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ value\_;\ \}}
+\DoxyCodeLine{00507\ }
+\DoxyCodeLine{00508\ \ \ \textcolor{comment}{//\ Defines\ how\ to\ print\ a\ Double\ value.\ We\ don't\ use\ the\ AbslStringify\ API}}
+\DoxyCodeLine{00509\ \ \ \textcolor{comment}{//\ because\ googletest\ doesn't\ require\ absl\ yet.}}
+\DoxyCodeLine{00510\ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{void}\ PrintTo(\textcolor{keyword}{const}\ Double\&\ value,\ std::ostream*\ os)\ \{}
+\DoxyCodeLine{00511\ \ \ \ \ *os\ <<\ \textcolor{stringliteral}{"{}Double("{}}\ <<\ value.value()\ <<\ \textcolor{stringliteral}{"{})"{}};}
+\DoxyCodeLine{00512\ \ \ \}}
+\DoxyCodeLine{00513\ }
+\DoxyCodeLine{00514\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00515\ \ \ \textcolor{keywordtype}{double}\ value\_;}
+\DoxyCodeLine{00516\ \};}
+\DoxyCodeLine{00517\ }
+\DoxyCodeLine{00518\ \textcolor{comment}{//\ Returns\ the\ distance\ between\ two\ Double\ values.}}
+\DoxyCodeLine{00519\ Double\ DoubleDistance(Double\ lhs,\ Double\ rhs)\ \{}
+\DoxyCodeLine{00520\ \ \ \textcolor{keywordflow}{return}\ Double(std::abs(lhs.value()\ -\/\ rhs.value()));}
+\DoxyCodeLine{00521\ \}}
+\DoxyCodeLine{00522\ }
+\DoxyCodeLine{00523\ MATCHER\_P(DoubleLe,\ rhs,\ (negation\ ?\ \textcolor{stringliteral}{"{}is\ >\ "{}}\ :\ \textcolor{stringliteral}{"{}is\ <=\ "{}})\ +\ PrintToString(rhs))\ \{}
+\DoxyCodeLine{00524\ \ \ \textcolor{keywordflow}{return}\ arg.value()\ <=\ rhs.value();}
+\DoxyCodeLine{00525\ \}}
+\DoxyCodeLine{00526\ }
+\DoxyCodeLine{00527\ \textcolor{comment}{//\ Tests\ that\ DistanceFrom()\ can\ describe\ itself\ properly\ for\ a\ type\ with\ a}}
+\DoxyCodeLine{00528\ \textcolor{comment}{//\ custom\ printer.}}
+\DoxyCodeLine{00529\ TEST(DistanceFrom,\ CanDescribeWithCustomPrinter)\ \{}
+\DoxyCodeLine{00530\ \ \ \textcolor{keyword}{const}\ Matcher<Double>\ m\ =}
+\DoxyCodeLine{00531\ \ \ \ \ \ \ DistanceFrom(Double(0.5),\ DoubleDistance,\ DoubleLe(Double(0.1)));}
+\DoxyCodeLine{00532\ \ \ EXPECT\_EQ(Describe(m),\ \textcolor{stringliteral}{"{}is\ <=\ Double(0.1)\ away\ from\ Double(0.5)"{}});}
+\DoxyCodeLine{00533\ \ \ EXPECT\_EQ(DescribeNegation(m),\ \textcolor{stringliteral}{"{}is\ >\ Double(0.1)\ away\ from\ Double(0.5)"{}});}
+\DoxyCodeLine{00534\ \}}
+\DoxyCodeLine{00535\ }
+\DoxyCodeLine{00536\ \textcolor{comment}{//\ Tests\ that\ DistanceFrom()\ can\ be\ used\ with\ a\ custom\ distance\ function\ and}}
+\DoxyCodeLine{00537\ \textcolor{comment}{//\ comparator.}}
+\DoxyCodeLine{00538\ TEST(DistanceFrom,\ CanCustomizeDistanceAndComparator)\ \{}
+\DoxyCodeLine{00539\ \ \ \textcolor{keyword}{const}\ Matcher<Double>\ m\ =}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ DistanceFrom(Double(0.5),\ DoubleDistance,\ DoubleLe(Double(0.1)));}
+\DoxyCodeLine{00541\ \ \ EXPECT\_TRUE(m.Matches(Double(0.45)));}
+\DoxyCodeLine{00542\ \ \ EXPECT\_TRUE(m.Matches(Double(0.5)));}
+\DoxyCodeLine{00543\ \ \ EXPECT\_FALSE(m.Matches(Double(0.39)));}
+\DoxyCodeLine{00544\ \ \ EXPECT\_FALSE(m.Matches(Double(0.61)));}
+\DoxyCodeLine{00545\ \}}
+\DoxyCodeLine{00546\ }
+\DoxyCodeLine{00547\ \textcolor{comment}{//\ For\ testing\ using\ DistanceFrom()\ with\ a\ type\ that\ supports\ both\ -\/\ and\ abs.}}
+\DoxyCodeLine{00548\ \textcolor{keyword}{class\ }Float\ \{}
+\DoxyCodeLine{00549\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00550\ \ \ \textcolor{keyword}{explicit}\ Float(\textcolor{keywordtype}{float}\ value)\ :\ value\_(value)\ \{\}}
+\DoxyCodeLine{00551\ \ \ Float(\textcolor{keyword}{const}\ Float\&\ other)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00552\ \ \ \textcolor{keywordtype}{float}\ value()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ value\_;\ \}}
+\DoxyCodeLine{00553\ }
+\DoxyCodeLine{00554\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00555\ \ \ \textcolor{keywordtype}{float}\ value\_\ =\ 0.0f;}
+\DoxyCodeLine{00556\ \};}
+\DoxyCodeLine{00557\ }
+\DoxyCodeLine{00558\ \textcolor{comment}{//\ Returns\ the\ difference\ between\ two\ Float\ values.\ This\ must\ be\ defined\ in\ the}}
+\DoxyCodeLine{00559\ \textcolor{comment}{//\ same\ namespace\ as\ Float.}}
+\DoxyCodeLine{00560\ Float\ operator-\/(\textcolor{keyword}{const}\ Float\&\ lhs,\ \textcolor{keyword}{const}\ Float\&\ rhs)\ \{}
+\DoxyCodeLine{00561\ \ \ \textcolor{keywordflow}{return}\ Float(lhs.value()\ -\/\ rhs.value());}
+\DoxyCodeLine{00562\ \}}
+\DoxyCodeLine{00563\ }
+\DoxyCodeLine{00564\ \textcolor{comment}{//\ Returns\ the\ absolute\ value\ of\ a\ Float\ value.\ This\ must\ be\ defined\ in\ the}}
+\DoxyCodeLine{00565\ \textcolor{comment}{//\ same\ namespace\ as\ Float.}}
+\DoxyCodeLine{00566\ Float\ abs(Float\ value)\ \{\ \textcolor{keywordflow}{return}\ Float(std::abs(value.value()));\ \}}
+\DoxyCodeLine{00567\ }
+\DoxyCodeLine{00568\ \textcolor{comment}{//\ Returns\ true\ if\ and\ only\ if\ the\ first\ Float\ value\ is\ less\ than\ the\ second}}
+\DoxyCodeLine{00569\ \textcolor{comment}{//\ Float\ value.\ This\ must\ be\ defined\ in\ the\ same\ namespace\ as\ Float.}}
+\DoxyCodeLine{00570\ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ Float\&\ lhs,\ \textcolor{keyword}{const}\ Float\&\ rhs)\ \{}
+\DoxyCodeLine{00571\ \ \ \textcolor{keywordflow}{return}\ lhs.value()\ <\ rhs.value();}
+\DoxyCodeLine{00572\ \}}
+\DoxyCodeLine{00573\ }
+\DoxyCodeLine{00574\ \textcolor{comment}{//\ Tests\ that\ DistanceFrom()\ can\ be\ used\ with\ a\ type\ that\ supports\ both\ -\/\ and}}
+\DoxyCodeLine{00575\ \textcolor{comment}{//\ abs.}}
+\DoxyCodeLine{00576\ TEST(DistanceFrom,\ CanBeUsedWithTypeThatSupportsBothMinusAndAbs)\ \{}
+\DoxyCodeLine{00577\ \ \ \textcolor{keyword}{const}\ Matcher<Float>\ m\ =\ DistanceFrom(Float(0.5f),\ Lt(Float(0.1f)));}
+\DoxyCodeLine{00578\ \ \ EXPECT\_TRUE(m.Matches(Float(0.45f)));}
+\DoxyCodeLine{00579\ \ \ EXPECT\_TRUE(m.Matches(Float(0.55f)));}
+\DoxyCodeLine{00580\ \ \ EXPECT\_FALSE(m.Matches(Float(0.39f)));}
+\DoxyCodeLine{00581\ \ \ EXPECT\_FALSE(m.Matches(Float(0.61f)));}
+\DoxyCodeLine{00582\ \}}
+\DoxyCodeLine{00583\ }
+\DoxyCodeLine{00584\ \textcolor{comment}{//\ Tests\ that\ Not(m)\ matches\ any\ value\ that\ doesn't\ match\ m.}}
+\DoxyCodeLine{00585\ TEST(NotTest,\ NegatesMatcher)\ \{}
+\DoxyCodeLine{00586\ \ \ Matcher<int>\ m;}
+\DoxyCodeLine{00587\ \ \ m\ =\ Not(Eq(2));}
+\DoxyCodeLine{00588\ \ \ EXPECT\_TRUE(m.Matches(3));}
+\DoxyCodeLine{00589\ \ \ EXPECT\_FALSE(m.Matches(2));}
+\DoxyCodeLine{00590\ \}}
+\DoxyCodeLine{00591\ }
+\DoxyCodeLine{00592\ \textcolor{comment}{//\ Tests\ that\ Not(m)\ describes\ itself\ properly.}}
+\DoxyCodeLine{00593\ TEST(NotTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00594\ \ \ Matcher<int>\ m\ =\ Not(Eq(5));}
+\DoxyCodeLine{00595\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ equal\ to\ 5"{}},\ Describe(m));}
+\DoxyCodeLine{00596\ \}}
+\DoxyCodeLine{00597\ }
+\DoxyCodeLine{00598\ \textcolor{comment}{//\ Tests\ that\ monomorphic\ matchers\ are\ safely\ cast\ by\ the\ Not\ matcher.}}
+\DoxyCodeLine{00599\ TEST(NotTest,\ NotMatcherSafelyCastsMonomorphicMatchers)\ \{}
+\DoxyCodeLine{00600\ \ \ \textcolor{comment}{//\ greater\_than\_5\ is\ a\ monomorphic\ matcher.}}
+\DoxyCodeLine{00601\ \ \ Matcher<int>\ greater\_than\_5\ =\ Gt(5);}
+\DoxyCodeLine{00602\ }
+\DoxyCodeLine{00603\ \ \ Matcher<const\ int\&>\ m\ =\ Not(greater\_than\_5);}
+\DoxyCodeLine{00604\ \ \ Matcher<int\&>\ m2\ =\ Not(greater\_than\_5);}
+\DoxyCodeLine{00605\ \ \ Matcher<int\&>\ m3\ =\ Not(m);}
+\DoxyCodeLine{00606\ \}}
+\DoxyCodeLine{00607\ }
+\DoxyCodeLine{00608\ \textcolor{comment}{//\ Helper\ to\ allow\ easy\ testing\ of\ AllOf\ matchers\ with\ num\ parameters.}}
+\DoxyCodeLine{00609\ \textcolor{keywordtype}{void}\ AllOfMatches(\textcolor{keywordtype}{int}\ num,\ \textcolor{keyword}{const}\ Matcher<int>\&\ m)\ \{}
+\DoxyCodeLine{00610\ \ \ SCOPED\_TRACE(Describe(m));}
+\DoxyCodeLine{00611\ \ \ EXPECT\_TRUE(m.Matches(0));}
+\DoxyCodeLine{00612\ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <=\ num;\ ++i)\ \{}
+\DoxyCodeLine{00613\ \ \ \ \ EXPECT\_FALSE(m.Matches(i));}
+\DoxyCodeLine{00614\ \ \ \}}
+\DoxyCodeLine{00615\ \ \ EXPECT\_TRUE(m.Matches(num\ +\ 1));}
+\DoxyCodeLine{00616\ \}}
+\DoxyCodeLine{00617\ }
+\DoxyCodeLine{00618\ INSTANTIATE\_GTEST\_MATCHER\_TEST\_P(AllOfTest);}
+\DoxyCodeLine{00619\ }
+\DoxyCodeLine{00620\ \textcolor{comment}{//\ Tests\ that\ AllOf(m1,\ ...,\ mn)\ matches\ any\ value\ that\ matches\ all\ of}}
+\DoxyCodeLine{00621\ \textcolor{comment}{//\ the\ given\ matchers.}}
+\DoxyCodeLine{00622\ TEST(AllOfTest,\ MatchesWhenAllMatch)\ \{}
+\DoxyCodeLine{00623\ \ \ Matcher<int>\ m;}
+\DoxyCodeLine{00624\ \ \ m\ =\ AllOf(Le(2),\ Ge(1));}
+\DoxyCodeLine{00625\ \ \ EXPECT\_TRUE(m.Matches(1));}
+\DoxyCodeLine{00626\ \ \ EXPECT\_TRUE(m.Matches(2));}
+\DoxyCodeLine{00627\ \ \ EXPECT\_FALSE(m.Matches(0));}
+\DoxyCodeLine{00628\ \ \ EXPECT\_FALSE(m.Matches(3));}
+\DoxyCodeLine{00629\ }
+\DoxyCodeLine{00630\ \ \ m\ =\ AllOf(Gt(0),\ Ne(1),\ Ne(2));}
+\DoxyCodeLine{00631\ \ \ EXPECT\_TRUE(m.Matches(3));}
+\DoxyCodeLine{00632\ \ \ EXPECT\_FALSE(m.Matches(2));}
+\DoxyCodeLine{00633\ \ \ EXPECT\_FALSE(m.Matches(1));}
+\DoxyCodeLine{00634\ \ \ EXPECT\_FALSE(m.Matches(0));}
+\DoxyCodeLine{00635\ }
+\DoxyCodeLine{00636\ \ \ m\ =\ AllOf(Gt(0),\ Ne(1),\ Ne(2),\ Ne(3));}
+\DoxyCodeLine{00637\ \ \ EXPECT\_TRUE(m.Matches(4));}
+\DoxyCodeLine{00638\ \ \ EXPECT\_FALSE(m.Matches(3));}
+\DoxyCodeLine{00639\ \ \ EXPECT\_FALSE(m.Matches(2));}
+\DoxyCodeLine{00640\ \ \ EXPECT\_FALSE(m.Matches(1));}
+\DoxyCodeLine{00641\ \ \ EXPECT\_FALSE(m.Matches(0));}
+\DoxyCodeLine{00642\ }
+\DoxyCodeLine{00643\ \ \ m\ =\ AllOf(Ge(0),\ Lt(10),\ Ne(3),\ Ne(5),\ Ne(7));}
+\DoxyCodeLine{00644\ \ \ EXPECT\_TRUE(m.Matches(0));}
+\DoxyCodeLine{00645\ \ \ EXPECT\_TRUE(m.Matches(1));}
+\DoxyCodeLine{00646\ \ \ EXPECT\_FALSE(m.Matches(3));}
+\DoxyCodeLine{00647\ }
+\DoxyCodeLine{00648\ \ \ \textcolor{comment}{//\ The\ following\ tests\ for\ varying\ number\ of\ sub-\/matchers.\ Due\ to\ the\ way}}
+\DoxyCodeLine{00649\ \ \ \textcolor{comment}{//\ the\ sub-\/matchers\ are\ handled\ it\ is\ enough\ to\ test\ every\ sub-\/matcher\ once}}
+\DoxyCodeLine{00650\ \ \ \textcolor{comment}{//\ with\ sub-\/matchers\ using\ the\ same\ matcher\ type.\ Varying\ matcher\ types\ are}}
+\DoxyCodeLine{00651\ \ \ \textcolor{comment}{//\ checked\ for\ above.}}
+\DoxyCodeLine{00652\ \ \ AllOfMatches(2,\ AllOf(Ne(1),\ Ne(2)));}
+\DoxyCodeLine{00653\ \ \ AllOfMatches(3,\ AllOf(Ne(1),\ Ne(2),\ Ne(3)));}
+\DoxyCodeLine{00654\ \ \ AllOfMatches(4,\ AllOf(Ne(1),\ Ne(2),\ Ne(3),\ Ne(4)));}
+\DoxyCodeLine{00655\ \ \ AllOfMatches(5,\ AllOf(Ne(1),\ Ne(2),\ Ne(3),\ Ne(4),\ Ne(5)));}
+\DoxyCodeLine{00656\ \ \ AllOfMatches(6,\ AllOf(Ne(1),\ Ne(2),\ Ne(3),\ Ne(4),\ Ne(5),\ Ne(6)));}
+\DoxyCodeLine{00657\ \ \ AllOfMatches(7,\ AllOf(Ne(1),\ Ne(2),\ Ne(3),\ Ne(4),\ Ne(5),\ Ne(6),\ Ne(7)));}
+\DoxyCodeLine{00658\ \ \ AllOfMatches(8,}
+\DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AllOf(Ne(1),\ Ne(2),\ Ne(3),\ Ne(4),\ Ne(5),\ Ne(6),\ Ne(7),\ Ne(8)));}
+\DoxyCodeLine{00660\ \ \ AllOfMatches(}
+\DoxyCodeLine{00661\ \ \ \ \ \ \ 9,\ AllOf(Ne(1),\ Ne(2),\ Ne(3),\ Ne(4),\ Ne(5),\ Ne(6),\ Ne(7),\ Ne(8),\ Ne(9)));}
+\DoxyCodeLine{00662\ \ \ AllOfMatches(10,\ AllOf(Ne(1),\ Ne(2),\ Ne(3),\ Ne(4),\ Ne(5),\ Ne(6),\ Ne(7),\ Ne(8),}
+\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Ne(9),\ Ne(10)));}
+\DoxyCodeLine{00664\ \ \ AllOfMatches(}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ 50,\ AllOf(Ne(1),\ Ne(2),\ Ne(3),\ Ne(4),\ Ne(5),\ Ne(6),\ Ne(7),\ Ne(8),\ Ne(9),}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Ne(10),\ Ne(11),\ Ne(12),\ Ne(13),\ Ne(14),\ Ne(15),\ Ne(16),\ Ne(17),}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Ne(18),\ Ne(19),\ Ne(20),\ Ne(21),\ Ne(22),\ Ne(23),\ Ne(24),\ Ne(25),}
+\DoxyCodeLine{00668\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Ne(26),\ Ne(27),\ Ne(28),\ Ne(29),\ Ne(30),\ Ne(31),\ Ne(32),\ Ne(33),}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Ne(34),\ Ne(35),\ Ne(36),\ Ne(37),\ Ne(38),\ Ne(39),\ Ne(40),\ Ne(41),}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Ne(42),\ Ne(43),\ Ne(44),\ Ne(45),\ Ne(46),\ Ne(47),\ Ne(48),\ Ne(49),}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Ne(50)));}
+\DoxyCodeLine{00672\ \}}
+\DoxyCodeLine{00673\ }
+\DoxyCodeLine{00674\ \textcolor{comment}{//\ Tests\ that\ AllOf(m1,\ ...,\ mn)\ describes\ itself\ properly.}}
+\DoxyCodeLine{00675\ TEST(AllOfTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00676\ \ \ Matcher<int>\ m;}
+\DoxyCodeLine{00677\ \ \ m\ =\ AllOf(Le(2),\ Ge(1));}
+\DoxyCodeLine{00678\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}(is\ <=\ 2)\ and\ (is\ >=\ 1)"{}},\ Describe(m));}
+\DoxyCodeLine{00679\ }
+\DoxyCodeLine{00680\ \ \ m\ =\ AllOf(Gt(0),\ Ne(1),\ Ne(2));}
+\DoxyCodeLine{00681\ \ \ std::string\ expected\_descr1\ =}
+\DoxyCodeLine{00682\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(is\ >\ 0)\ and\ (isn't\ equal\ to\ 1)\ and\ (isn't\ equal\ to\ 2)"{}};}
+\DoxyCodeLine{00683\ \ \ EXPECT\_EQ(expected\_descr1,\ Describe(m));}
+\DoxyCodeLine{00684\ }
+\DoxyCodeLine{00685\ \ \ m\ =\ AllOf(Gt(0),\ Ne(1),\ Ne(2),\ Ne(3));}
+\DoxyCodeLine{00686\ \ \ std::string\ expected\_descr2\ =}
+\DoxyCodeLine{00687\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(is\ >\ 0)\ and\ (isn't\ equal\ to\ 1)\ and\ (isn't\ equal\ to\ 2)\ and\ (isn't\ equal\ "{}}}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}to\ 3)"{}};}
+\DoxyCodeLine{00689\ \ \ EXPECT\_EQ(expected\_descr2,\ Describe(m));}
+\DoxyCodeLine{00690\ }
+\DoxyCodeLine{00691\ \ \ m\ =\ AllOf(Ge(0),\ Lt(10),\ Ne(3),\ Ne(5),\ Ne(7));}
+\DoxyCodeLine{00692\ \ \ std::string\ expected\_descr3\ =}
+\DoxyCodeLine{00693\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(is\ >=\ 0)\ and\ (is\ <\ 10)\ and\ (isn't\ equal\ to\ 3)\ and\ (isn't\ equal\ to\ 5)\ "{}}}
+\DoxyCodeLine{00694\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}and\ (isn't\ equal\ to\ 7)"{}};}
+\DoxyCodeLine{00695\ \ \ EXPECT\_EQ(expected\_descr3,\ Describe(m));}
+\DoxyCodeLine{00696\ \}}
+\DoxyCodeLine{00697\ }
+\DoxyCodeLine{00698\ \textcolor{comment}{//\ Tests\ that\ AllOf(m1,\ ...,\ mn)\ describes\ its\ negation\ properly.}}
+\DoxyCodeLine{00699\ TEST(AllOfTest,\ CanDescribeNegation)\ \{}
+\DoxyCodeLine{00700\ \ \ Matcher<int>\ m;}
+\DoxyCodeLine{00701\ \ \ m\ =\ AllOf(Le(2),\ Ge(1));}
+\DoxyCodeLine{00702\ \ \ std::string\ expected\_descr4\ =\ \textcolor{stringliteral}{"{}(isn't\ <=\ 2)\ or\ (isn't\ >=\ 1)"{}};}
+\DoxyCodeLine{00703\ \ \ EXPECT\_EQ(expected\_descr4,\ DescribeNegation(m));}
+\DoxyCodeLine{00704\ }
+\DoxyCodeLine{00705\ \ \ m\ =\ AllOf(Gt(0),\ Ne(1),\ Ne(2));}
+\DoxyCodeLine{00706\ \ \ std::string\ expected\_descr5\ =}
+\DoxyCodeLine{00707\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(isn't\ >\ 0)\ or\ (is\ equal\ to\ 1)\ or\ (is\ equal\ to\ 2)"{}};}
+\DoxyCodeLine{00708\ \ \ EXPECT\_EQ(expected\_descr5,\ DescribeNegation(m));}
+\DoxyCodeLine{00709\ }
+\DoxyCodeLine{00710\ \ \ m\ =\ AllOf(Gt(0),\ Ne(1),\ Ne(2),\ Ne(3));}
+\DoxyCodeLine{00711\ \ \ std::string\ expected\_descr6\ =}
+\DoxyCodeLine{00712\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(isn't\ >\ 0)\ or\ (is\ equal\ to\ 1)\ or\ (is\ equal\ to\ 2)\ or\ (is\ equal\ to\ 3)"{}};}
+\DoxyCodeLine{00713\ \ \ EXPECT\_EQ(expected\_descr6,\ DescribeNegation(m));}
+\DoxyCodeLine{00714\ }
+\DoxyCodeLine{00715\ \ \ m\ =\ AllOf(Ge(0),\ Lt(10),\ Ne(3),\ Ne(5),\ Ne(7));}
+\DoxyCodeLine{00716\ \ \ std::string\ expected\_desr7\ =}
+\DoxyCodeLine{00717\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(isn't\ >=\ 0)\ or\ (isn't\ <\ 10)\ or\ (is\ equal\ to\ 3)\ or\ (is\ equal\ to\ 5)\ or\ "{}}}
+\DoxyCodeLine{00718\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(is\ equal\ to\ 7)"{}};}
+\DoxyCodeLine{00719\ \ \ EXPECT\_EQ(expected\_desr7,\ DescribeNegation(m));}
+\DoxyCodeLine{00720\ }
+\DoxyCodeLine{00721\ \ \ m\ =\ AllOf(Ne(1),\ Ne(2),\ Ne(3),\ Ne(4),\ Ne(5),\ Ne(6),\ Ne(7),\ Ne(8),\ Ne(9),}
+\DoxyCodeLine{00722\ \ \ \ \ \ \ \ \ \ \ \ \ Ne(10),\ Ne(11));}
+\DoxyCodeLine{00723\ \ \ AllOf(1,\ 2,\ 3,\ 4,\ 5,\ 6,\ 7,\ 8,\ 9,\ 10,\ 11);}
+\DoxyCodeLine{00724\ \ \ EXPECT\_THAT(Describe(m),\ EndsWith(\textcolor{stringliteral}{"{}and\ (isn't\ equal\ to\ 11)"{}}));}
+\DoxyCodeLine{00725\ \ \ AllOfMatches(11,\ m);}
+\DoxyCodeLine{00726\ \}}
+\DoxyCodeLine{00727\ }
+\DoxyCodeLine{00728\ \textcolor{comment}{//\ Tests\ that\ monomorphic\ matchers\ are\ safely\ cast\ by\ the\ AllOf\ matcher.}}
+\DoxyCodeLine{00729\ TEST(AllOfTest,\ AllOfMatcherSafelyCastsMonomorphicMatchers)\ \{}
+\DoxyCodeLine{00730\ \ \ \textcolor{comment}{//\ greater\_than\_5\ and\ less\_than\_10\ are\ monomorphic\ matchers.}}
+\DoxyCodeLine{00731\ \ \ Matcher<int>\ greater\_than\_5\ =\ Gt(5);}
+\DoxyCodeLine{00732\ \ \ Matcher<int>\ less\_than\_10\ =\ Lt(10);}
+\DoxyCodeLine{00733\ }
+\DoxyCodeLine{00734\ \ \ Matcher<const\ int\&>\ m\ =\ AllOf(greater\_than\_5,\ less\_than\_10);}
+\DoxyCodeLine{00735\ \ \ Matcher<int\&>\ m2\ =\ AllOf(greater\_than\_5,\ less\_than\_10);}
+\DoxyCodeLine{00736\ \ \ Matcher<int\&>\ m3\ =\ AllOf(greater\_than\_5,\ m2);}
+\DoxyCodeLine{00737\ }
+\DoxyCodeLine{00738\ \ \ \textcolor{comment}{//\ Tests\ that\ BothOf\ works\ when\ composing\ itself.}}
+\DoxyCodeLine{00739\ \ \ Matcher<const\ int\&>\ m4\ =\ AllOf(greater\_than\_5,\ less\_than\_10,\ less\_than\_10);}
+\DoxyCodeLine{00740\ \ \ Matcher<int\&>\ m5\ =\ AllOf(greater\_than\_5,\ less\_than\_10,\ less\_than\_10);}
+\DoxyCodeLine{00741\ \}}
+\DoxyCodeLine{00742\ }
+\DoxyCodeLine{00743\ TEST\_P(AllOfTestP,\ ExplainsResult)\ \{}
+\DoxyCodeLine{00744\ \ \ Matcher<int>\ m;}
+\DoxyCodeLine{00745\ }
+\DoxyCodeLine{00746\ \ \ \textcolor{comment}{//\ Successful\ match.\ \ Both\ matchers\ need\ to\ explain.\ \ The\ second}}
+\DoxyCodeLine{00747\ \ \ \textcolor{comment}{//\ matcher\ doesn't\ give\ an\ explanation,\ so\ the\ matcher\ description\ is\ used.}}
+\DoxyCodeLine{00748\ \ \ m\ =\ AllOf(GreaterThan(10),\ Lt(30));}
+\DoxyCodeLine{00749\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 15\ more\ than\ 10,\ and\ is\ <\ 30"{}},\ Explain(m,\ 25));}
+\DoxyCodeLine{00750\ }
+\DoxyCodeLine{00751\ \ \ \textcolor{comment}{//\ Successful\ match.\ \ Both\ matchers\ need\ to\ explain.}}
+\DoxyCodeLine{00752\ \ \ m\ =\ AllOf(GreaterThan(10),\ GreaterThan(20));}
+\DoxyCodeLine{00753\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 20\ more\ than\ 10,\ and\ which\ is\ 10\ more\ than\ 20"{}},}
+\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \ \ \ \ Explain(m,\ 30));}
+\DoxyCodeLine{00755\ }
+\DoxyCodeLine{00756\ \ \ \textcolor{comment}{//\ Successful\ match.\ \ All\ matchers\ need\ to\ explain.\ \ The\ second}}
+\DoxyCodeLine{00757\ \ \ \textcolor{comment}{//\ matcher\ doesn't\ given\ an\ explanation.}}
+\DoxyCodeLine{00758\ \ \ m\ =\ AllOf(GreaterThan(10),\ Lt(30),\ GreaterThan(20));}
+\DoxyCodeLine{00759\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{00760\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}which\ is\ 15\ more\ than\ 10,\ and\ is\ <\ 30,\ and\ which\ is\ 5\ more\ than\ 20"{}},}
+\DoxyCodeLine{00761\ \ \ \ \ \ \ Explain(m,\ 25));}
+\DoxyCodeLine{00762\ }
+\DoxyCodeLine{00763\ \ \ \textcolor{comment}{//\ Successful\ match.\ \ All\ matchers\ need\ to\ explain.}}
+\DoxyCodeLine{00764\ \ \ m\ =\ AllOf(GreaterThan(10),\ GreaterThan(20),\ GreaterThan(30));}
+\DoxyCodeLine{00765\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{00766\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}which\ is\ 30\ more\ than\ 10,\ and\ which\ is\ 20\ more\ than\ 20,\ "{}}}
+\DoxyCodeLine{00767\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}and\ which\ is\ 10\ more\ than\ 30"{}},}
+\DoxyCodeLine{00768\ \ \ \ \ \ \ Explain(m,\ 40));}
+\DoxyCodeLine{00769\ }
+\DoxyCodeLine{00770\ \ \ \textcolor{comment}{//\ Failed\ match.\ \ The\ first\ matcher,\ which\ failed,\ needs\ to}}
+\DoxyCodeLine{00771\ \ \ \textcolor{comment}{//\ explain.}}
+\DoxyCodeLine{00772\ \ \ m\ =\ AllOf(GreaterThan(10),\ GreaterThan(20));}
+\DoxyCodeLine{00773\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 5\ less\ than\ 10"{}},\ Explain(m,\ 5));}
+\DoxyCodeLine{00774\ }
+\DoxyCodeLine{00775\ \ \ \textcolor{comment}{//\ Failed\ match.\ \ The\ second\ matcher,\ which\ failed,\ needs\ to}}
+\DoxyCodeLine{00776\ \ \ \textcolor{comment}{//\ explain.\ \ Since\ it\ doesn't\ given\ an\ explanation,\ the\ matcher\ text\ is}}
+\DoxyCodeLine{00777\ \ \ \textcolor{comment}{//\ printed.}}
+\DoxyCodeLine{00778\ \ \ m\ =\ AllOf(GreaterThan(10),\ Lt(30));}
+\DoxyCodeLine{00779\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ doesn't\ match\ (is\ <\ 30)"{}},\ Explain(m,\ 40));}
+\DoxyCodeLine{00780\ }
+\DoxyCodeLine{00781\ \ \ \textcolor{comment}{//\ Failed\ match.\ \ The\ second\ matcher,\ which\ failed,\ needs\ to}}
+\DoxyCodeLine{00782\ \ \ \textcolor{comment}{//\ explain.}}
+\DoxyCodeLine{00783\ \ \ m\ =\ AllOf(GreaterThan(10),\ GreaterThan(20));}
+\DoxyCodeLine{00784\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 5\ less\ than\ 20"{}},\ Explain(m,\ 15));}
+\DoxyCodeLine{00785\ \}}
+\DoxyCodeLine{00786\ }
+\DoxyCodeLine{00787\ \textcolor{comment}{//\ Helper\ to\ allow\ easy\ testing\ of\ AnyOf\ matchers\ with\ num\ parameters.}}
+\DoxyCodeLine{00788\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ AnyOfMatches(\textcolor{keywordtype}{int}\ num,\ \textcolor{keyword}{const}\ Matcher<int>\&\ m)\ \{}
+\DoxyCodeLine{00789\ \ \ SCOPED\_TRACE(Describe(m));}
+\DoxyCodeLine{00790\ \ \ EXPECT\_FALSE(m.Matches(0));}
+\DoxyCodeLine{00791\ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <=\ num;\ ++i)\ \{}
+\DoxyCodeLine{00792\ \ \ \ \ EXPECT\_TRUE(m.Matches(i));}
+\DoxyCodeLine{00793\ \ \ \}}
+\DoxyCodeLine{00794\ \ \ EXPECT\_FALSE(m.Matches(num\ +\ 1));}
+\DoxyCodeLine{00795\ \}}
+\DoxyCodeLine{00796\ }
+\DoxyCodeLine{00797\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ AnyOfStringMatches(\textcolor{keywordtype}{int}\ num,\ \textcolor{keyword}{const}\ Matcher<std::string>\&\ m)\ \{}
+\DoxyCodeLine{00798\ \ \ SCOPED\_TRACE(Describe(m));}
+\DoxyCodeLine{00799\ \ \ EXPECT\_FALSE(m.Matches(std::to\_string(0)));}
+\DoxyCodeLine{00800\ }
+\DoxyCodeLine{00801\ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <=\ num;\ ++i)\ \{}
+\DoxyCodeLine{00802\ \ \ \ \ EXPECT\_TRUE(m.Matches(std::to\_string(i)));}
+\DoxyCodeLine{00803\ \ \ \}}
+\DoxyCodeLine{00804\ \ \ EXPECT\_FALSE(m.Matches(std::to\_string(num\ +\ 1)));}
+\DoxyCodeLine{00805\ \}}
+\DoxyCodeLine{00806\ }
+\DoxyCodeLine{00807\ INSTANTIATE\_GTEST\_MATCHER\_TEST\_P(AnyOfTest);}
+\DoxyCodeLine{00808\ }
+\DoxyCodeLine{00809\ \textcolor{comment}{//\ Tests\ that\ AnyOf(m1,\ ...,\ mn)\ matches\ any\ value\ that\ matches\ at}}
+\DoxyCodeLine{00810\ \textcolor{comment}{//\ least\ one\ of\ the\ given\ matchers.}}
+\DoxyCodeLine{00811\ TEST(AnyOfTest,\ MatchesWhenAnyMatches)\ \{}
+\DoxyCodeLine{00812\ \ \ Matcher<int>\ m;}
+\DoxyCodeLine{00813\ \ \ m\ =\ AnyOf(Le(1),\ Ge(3));}
+\DoxyCodeLine{00814\ \ \ EXPECT\_TRUE(m.Matches(1));}
+\DoxyCodeLine{00815\ \ \ EXPECT\_TRUE(m.Matches(4));}
+\DoxyCodeLine{00816\ \ \ EXPECT\_FALSE(m.Matches(2));}
+\DoxyCodeLine{00817\ }
+\DoxyCodeLine{00818\ \ \ m\ =\ AnyOf(Lt(0),\ Eq(1),\ Eq(2));}
+\DoxyCodeLine{00819\ \ \ EXPECT\_TRUE(m.Matches(-\/1));}
+\DoxyCodeLine{00820\ \ \ EXPECT\_TRUE(m.Matches(1));}
+\DoxyCodeLine{00821\ \ \ EXPECT\_TRUE(m.Matches(2));}
+\DoxyCodeLine{00822\ \ \ EXPECT\_FALSE(m.Matches(0));}
+\DoxyCodeLine{00823\ }
+\DoxyCodeLine{00824\ \ \ m\ =\ AnyOf(Lt(0),\ Eq(1),\ Eq(2),\ Eq(3));}
+\DoxyCodeLine{00825\ \ \ EXPECT\_TRUE(m.Matches(-\/1));}
+\DoxyCodeLine{00826\ \ \ EXPECT\_TRUE(m.Matches(1));}
+\DoxyCodeLine{00827\ \ \ EXPECT\_TRUE(m.Matches(2));}
+\DoxyCodeLine{00828\ \ \ EXPECT\_TRUE(m.Matches(3));}
+\DoxyCodeLine{00829\ \ \ EXPECT\_FALSE(m.Matches(0));}
+\DoxyCodeLine{00830\ }
+\DoxyCodeLine{00831\ \ \ m\ =\ AnyOf(Le(0),\ Gt(10),\ 3,\ 5,\ 7);}
+\DoxyCodeLine{00832\ \ \ EXPECT\_TRUE(m.Matches(0));}
+\DoxyCodeLine{00833\ \ \ EXPECT\_TRUE(m.Matches(11));}
+\DoxyCodeLine{00834\ \ \ EXPECT\_TRUE(m.Matches(3));}
+\DoxyCodeLine{00835\ \ \ EXPECT\_FALSE(m.Matches(2));}
+\DoxyCodeLine{00836\ }
+\DoxyCodeLine{00837\ \ \ \textcolor{comment}{//\ The\ following\ tests\ for\ varying\ number\ of\ sub-\/matchers.\ Due\ to\ the\ way}}
+\DoxyCodeLine{00838\ \ \ \textcolor{comment}{//\ the\ sub-\/matchers\ are\ handled\ it\ is\ enough\ to\ test\ every\ sub-\/matcher\ once}}
+\DoxyCodeLine{00839\ \ \ \textcolor{comment}{//\ with\ sub-\/matchers\ using\ the\ same\ matcher\ type.\ Varying\ matcher\ types\ are}}
+\DoxyCodeLine{00840\ \ \ \textcolor{comment}{//\ checked\ for\ above.}}
+\DoxyCodeLine{00841\ \ \ AnyOfMatches(2,\ AnyOf(1,\ 2));}
+\DoxyCodeLine{00842\ \ \ AnyOfMatches(3,\ AnyOf(1,\ 2,\ 3));}
+\DoxyCodeLine{00843\ \ \ AnyOfMatches(4,\ AnyOf(1,\ 2,\ 3,\ 4));}
+\DoxyCodeLine{00844\ \ \ AnyOfMatches(5,\ AnyOf(1,\ 2,\ 3,\ 4,\ 5));}
+\DoxyCodeLine{00845\ \ \ AnyOfMatches(6,\ AnyOf(1,\ 2,\ 3,\ 4,\ 5,\ 6));}
+\DoxyCodeLine{00846\ \ \ AnyOfMatches(7,\ AnyOf(1,\ 2,\ 3,\ 4,\ 5,\ 6,\ 7));}
+\DoxyCodeLine{00847\ \ \ AnyOfMatches(8,\ AnyOf(1,\ 2,\ 3,\ 4,\ 5,\ 6,\ 7,\ 8));}
+\DoxyCodeLine{00848\ \ \ AnyOfMatches(9,\ AnyOf(1,\ 2,\ 3,\ 4,\ 5,\ 6,\ 7,\ 8,\ 9));}
+\DoxyCodeLine{00849\ \ \ AnyOfMatches(10,\ AnyOf(1,\ 2,\ 3,\ 4,\ 5,\ 6,\ 7,\ 8,\ 9,\ 10));}
+\DoxyCodeLine{00850\ \}}
+\DoxyCodeLine{00851\ }
+\DoxyCodeLine{00852\ \textcolor{comment}{//\ Tests\ the\ variadic\ version\ of\ the\ AnyOfMatcher.}}
+\DoxyCodeLine{00853\ TEST(AnyOfTest,\ VariadicMatchesWhenAnyMatches)\ \{}
+\DoxyCodeLine{00854\ \ \ \textcolor{comment}{//\ Also\ make\ sure\ AnyOf\ is\ defined\ in\ the\ right\ namespace\ and\ does\ not\ depend}}
+\DoxyCodeLine{00855\ \ \ \textcolor{comment}{//\ on\ ADL.}}
+\DoxyCodeLine{00856\ \ \ Matcher<int>\ m\ =\ ::testing::AnyOf(1,\ 2,\ 3,\ 4,\ 5,\ 6,\ 7,\ 8,\ 9,\ 10,\ 11);}
+\DoxyCodeLine{00857\ }
+\DoxyCodeLine{00858\ \ \ EXPECT\_THAT(Describe(m),\ EndsWith(\textcolor{stringliteral}{"{}or\ (is\ equal\ to\ 11)"{}}));}
+\DoxyCodeLine{00859\ \ \ AnyOfMatches(11,\ m);}
+\DoxyCodeLine{00860\ \ \ AnyOfMatches(50,\ AnyOf(1,\ 2,\ 3,\ 4,\ 5,\ 6,\ 7,\ 8,\ 9,\ 10,\ 11,\ 12,\ 13,\ 14,\ 15,\ 16,}
+\DoxyCodeLine{00861\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 17,\ 18,\ 19,\ 20,\ 21,\ 22,\ 23,\ 24,\ 25,\ 26,\ 27,\ 28,\ 29,\ 30,}
+\DoxyCodeLine{00862\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 31,\ 32,\ 33,\ 34,\ 35,\ 36,\ 37,\ 38,\ 39,\ 40,\ 41,\ 42,\ 43,\ 44,}
+\DoxyCodeLine{00863\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 45,\ 46,\ 47,\ 48,\ 49,\ 50));}
+\DoxyCodeLine{00864\ \ \ AnyOfStringMatches(}
+\DoxyCodeLine{00865\ \ \ \ \ \ \ 50,\ AnyOf(\textcolor{stringliteral}{"{}1"{}},\ \textcolor{stringliteral}{"{}2"{}},\ \textcolor{stringliteral}{"{}3"{}},\ \textcolor{stringliteral}{"{}4"{}},\ \textcolor{stringliteral}{"{}5"{}},\ \textcolor{stringliteral}{"{}6"{}},\ \textcolor{stringliteral}{"{}7"{}},\ \textcolor{stringliteral}{"{}8"{}},\ \textcolor{stringliteral}{"{}9"{}},\ \textcolor{stringliteral}{"{}10"{}},\ \textcolor{stringliteral}{"{}11"{}},\ \textcolor{stringliteral}{"{}12"{}},}
+\DoxyCodeLine{00866\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}13"{}},\ \textcolor{stringliteral}{"{}14"{}},\ \textcolor{stringliteral}{"{}15"{}},\ \textcolor{stringliteral}{"{}16"{}},\ \textcolor{stringliteral}{"{}17"{}},\ \textcolor{stringliteral}{"{}18"{}},\ \textcolor{stringliteral}{"{}19"{}},\ \textcolor{stringliteral}{"{}20"{}},\ \textcolor{stringliteral}{"{}21"{}},\ \textcolor{stringliteral}{"{}22"{}},}
+\DoxyCodeLine{00867\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}23"{}},\ \textcolor{stringliteral}{"{}24"{}},\ \textcolor{stringliteral}{"{}25"{}},\ \textcolor{stringliteral}{"{}26"{}},\ \textcolor{stringliteral}{"{}27"{}},\ \textcolor{stringliteral}{"{}28"{}},\ \textcolor{stringliteral}{"{}29"{}},\ \textcolor{stringliteral}{"{}30"{}},\ \textcolor{stringliteral}{"{}31"{}},\ \textcolor{stringliteral}{"{}32"{}},}
+\DoxyCodeLine{00868\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}33"{}},\ \textcolor{stringliteral}{"{}34"{}},\ \textcolor{stringliteral}{"{}35"{}},\ \textcolor{stringliteral}{"{}36"{}},\ \textcolor{stringliteral}{"{}37"{}},\ \textcolor{stringliteral}{"{}38"{}},\ \textcolor{stringliteral}{"{}39"{}},\ \textcolor{stringliteral}{"{}40"{}},\ \textcolor{stringliteral}{"{}41"{}},\ \textcolor{stringliteral}{"{}42"{}},}
+\DoxyCodeLine{00869\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}43"{}},\ \textcolor{stringliteral}{"{}44"{}},\ \textcolor{stringliteral}{"{}45"{}},\ \textcolor{stringliteral}{"{}46"{}},\ \textcolor{stringliteral}{"{}47"{}},\ \textcolor{stringliteral}{"{}48"{}},\ \textcolor{stringliteral}{"{}49"{}},\ \textcolor{stringliteral}{"{}50"{}}));}
+\DoxyCodeLine{00870\ \}}
+\DoxyCodeLine{00871\ }
+\DoxyCodeLine{00872\ TEST(ConditionalTest,\ MatchesFirstIfCondition)\ \{}
+\DoxyCodeLine{00873\ \ \ Matcher<std::string>\ eq\_red\ =\ Eq(\textcolor{stringliteral}{"{}red"{}});}
+\DoxyCodeLine{00874\ \ \ Matcher<std::string>\ ne\_red\ =\ Ne(\textcolor{stringliteral}{"{}red"{}});}
+\DoxyCodeLine{00875\ \ \ Matcher<std::string>\ m\ =\ Conditional(\textcolor{keyword}{true},\ eq\_red,\ ne\_red);}
+\DoxyCodeLine{00876\ \ \ EXPECT\_TRUE(m.Matches(\textcolor{stringliteral}{"{}red"{}}));}
+\DoxyCodeLine{00877\ \ \ EXPECT\_FALSE(m.Matches(\textcolor{stringliteral}{"{}green"{}}));}
+\DoxyCodeLine{00878\ }
+\DoxyCodeLine{00879\ \ \ StringMatchResultListener\ listener;}
+\DoxyCodeLine{00880\ \ \ StringMatchResultListener\ expected;}
+\DoxyCodeLine{00881\ \ \ EXPECT\_FALSE(m.MatchAndExplain(\textcolor{stringliteral}{"{}green"{}},\ \&listener));}
+\DoxyCodeLine{00882\ \ \ EXPECT\_FALSE(eq\_red.MatchAndExplain(\textcolor{stringliteral}{"{}green"{}},\ \&expected));}
+\DoxyCodeLine{00883\ \ \ EXPECT\_THAT(listener.str(),\ Eq(expected.str()));}
+\DoxyCodeLine{00884\ \}}
+\DoxyCodeLine{00885\ }
+\DoxyCodeLine{00886\ TEST(ConditionalTest,\ MatchesSecondIfCondition)\ \{}
+\DoxyCodeLine{00887\ \ \ Matcher<std::string>\ eq\_red\ =\ Eq(\textcolor{stringliteral}{"{}red"{}});}
+\DoxyCodeLine{00888\ \ \ Matcher<std::string>\ ne\_red\ =\ Ne(\textcolor{stringliteral}{"{}red"{}});}
+\DoxyCodeLine{00889\ \ \ Matcher<std::string>\ m\ =\ Conditional(\textcolor{keyword}{false},\ eq\_red,\ ne\_red);}
+\DoxyCodeLine{00890\ \ \ EXPECT\_FALSE(m.Matches(\textcolor{stringliteral}{"{}red"{}}));}
+\DoxyCodeLine{00891\ \ \ EXPECT\_TRUE(m.Matches(\textcolor{stringliteral}{"{}green"{}}));}
+\DoxyCodeLine{00892\ }
+\DoxyCodeLine{00893\ \ \ StringMatchResultListener\ listener;}
+\DoxyCodeLine{00894\ \ \ StringMatchResultListener\ expected;}
+\DoxyCodeLine{00895\ \ \ EXPECT\_FALSE(m.MatchAndExplain(\textcolor{stringliteral}{"{}red"{}},\ \&listener));}
+\DoxyCodeLine{00896\ \ \ EXPECT\_FALSE(ne\_red.MatchAndExplain(\textcolor{stringliteral}{"{}red"{}},\ \&expected));}
+\DoxyCodeLine{00897\ \ \ EXPECT\_THAT(listener.str(),\ Eq(expected.str()));}
+\DoxyCodeLine{00898\ \}}
+\DoxyCodeLine{00899\ }
+\DoxyCodeLine{00900\ \textcolor{comment}{//\ Tests\ that\ AnyOf(m1,\ ...,\ mn)\ describes\ itself\ properly.}}
+\DoxyCodeLine{00901\ TEST(AnyOfTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00902\ \ \ Matcher<int>\ m;}
+\DoxyCodeLine{00903\ \ \ m\ =\ AnyOf(Le(1),\ Ge(3));}
+\DoxyCodeLine{00904\ }
+\DoxyCodeLine{00905\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}(is\ <=\ 1)\ or\ (is\ >=\ 3)"{}},\ Describe(m));}
+\DoxyCodeLine{00906\ }
+\DoxyCodeLine{00907\ \ \ m\ =\ AnyOf(Lt(0),\ Eq(1),\ Eq(2));}
+\DoxyCodeLine{00908\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}(is\ <\ 0)\ or\ (is\ equal\ to\ 1)\ or\ (is\ equal\ to\ 2)"{}},\ Describe(m));}
+\DoxyCodeLine{00909\ }
+\DoxyCodeLine{00910\ \ \ m\ =\ AnyOf(Lt(0),\ Eq(1),\ Eq(2),\ Eq(3));}
+\DoxyCodeLine{00911\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}(is\ <\ 0)\ or\ (is\ equal\ to\ 1)\ or\ (is\ equal\ to\ 2)\ or\ (is\ equal\ to\ 3)"{}},}
+\DoxyCodeLine{00912\ \ \ \ \ \ \ \ \ \ \ \ \ Describe(m));}
+\DoxyCodeLine{00913\ }
+\DoxyCodeLine{00914\ \ \ m\ =\ AnyOf(Le(0),\ Gt(10),\ 3,\ 5,\ 7);}
+\DoxyCodeLine{00915\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{00916\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(is\ <=\ 0)\ or\ (is\ >\ 10)\ or\ (is\ equal\ to\ 3)\ or\ (is\ equal\ to\ 5)\ or\ (is\ "{}}}
+\DoxyCodeLine{00917\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}equal\ to\ 7)"{}},}
+\DoxyCodeLine{00918\ \ \ \ \ \ \ Describe(m));}
+\DoxyCodeLine{00919\ \}}
+\DoxyCodeLine{00920\ }
+\DoxyCodeLine{00921\ \textcolor{comment}{//\ Tests\ that\ AnyOf(m1,\ ...,\ mn)\ describes\ its\ negation\ properly.}}
+\DoxyCodeLine{00922\ TEST(AnyOfTest,\ CanDescribeNegation)\ \{}
+\DoxyCodeLine{00923\ \ \ Matcher<int>\ m;}
+\DoxyCodeLine{00924\ \ \ m\ =\ AnyOf(Le(1),\ Ge(3));}
+\DoxyCodeLine{00925\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}(isn't\ <=\ 1)\ and\ (isn't\ >=\ 3)"{}},\ DescribeNegation(m));}
+\DoxyCodeLine{00926\ }
+\DoxyCodeLine{00927\ \ \ m\ =\ AnyOf(Lt(0),\ Eq(1),\ Eq(2));}
+\DoxyCodeLine{00928\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}(isn't\ <\ 0)\ and\ (isn't\ equal\ to\ 1)\ and\ (isn't\ equal\ to\ 2)"{}},}
+\DoxyCodeLine{00929\ \ \ \ \ \ \ \ \ \ \ \ \ DescribeNegation(m));}
+\DoxyCodeLine{00930\ }
+\DoxyCodeLine{00931\ \ \ m\ =\ AnyOf(Lt(0),\ Eq(1),\ Eq(2),\ Eq(3));}
+\DoxyCodeLine{00932\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{00933\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(isn't\ <\ 0)\ and\ (isn't\ equal\ to\ 1)\ and\ (isn't\ equal\ to\ 2)\ and\ (isn't\ "{}}}
+\DoxyCodeLine{00934\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}equal\ to\ 3)"{}},}
+\DoxyCodeLine{00935\ \ \ \ \ \ \ DescribeNegation(m));}
+\DoxyCodeLine{00936\ }
+\DoxyCodeLine{00937\ \ \ m\ =\ AnyOf(Le(0),\ Gt(10),\ 3,\ 5,\ 7);}
+\DoxyCodeLine{00938\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{00939\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}(isn't\ <=\ 0)\ and\ (isn't\ >\ 10)\ and\ (isn't\ equal\ to\ 3)\ and\ (isn't\ equal\ "{}}}
+\DoxyCodeLine{00940\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}to\ 5)\ and\ (isn't\ equal\ to\ 7)"{}},}
+\DoxyCodeLine{00941\ \ \ \ \ \ \ DescribeNegation(m));}
+\DoxyCodeLine{00942\ \}}
+\DoxyCodeLine{00943\ }
+\DoxyCodeLine{00944\ \textcolor{comment}{//\ Tests\ that\ monomorphic\ matchers\ are\ safely\ cast\ by\ the\ AnyOf\ matcher.}}
+\DoxyCodeLine{00945\ TEST(AnyOfTest,\ AnyOfMatcherSafelyCastsMonomorphicMatchers)\ \{}
+\DoxyCodeLine{00946\ \ \ \textcolor{comment}{//\ greater\_than\_5\ and\ less\_than\_10\ are\ monomorphic\ matchers.}}
+\DoxyCodeLine{00947\ \ \ Matcher<int>\ greater\_than\_5\ =\ Gt(5);}
+\DoxyCodeLine{00948\ \ \ Matcher<int>\ less\_than\_10\ =\ Lt(10);}
+\DoxyCodeLine{00949\ }
+\DoxyCodeLine{00950\ \ \ Matcher<const\ int\&>\ m\ =\ AnyOf(greater\_than\_5,\ less\_than\_10);}
+\DoxyCodeLine{00951\ \ \ Matcher<int\&>\ m2\ =\ AnyOf(greater\_than\_5,\ less\_than\_10);}
+\DoxyCodeLine{00952\ \ \ Matcher<int\&>\ m3\ =\ AnyOf(greater\_than\_5,\ m2);}
+\DoxyCodeLine{00953\ }
+\DoxyCodeLine{00954\ \ \ \textcolor{comment}{//\ Tests\ that\ EitherOf\ works\ when\ composing\ itself.}}
+\DoxyCodeLine{00955\ \ \ Matcher<const\ int\&>\ m4\ =\ AnyOf(greater\_than\_5,\ less\_than\_10,\ less\_than\_10);}
+\DoxyCodeLine{00956\ \ \ Matcher<int\&>\ m5\ =\ AnyOf(greater\_than\_5,\ less\_than\_10,\ less\_than\_10);}
+\DoxyCodeLine{00957\ \}}
+\DoxyCodeLine{00958\ }
+\DoxyCodeLine{00959\ TEST\_P(AnyOfTestP,\ ExplainsResult)\ \{}
+\DoxyCodeLine{00960\ \ \ Matcher<int>\ m;}
+\DoxyCodeLine{00961\ }
+\DoxyCodeLine{00962\ \ \ \textcolor{comment}{//\ Failed\ match.\ The\ second\ matcher\ have\ no\ explanation\ (description\ is\ used).}}
+\DoxyCodeLine{00963\ \ \ m\ =\ AnyOf(GreaterThan(10),\ Lt(0));}
+\DoxyCodeLine{00964\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 5\ less\ than\ 10,\ and\ isn't\ <\ 0"{}},\ Explain(m,\ 5));}
+\DoxyCodeLine{00965\ }
+\DoxyCodeLine{00966\ \ \ \textcolor{comment}{//\ Failed\ match.\ Both\ matchers\ have\ explanations.}}
+\DoxyCodeLine{00967\ \ \ m\ =\ AnyOf(GreaterThan(10),\ GreaterThan(20));}
+\DoxyCodeLine{00968\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 5\ less\ than\ 10,\ and\ which\ is\ 15\ less\ than\ 20"{}},}
+\DoxyCodeLine{00969\ \ \ \ \ \ \ \ \ \ \ \ \ Explain(m,\ 5));}
+\DoxyCodeLine{00970\ }
+\DoxyCodeLine{00971\ \ \ \textcolor{comment}{//\ Failed\ match.\ The\ middle\ matcher\ have\ no\ explanation.}}
+\DoxyCodeLine{00972\ \ \ m\ =\ AnyOf(GreaterThan(10),\ Gt(20),\ GreaterThan(30));}
+\DoxyCodeLine{00973\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{00974\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}which\ is\ 5\ less\ than\ 10,\ and\ isn't\ >\ 20,\ and\ which\ is\ 25\ less\ than\ 30"{}},}
+\DoxyCodeLine{00975\ \ \ \ \ \ \ Explain(m,\ 5));}
+\DoxyCodeLine{00976\ }
+\DoxyCodeLine{00977\ \ \ \textcolor{comment}{//\ Failed\ match.\ All\ three\ matchers\ have\ explanations.}}
+\DoxyCodeLine{00978\ \ \ m\ =\ AnyOf(GreaterThan(10),\ GreaterThan(20),\ GreaterThan(30));}
+\DoxyCodeLine{00979\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{00980\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}which\ is\ 5\ less\ than\ 10,\ and\ which\ is\ 15\ less\ than\ 20,\ "{}}}
+\DoxyCodeLine{00981\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}and\ which\ is\ 25\ less\ than\ 30"{}},}
+\DoxyCodeLine{00982\ \ \ \ \ \ \ Explain(m,\ 5));}
+\DoxyCodeLine{00983\ }
+\DoxyCodeLine{00984\ \ \ \textcolor{comment}{//\ Successful\ match.\ The\ first\ macher\ succeeded\ and\ has\ explanation.}}
+\DoxyCodeLine{00985\ \ \ m\ =\ AnyOf(GreaterThan(10),\ GreaterThan(20));}
+\DoxyCodeLine{00986\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 5\ more\ than\ 10"{}},\ Explain(m,\ 15));}
+\DoxyCodeLine{00987\ }
+\DoxyCodeLine{00988\ \ \ \textcolor{comment}{//\ Successful\ match.\ The\ second\ matcher\ succeeded\ and\ has\ explanation.}}
+\DoxyCodeLine{00989\ \ \ m\ =\ AnyOf(GreaterThan(30),\ GreaterThan(20));}
+\DoxyCodeLine{00990\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 5\ more\ than\ 20"{}},\ Explain(m,\ 25));}
+\DoxyCodeLine{00991\ }
+\DoxyCodeLine{00992\ \ \ \textcolor{comment}{//\ Successful\ match.\ The\ first\ matcher\ succeeded\ and\ has\ no\ explanation.}}
+\DoxyCodeLine{00993\ \ \ m\ =\ AnyOf(Gt(10),\ Lt(20));}
+\DoxyCodeLine{00994\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ matches\ (is\ >\ 10)"{}},\ Explain(m,\ 15));}
+\DoxyCodeLine{00995\ }
+\DoxyCodeLine{00996\ \ \ \textcolor{comment}{//\ Successful\ match.\ The\ second\ matcher\ succeeded\ and\ has\ no\ explanation.}}
+\DoxyCodeLine{00997\ \ \ m\ =\ AnyOf(Gt(30),\ Gt(20));}
+\DoxyCodeLine{00998\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ matches\ (is\ >\ 20)"{}},\ Explain(m,\ 25));}
+\DoxyCodeLine{00999\ \}}
+\DoxyCodeLine{01000\ }
+\DoxyCodeLine{01001\ \textcolor{comment}{//\ The\ following\ predicate\ function\ and\ predicate\ functor\ are\ for}}
+\DoxyCodeLine{01002\ \textcolor{comment}{//\ testing\ the\ Truly(predicate)\ matcher.}}
+\DoxyCodeLine{01003\ }
+\DoxyCodeLine{01004\ \textcolor{comment}{//\ Returns\ non-\/zero\ if\ the\ input\ is\ positive.\ \ Note\ that\ the\ return}}
+\DoxyCodeLine{01005\ \textcolor{comment}{//\ type\ of\ this\ function\ is\ not\ bool.\ \ It's\ OK\ as\ Truly()\ accepts\ any}}
+\DoxyCodeLine{01006\ \textcolor{comment}{//\ unary\ function\ or\ functor\ whose\ return\ type\ can\ be\ implicitly}}
+\DoxyCodeLine{01007\ \textcolor{comment}{//\ converted\ to\ bool.}}
+\DoxyCodeLine{01008\ \textcolor{keywordtype}{int}\ IsPositive(\textcolor{keywordtype}{double}\ x)\ \{\ \textcolor{keywordflow}{return}\ x\ >\ 0\ ?\ 1\ :\ 0;\ \}}
+\DoxyCodeLine{01009\ }
+\DoxyCodeLine{01010\ \textcolor{comment}{//\ This\ functor\ returns\ true\ if\ the\ input\ is\ greater\ than\ the\ given}}
+\DoxyCodeLine{01011\ \textcolor{comment}{//\ number.}}
+\DoxyCodeLine{01012\ \textcolor{keyword}{class\ }IsGreaterThan\ \{}
+\DoxyCodeLine{01013\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01014\ \ \ \textcolor{keyword}{explicit}\ IsGreaterThan(\textcolor{keywordtype}{int}\ threshold)\ :\ threshold\_(threshold)\ \{\}}
+\DoxyCodeLine{01015\ }
+\DoxyCodeLine{01016\ \ \ \textcolor{keywordtype}{bool}\ operator()(\textcolor{keywordtype}{int}\ n)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ n\ >\ threshold\_;\ \}}
+\DoxyCodeLine{01017\ }
+\DoxyCodeLine{01018\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01019\ \ \ \textcolor{keywordtype}{int}\ threshold\_;}
+\DoxyCodeLine{01020\ \};}
+\DoxyCodeLine{01021\ }
+\DoxyCodeLine{01022\ \textcolor{comment}{//\ For\ testing\ Truly().}}
+\DoxyCodeLine{01023\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ foo\ =\ 0;}
+\DoxyCodeLine{01024\ }
+\DoxyCodeLine{01025\ \textcolor{comment}{//\ This\ predicate\ returns\ true\ if\ and\ only\ if\ the\ argument\ references\ foo\ and}}
+\DoxyCodeLine{01026\ \textcolor{comment}{//\ has\ a\ zero\ value.}}
+\DoxyCodeLine{01027\ \textcolor{keywordtype}{bool}\ ReferencesFooAndIsZero(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ n)\ \{\ \textcolor{keywordflow}{return}\ (\&n\ ==\ \&foo)\ \&\&\ (n\ ==\ 0);\ \}}
+\DoxyCodeLine{01028\ }
+\DoxyCodeLine{01029\ \textcolor{comment}{//\ Tests\ that\ Truly(predicate)\ matches\ what\ satisfies\ the\ given}}
+\DoxyCodeLine{01030\ \textcolor{comment}{//\ predicate.}}
+\DoxyCodeLine{01031\ TEST(TrulyTest,\ MatchesWhatSatisfiesThePredicate)\ \{}
+\DoxyCodeLine{01032\ \ \ Matcher<double>\ m\ =\ Truly(IsPositive);}
+\DoxyCodeLine{01033\ \ \ EXPECT\_TRUE(m.Matches(2.0));}
+\DoxyCodeLine{01034\ \ \ EXPECT\_FALSE(m.Matches(-\/1.5));}
+\DoxyCodeLine{01035\ \}}
+\DoxyCodeLine{01036\ }
+\DoxyCodeLine{01037\ \textcolor{comment}{//\ Tests\ that\ Truly(predicate\_functor)\ works\ too.}}
+\DoxyCodeLine{01038\ TEST(TrulyTest,\ CanBeUsedWithFunctor)\ \{}
+\DoxyCodeLine{01039\ \ \ Matcher<int>\ m\ =\ Truly(IsGreaterThan(5));}
+\DoxyCodeLine{01040\ \ \ EXPECT\_TRUE(m.Matches(6));}
+\DoxyCodeLine{01041\ \ \ EXPECT\_FALSE(m.Matches(4));}
+\DoxyCodeLine{01042\ \}}
+\DoxyCodeLine{01043\ }
+\DoxyCodeLine{01044\ \textcolor{comment}{//\ A\ class\ that\ can\ be\ implicitly\ converted\ to\ bool.}}
+\DoxyCodeLine{01045\ \textcolor{keyword}{class\ }ConvertibleToBool\ \{}
+\DoxyCodeLine{01046\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01047\ \ \ \textcolor{keyword}{explicit}\ ConvertibleToBool(\textcolor{keywordtype}{int}\ number)\ :\ number\_(number)\ \{\}}
+\DoxyCodeLine{01048\ \ \ \textcolor{keyword}{operator}\ bool()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ number\_\ !=\ 0;\ \}}
+\DoxyCodeLine{01049\ }
+\DoxyCodeLine{01050\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01051\ \ \ \textcolor{keywordtype}{int}\ number\_;}
+\DoxyCodeLine{01052\ \};}
+\DoxyCodeLine{01053\ }
+\DoxyCodeLine{01054\ ConvertibleToBool\ IsNotZero(\textcolor{keywordtype}{int}\ number)\ \{\ \textcolor{keywordflow}{return}\ ConvertibleToBool(number);\ \}}
+\DoxyCodeLine{01055\ }
+\DoxyCodeLine{01056\ \textcolor{comment}{//\ Tests\ that\ the\ predicate\ used\ in\ Truly()\ may\ return\ a\ class\ that's}}
+\DoxyCodeLine{01057\ \textcolor{comment}{//\ implicitly\ convertible\ to\ bool,\ even\ when\ the\ class\ has\ no}}
+\DoxyCodeLine{01058\ \textcolor{comment}{//\ operator!().}}
+\DoxyCodeLine{01059\ TEST(TrulyTest,\ PredicateCanReturnAClassConvertibleToBool)\ \{}
+\DoxyCodeLine{01060\ \ \ Matcher<int>\ m\ =\ Truly(IsNotZero);}
+\DoxyCodeLine{01061\ \ \ EXPECT\_TRUE(m.Matches(1));}
+\DoxyCodeLine{01062\ \ \ EXPECT\_FALSE(m.Matches(0));}
+\DoxyCodeLine{01063\ \}}
+\DoxyCodeLine{01064\ }
+\DoxyCodeLine{01065\ \textcolor{comment}{//\ Tests\ that\ Truly(predicate)\ can\ describe\ itself\ properly.}}
+\DoxyCodeLine{01066\ TEST(TrulyTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01067\ \ \ Matcher<double>\ m\ =\ Truly(IsPositive);}
+\DoxyCodeLine{01068\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}satisfies\ the\ given\ predicate"{}},\ Describe(m));}
+\DoxyCodeLine{01069\ \}}
+\DoxyCodeLine{01070\ }
+\DoxyCodeLine{01071\ \textcolor{comment}{//\ Tests\ that\ Truly(predicate)\ works\ when\ the\ matcher\ takes\ its}}
+\DoxyCodeLine{01072\ \textcolor{comment}{//\ argument\ by\ reference.}}
+\DoxyCodeLine{01073\ TEST(TrulyTest,\ WorksForByRefArguments)\ \{}
+\DoxyCodeLine{01074\ \ \ Matcher<const\ int\&>\ m\ =\ Truly(ReferencesFooAndIsZero);}
+\DoxyCodeLine{01075\ \ \ EXPECT\_TRUE(m.Matches(foo));}
+\DoxyCodeLine{01076\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{01077\ \ \ EXPECT\_FALSE(m.Matches(n));}
+\DoxyCodeLine{01078\ \}}
+\DoxyCodeLine{01079\ }
+\DoxyCodeLine{01080\ \textcolor{comment}{//\ Tests\ that\ Truly(predicate)\ provides\ a\ helpful\ reason\ when\ it\ fails.}}
+\DoxyCodeLine{01081\ TEST(TrulyTest,\ ExplainsFailures)\ \{}
+\DoxyCodeLine{01082\ \ \ StringMatchResultListener\ listener;}
+\DoxyCodeLine{01083\ \ \ EXPECT\_FALSE(ExplainMatchResult(Truly(IsPositive),\ -\/1,\ \&listener));}
+\DoxyCodeLine{01084\ \ \ EXPECT\_EQ(listener.str(),\ \textcolor{stringliteral}{"{}didn't\ satisfy\ the\ given\ predicate"{}});}
+\DoxyCodeLine{01085\ \}}
+\DoxyCodeLine{01086\ }
+\DoxyCodeLine{01087\ \textcolor{comment}{//\ Tests\ that\ Matches(m)\ is\ a\ predicate\ satisfied\ by\ whatever\ that}}
+\DoxyCodeLine{01088\ \textcolor{comment}{//\ matches\ matcher\ m.}}
+\DoxyCodeLine{01089\ TEST(MatchesTest,\ IsSatisfiedByWhatMatchesTheMatcher)\ \{}
+\DoxyCodeLine{01090\ \ \ EXPECT\_TRUE(Matches(Ge(0))(1));}
+\DoxyCodeLine{01091\ \ \ EXPECT\_FALSE(Matches(Eq(\textcolor{charliteral}{'a'}))(\textcolor{charliteral}{'b'}));}
+\DoxyCodeLine{01092\ \}}
+\DoxyCodeLine{01093\ }
+\DoxyCodeLine{01094\ \textcolor{comment}{//\ Tests\ that\ Matches(m)\ works\ when\ the\ matcher\ takes\ its\ argument\ by}}
+\DoxyCodeLine{01095\ \textcolor{comment}{//\ reference.}}
+\DoxyCodeLine{01096\ TEST(MatchesTest,\ WorksOnByRefArguments)\ \{}
+\DoxyCodeLine{01097\ \ \ \textcolor{keywordtype}{int}\ m\ =\ 0,\ n\ =\ 0;}
+\DoxyCodeLine{01098\ \ \ EXPECT\_TRUE(Matches(AllOf(Ref(n),\ Eq(0)))(n));}
+\DoxyCodeLine{01099\ \ \ EXPECT\_FALSE(Matches(Ref(m))(n));}
+\DoxyCodeLine{01100\ \}}
+\DoxyCodeLine{01101\ }
+\DoxyCodeLine{01102\ \textcolor{comment}{//\ Tests\ that\ a\ Matcher\ on\ non-\/reference\ type\ can\ be\ used\ in}}
+\DoxyCodeLine{01103\ \textcolor{comment}{//\ Matches().}}
+\DoxyCodeLine{01104\ TEST(MatchesTest,\ WorksWithMatcherOnNonRefType)\ \{}
+\DoxyCodeLine{01105\ \ \ Matcher<int>\ eq5\ =\ Eq(5);}
+\DoxyCodeLine{01106\ \ \ EXPECT\_TRUE(Matches(eq5)(5));}
+\DoxyCodeLine{01107\ \ \ EXPECT\_FALSE(Matches(eq5)(2));}
+\DoxyCodeLine{01108\ \}}
+\DoxyCodeLine{01109\ }
+\DoxyCodeLine{01110\ \textcolor{comment}{//\ Tests\ Value(value,\ matcher).\ \ Since\ Value()\ is\ a\ simple\ wrapper\ for}}
+\DoxyCodeLine{01111\ \textcolor{comment}{//\ Matches(),\ which\ has\ been\ tested\ already,\ we\ don't\ spend\ a\ lot\ of}}
+\DoxyCodeLine{01112\ \textcolor{comment}{//\ effort\ on\ testing\ Value().}}
+\DoxyCodeLine{01113\ TEST(ValueTest,\ WorksWithPolymorphicMatcher)\ \{}
+\DoxyCodeLine{01114\ \ \ EXPECT\_TRUE(Value(\textcolor{stringliteral}{"{}hi"{}},\ StartsWith(\textcolor{stringliteral}{"{}h"{}})));}
+\DoxyCodeLine{01115\ \ \ EXPECT\_FALSE(Value(5,\ Gt(10)));}
+\DoxyCodeLine{01116\ \}}
+\DoxyCodeLine{01117\ }
+\DoxyCodeLine{01118\ TEST(ValueTest,\ WorksWithMonomorphicMatcher)\ \{}
+\DoxyCodeLine{01119\ \ \ \textcolor{keyword}{const}\ Matcher<int>\ is\_zero\ =\ Eq(0);}
+\DoxyCodeLine{01120\ \ \ EXPECT\_TRUE(Value(0,\ is\_zero));}
+\DoxyCodeLine{01121\ \ \ EXPECT\_FALSE(Value(\textcolor{charliteral}{'a'},\ is\_zero));}
+\DoxyCodeLine{01122\ }
+\DoxyCodeLine{01123\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{01124\ \ \ \textcolor{keyword}{const}\ Matcher<const\ int\&>\ ref\_n\ =\ Ref(n);}
+\DoxyCodeLine{01125\ \ \ EXPECT\_TRUE(Value(n,\ ref\_n));}
+\DoxyCodeLine{01126\ \ \ EXPECT\_FALSE(Value(1,\ ref\_n));}
+\DoxyCodeLine{01127\ \}}
+\DoxyCodeLine{01128\ }
+\DoxyCodeLine{01129\ TEST(AllArgsTest,\ WorksForTuple)\ \{}
+\DoxyCodeLine{01130\ \ \ EXPECT\_THAT(std::make\_tuple(1,\ 2L),\ AllArgs(Lt()));}
+\DoxyCodeLine{01131\ \ \ EXPECT\_THAT(std::make\_tuple(2L,\ 1),\ Not(AllArgs(Lt())));}
+\DoxyCodeLine{01132\ \}}
+\DoxyCodeLine{01133\ }
+\DoxyCodeLine{01134\ TEST(AllArgsTest,\ WorksForNonTuple)\ \{}
+\DoxyCodeLine{01135\ \ \ EXPECT\_THAT(42,\ AllArgs(Gt(0)));}
+\DoxyCodeLine{01136\ \ \ EXPECT\_THAT(\textcolor{charliteral}{'a'},\ Not(AllArgs(Eq(\textcolor{charliteral}{'b'}))));}
+\DoxyCodeLine{01137\ \}}
+\DoxyCodeLine{01138\ }
+\DoxyCodeLine{01139\ \textcolor{keyword}{class\ }AllArgsHelper\ \{}
+\DoxyCodeLine{01140\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01141\ \ \ AllArgsHelper()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{01142\ }
+\DoxyCodeLine{01143\ \ \ MOCK\_METHOD2(Helper,\ \textcolor{keywordtype}{int}(\textcolor{keywordtype}{char}\ x,\ \textcolor{keywordtype}{int}\ y));}
+\DoxyCodeLine{01144\ }
+\DoxyCodeLine{01145\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01146\ \ \ AllArgsHelper(\textcolor{keyword}{const}\ AllArgsHelper\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{01147\ \ \ AllArgsHelper\&\ operator=(\textcolor{keyword}{const}\ AllArgsHelper\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{01148\ \};}
+\DoxyCodeLine{01149\ }
+\DoxyCodeLine{01150\ TEST(AllArgsTest,\ WorksInWithClause)\ \{}
+\DoxyCodeLine{01151\ \ \ AllArgsHelper\ helper;}
+\DoxyCodeLine{01152\ \ \ ON\_CALL(helper,\ Helper(\_,\ \_)).With(AllArgs(Lt())).WillByDefault(Return(1));}
+\DoxyCodeLine{01153\ \ \ EXPECT\_CALL(helper,\ Helper(\_,\ \_));}
+\DoxyCodeLine{01154\ \ \ EXPECT\_CALL(helper,\ Helper(\_,\ \_)).With(AllArgs(Gt())).WillOnce(Return(2));}
+\DoxyCodeLine{01155\ }
+\DoxyCodeLine{01156\ \ \ EXPECT\_EQ(1,\ helper.Helper(\textcolor{charliteral}{'\(\backslash\)1'},\ 2));}
+\DoxyCodeLine{01157\ \ \ EXPECT\_EQ(2,\ helper.Helper(\textcolor{charliteral}{'a'},\ 1));}
+\DoxyCodeLine{01158\ \}}
+\DoxyCodeLine{01159\ }
+\DoxyCodeLine{01160\ \textcolor{keyword}{class\ }OptionalMatchersHelper\ \{}
+\DoxyCodeLine{01161\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01162\ \ \ OptionalMatchersHelper()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{01163\ }
+\DoxyCodeLine{01164\ \ \ MOCK\_METHOD0(NoArgs,\ \textcolor{keywordtype}{int}());}
+\DoxyCodeLine{01165\ }
+\DoxyCodeLine{01166\ \ \ MOCK\_METHOD1(OneArg,\ \textcolor{keywordtype}{int}(\textcolor{keywordtype}{int}\ y));}
+\DoxyCodeLine{01167\ }
+\DoxyCodeLine{01168\ \ \ MOCK\_METHOD2(TwoArgs,\ \textcolor{keywordtype}{int}(\textcolor{keywordtype}{char}\ x,\ \textcolor{keywordtype}{int}\ y));}
+\DoxyCodeLine{01169\ }
+\DoxyCodeLine{01170\ \ \ MOCK\_METHOD1(Overloaded,\ \textcolor{keywordtype}{int}(\textcolor{keywordtype}{char}\ x));}
+\DoxyCodeLine{01171\ \ \ MOCK\_METHOD2(Overloaded,\ \textcolor{keywordtype}{int}(\textcolor{keywordtype}{char}\ x,\ \textcolor{keywordtype}{int}\ y));}
+\DoxyCodeLine{01172\ }
+\DoxyCodeLine{01173\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01174\ \ \ OptionalMatchersHelper(\textcolor{keyword}{const}\ OptionalMatchersHelper\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{01175\ \ \ OptionalMatchersHelper\&\ operator=(\textcolor{keyword}{const}\ OptionalMatchersHelper\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{01176\ \};}
+\DoxyCodeLine{01177\ }
+\DoxyCodeLine{01178\ TEST(AllArgsTest,\ WorksWithoutMatchers)\ \{}
+\DoxyCodeLine{01179\ \ \ OptionalMatchersHelper\ helper;}
+\DoxyCodeLine{01180\ }
+\DoxyCodeLine{01181\ \ \ ON\_CALL(helper,\ NoArgs).WillByDefault(Return(10));}
+\DoxyCodeLine{01182\ \ \ ON\_CALL(helper,\ OneArg).WillByDefault(Return(20));}
+\DoxyCodeLine{01183\ \ \ ON\_CALL(helper,\ TwoArgs).WillByDefault(Return(30));}
+\DoxyCodeLine{01184\ }
+\DoxyCodeLine{01185\ \ \ EXPECT\_EQ(10,\ helper.NoArgs());}
+\DoxyCodeLine{01186\ \ \ EXPECT\_EQ(20,\ helper.OneArg(1));}
+\DoxyCodeLine{01187\ \ \ EXPECT\_EQ(30,\ helper.TwoArgs(\textcolor{charliteral}{'\(\backslash\)1'},\ 2));}
+\DoxyCodeLine{01188\ }
+\DoxyCodeLine{01189\ \ \ EXPECT\_CALL(helper,\ NoArgs).Times(1);}
+\DoxyCodeLine{01190\ \ \ EXPECT\_CALL(helper,\ OneArg).WillOnce(Return(100));}
+\DoxyCodeLine{01191\ \ \ EXPECT\_CALL(helper,\ OneArg(17)).WillOnce(Return(200));}
+\DoxyCodeLine{01192\ \ \ EXPECT\_CALL(helper,\ TwoArgs).Times(0);}
+\DoxyCodeLine{01193\ }
+\DoxyCodeLine{01194\ \ \ EXPECT\_EQ(10,\ helper.NoArgs());}
+\DoxyCodeLine{01195\ \ \ EXPECT\_EQ(100,\ helper.OneArg(1));}
+\DoxyCodeLine{01196\ \ \ EXPECT\_EQ(200,\ helper.OneArg(17));}
+\DoxyCodeLine{01197\ \}}
+\DoxyCodeLine{01198\ }
+\DoxyCodeLine{01199\ \textcolor{comment}{//\ Tests\ floating-\/point\ matchers.}}
+\DoxyCodeLine{01200\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ RawType>}
+\DoxyCodeLine{01201\ \textcolor{keyword}{class\ }FloatingPointTest\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classtesting_1_1Test}{testing::Test}}\ \{}
+\DoxyCodeLine{01202\ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{01203\ \ \ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{classtesting_1_1internal_1_1FloatingPoint}{testing::internal::FloatingPoint<RawType>}}\ Floating;}
+\DoxyCodeLine{01204\ \ \ \textcolor{keyword}{typedef}\ \textcolor{keyword}{typename}\ Floating::Bits\ Bits;}
+\DoxyCodeLine{01205\ }
+\DoxyCodeLine{01206\ \ \ FloatingPointTest()}
+\DoxyCodeLine{01207\ \ \ \ \ \ \ :\ max\_ulps\_(Floating::kMaxUlps),}
+\DoxyCodeLine{01208\ \ \ \ \ \ \ \ \ zero\_bits\_(Floating(0).bits()),}
+\DoxyCodeLine{01209\ \ \ \ \ \ \ \ \ one\_bits\_(Floating(1).bits()),}
+\DoxyCodeLine{01210\ \ \ \ \ \ \ \ \ infinity\_bits\_(Floating(Floating::Infinity()).bits()),}
+\DoxyCodeLine{01211\ \ \ \ \ \ \ \ \ close\_to\_positive\_zero\_(}
+\DoxyCodeLine{01212\ \ \ \ \ \ \ \ \ \ \ \ \ Floating::ReinterpretBits(zero\_bits\_\ +\ max\_ulps\_\ /\ 2)),}
+\DoxyCodeLine{01213\ \ \ \ \ \ \ \ \ close\_to\_negative\_zero\_(}
+\DoxyCodeLine{01214\ \ \ \ \ \ \ \ \ \ \ \ \ -\/Floating::ReinterpretBits(zero\_bits\_\ +\ max\_ulps\_\ -\/\ max\_ulps\_\ /\ 2)),}
+\DoxyCodeLine{01215\ \ \ \ \ \ \ \ \ further\_from\_negative\_zero\_(-\/Floating::ReinterpretBits(}
+\DoxyCodeLine{01216\ \ \ \ \ \ \ \ \ \ \ \ \ zero\_bits\_\ +\ max\_ulps\_\ +\ 1\ -\/\ max\_ulps\_\ /\ 2)),}
+\DoxyCodeLine{01217\ \ \ \ \ \ \ \ \ close\_to\_one\_(Floating::ReinterpretBits(one\_bits\_\ +\ max\_ulps\_)),}
+\DoxyCodeLine{01218\ \ \ \ \ \ \ \ \ further\_from\_one\_(Floating::ReinterpretBits(one\_bits\_\ +\ max\_ulps\_\ +\ 1)),}
+\DoxyCodeLine{01219\ \ \ \ \ \ \ \ \ infinity\_(Floating::Infinity()),}
+\DoxyCodeLine{01220\ \ \ \ \ \ \ \ \ close\_to\_infinity\_(}
+\DoxyCodeLine{01221\ \ \ \ \ \ \ \ \ \ \ \ \ Floating::ReinterpretBits(infinity\_bits\_\ -\/\ max\_ulps\_)),}
+\DoxyCodeLine{01222\ \ \ \ \ \ \ \ \ further\_from\_infinity\_(}
+\DoxyCodeLine{01223\ \ \ \ \ \ \ \ \ \ \ \ \ Floating::ReinterpretBits(infinity\_bits\_\ -\/\ max\_ulps\_\ -\/\ 1)),}
+\DoxyCodeLine{01224\ \ \ \ \ \ \ \ \ max\_(std::numeric\_limits<RawType>::max()),}
+\DoxyCodeLine{01225\ \ \ \ \ \ \ \ \ nan1\_(Floating::ReinterpretBits(Floating::kExponentBitMask\ |\ 1)),}
+\DoxyCodeLine{01226\ \ \ \ \ \ \ \ \ nan2\_(Floating::ReinterpretBits(Floating::kExponentBitMask\ |\ 200))\ \{\}}
+\DoxyCodeLine{01227\ }
+\DoxyCodeLine{01228\ \ \ \textcolor{keywordtype}{void}\ TestSize()\ \{\ EXPECT\_EQ(\textcolor{keyword}{sizeof}(RawType),\ \textcolor{keyword}{sizeof}(Bits));\ \}}
+\DoxyCodeLine{01229\ }
+\DoxyCodeLine{01230\ \ \ \textcolor{comment}{//\ A\ battery\ of\ tests\ for\ FloatingEqMatcher::Matches.}}
+\DoxyCodeLine{01231\ \ \ \textcolor{comment}{//\ matcher\_maker\ is\ a\ pointer\ to\ a\ function\ which\ creates\ a\ FloatingEqMatcher.}}
+\DoxyCodeLine{01232\ \ \ \textcolor{keywordtype}{void}\ TestMatches(}
+\DoxyCodeLine{01233\ \ \ \ \ \ \ testing::internal::FloatingEqMatcher<RawType>\ (*matcher\_maker)(RawType))\ \{}
+\DoxyCodeLine{01234\ \ \ \ \ Matcher<RawType>\ m1\ =\ matcher\_maker(0.0);}
+\DoxyCodeLine{01235\ \ \ \ \ EXPECT\_TRUE(m1.Matches(-\/0.0));}
+\DoxyCodeLine{01236\ \ \ \ \ EXPECT\_TRUE(m1.Matches(close\_to\_positive\_zero\_));}
+\DoxyCodeLine{01237\ \ \ \ \ EXPECT\_TRUE(m1.Matches(close\_to\_negative\_zero\_));}
+\DoxyCodeLine{01238\ \ \ \ \ EXPECT\_FALSE(m1.Matches(1.0));}
+\DoxyCodeLine{01239\ }
+\DoxyCodeLine{01240\ \ \ \ \ Matcher<RawType>\ m2\ =\ matcher\_maker(close\_to\_positive\_zero\_);}
+\DoxyCodeLine{01241\ \ \ \ \ EXPECT\_FALSE(m2.Matches(further\_from\_negative\_zero\_));}
+\DoxyCodeLine{01242\ }
+\DoxyCodeLine{01243\ \ \ \ \ Matcher<RawType>\ m3\ =\ matcher\_maker(1.0);}
+\DoxyCodeLine{01244\ \ \ \ \ EXPECT\_TRUE(m3.Matches(close\_to\_one\_));}
+\DoxyCodeLine{01245\ \ \ \ \ EXPECT\_FALSE(m3.Matches(further\_from\_one\_));}
+\DoxyCodeLine{01246\ }
+\DoxyCodeLine{01247\ \ \ \ \ \textcolor{comment}{//\ Test\ commutativity:\ matcher\_maker(0.0).Matches(1.0)\ was\ tested\ above.}}
+\DoxyCodeLine{01248\ \ \ \ \ EXPECT\_FALSE(m3.Matches(0.0));}
+\DoxyCodeLine{01249\ }
+\DoxyCodeLine{01250\ \ \ \ \ Matcher<RawType>\ m4\ =\ matcher\_maker(-\/infinity\_);}
+\DoxyCodeLine{01251\ \ \ \ \ EXPECT\_TRUE(m4.Matches(-\/close\_to\_infinity\_));}
+\DoxyCodeLine{01252\ }
+\DoxyCodeLine{01253\ \ \ \ \ Matcher<RawType>\ m5\ =\ matcher\_maker(infinity\_);}
+\DoxyCodeLine{01254\ \ \ \ \ EXPECT\_TRUE(m5.Matches(close\_to\_infinity\_));}
+\DoxyCodeLine{01255\ }
+\DoxyCodeLine{01256\ \ \ \ \ \textcolor{comment}{//\ This\ is\ interesting\ as\ the\ representations\ of\ infinity\_\ and\ nan1\_}}
+\DoxyCodeLine{01257\ \ \ \ \ \textcolor{comment}{//\ are\ only\ 1\ DLP\ apart.}}
+\DoxyCodeLine{01258\ \ \ \ \ EXPECT\_FALSE(m5.Matches(nan1\_));}
+\DoxyCodeLine{01259\ }
+\DoxyCodeLine{01260\ \ \ \ \ \textcolor{comment}{//\ matcher\_maker\ can\ produce\ a\ Matcher<const\ RawType\&>,\ which\ is\ needed\ in}}
+\DoxyCodeLine{01261\ \ \ \ \ \textcolor{comment}{//\ some\ cases.}}
+\DoxyCodeLine{01262\ \ \ \ \ Matcher<const\ RawType\&>\ m6\ =\ matcher\_maker(0.0);}
+\DoxyCodeLine{01263\ \ \ \ \ EXPECT\_TRUE(m6.Matches(-\/0.0));}
+\DoxyCodeLine{01264\ \ \ \ \ EXPECT\_TRUE(m6.Matches(close\_to\_positive\_zero\_));}
+\DoxyCodeLine{01265\ \ \ \ \ EXPECT\_FALSE(m6.Matches(1.0));}
+\DoxyCodeLine{01266\ }
+\DoxyCodeLine{01267\ \ \ \ \ \textcolor{comment}{//\ matcher\_maker\ can\ produce\ a\ Matcher<RawType\&>,\ which\ is\ needed\ in\ some}}
+\DoxyCodeLine{01268\ \ \ \ \ \textcolor{comment}{//\ cases.}}
+\DoxyCodeLine{01269\ \ \ \ \ Matcher<RawType\&>\ m7\ =\ matcher\_maker(0.0);}
+\DoxyCodeLine{01270\ \ \ \ \ RawType\ x\ =\ 0.0;}
+\DoxyCodeLine{01271\ \ \ \ \ EXPECT\_TRUE(m7.Matches(x));}
+\DoxyCodeLine{01272\ \ \ \ \ x\ =\ 0.01f;}
+\DoxyCodeLine{01273\ \ \ \ \ EXPECT\_FALSE(m7.Matches(x));}
+\DoxyCodeLine{01274\ \ \ \}}
+\DoxyCodeLine{01275\ }
+\DoxyCodeLine{01276\ \ \ \textcolor{comment}{//\ Pre-\/calculated\ numbers\ to\ be\ used\ by\ the\ tests.}}
+\DoxyCodeLine{01277\ }
+\DoxyCodeLine{01278\ \ \ \textcolor{keyword}{const}\ Bits\ max\_ulps\_;}
+\DoxyCodeLine{01279\ }
+\DoxyCodeLine{01280\ \ \ \textcolor{keyword}{const}\ Bits\ zero\_bits\_;\ \ \ \ \ \ \textcolor{comment}{//\ The\ bits\ that\ represent\ 0.0.}}
+\DoxyCodeLine{01281\ \ \ \textcolor{keyword}{const}\ Bits\ one\_bits\_;\ \ \ \ \ \ \ \textcolor{comment}{//\ The\ bits\ that\ represent\ 1.0.}}
+\DoxyCodeLine{01282\ \ \ \textcolor{keyword}{const}\ Bits\ infinity\_bits\_;\ \ \textcolor{comment}{//\ The\ bits\ that\ represent\ +infinity.}}
+\DoxyCodeLine{01283\ }
+\DoxyCodeLine{01284\ \ \ \textcolor{comment}{//\ Some\ numbers\ close\ to\ 0.0.}}
+\DoxyCodeLine{01285\ \ \ \textcolor{keyword}{const}\ RawType\ close\_to\_positive\_zero\_;}
+\DoxyCodeLine{01286\ \ \ \textcolor{keyword}{const}\ RawType\ close\_to\_negative\_zero\_;}
+\DoxyCodeLine{01287\ \ \ \textcolor{keyword}{const}\ RawType\ further\_from\_negative\_zero\_;}
+\DoxyCodeLine{01288\ }
+\DoxyCodeLine{01289\ \ \ \textcolor{comment}{//\ Some\ numbers\ close\ to\ 1.0.}}
+\DoxyCodeLine{01290\ \ \ \textcolor{keyword}{const}\ RawType\ close\_to\_one\_;}
+\DoxyCodeLine{01291\ \ \ \textcolor{keyword}{const}\ RawType\ further\_from\_one\_;}
+\DoxyCodeLine{01292\ }
+\DoxyCodeLine{01293\ \ \ \textcolor{comment}{//\ Some\ numbers\ close\ to\ +infinity.}}
+\DoxyCodeLine{01294\ \ \ \textcolor{keyword}{const}\ RawType\ infinity\_;}
+\DoxyCodeLine{01295\ \ \ \textcolor{keyword}{const}\ RawType\ close\_to\_infinity\_;}
+\DoxyCodeLine{01296\ \ \ \textcolor{keyword}{const}\ RawType\ further\_from\_infinity\_;}
+\DoxyCodeLine{01297\ }
+\DoxyCodeLine{01298\ \ \ \textcolor{comment}{//\ Maximum\ representable\ value\ that's\ not\ infinity.}}
+\DoxyCodeLine{01299\ \ \ \textcolor{keyword}{const}\ RawType\ max\_;}
+\DoxyCodeLine{01300\ }
+\DoxyCodeLine{01301\ \ \ \textcolor{comment}{//\ Some\ NaNs.}}
+\DoxyCodeLine{01302\ \ \ \textcolor{keyword}{const}\ RawType\ nan1\_;}
+\DoxyCodeLine{01303\ \ \ \textcolor{keyword}{const}\ RawType\ nan2\_;}
+\DoxyCodeLine{01304\ \};}
+\DoxyCodeLine{01305\ }
+\DoxyCodeLine{01306\ \textcolor{comment}{//\ Tests\ floating-\/point\ matchers\ with\ fixed\ epsilons.}}
+\DoxyCodeLine{01307\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ RawType>}
+\DoxyCodeLine{01308\ \textcolor{keyword}{class\ }FloatingPointNearTest\ :\ \textcolor{keyword}{public}\ FloatingPointTest<RawType>\ \{}
+\DoxyCodeLine{01309\ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{01310\ \ \ \textcolor{keyword}{typedef}\ FloatingPointTest<RawType>\ ParentType;}
+\DoxyCodeLine{01311\ }
+\DoxyCodeLine{01312\ \ \ \textcolor{comment}{//\ A\ battery\ of\ tests\ for\ FloatingEqMatcher::Matches\ with\ a\ fixed\ epsilon.}}
+\DoxyCodeLine{01313\ \ \ \textcolor{comment}{//\ matcher\_maker\ is\ a\ pointer\ to\ a\ function\ which\ creates\ a\ FloatingEqMatcher.}}
+\DoxyCodeLine{01314\ \ \ \textcolor{keywordtype}{void}\ TestNearMatches(testing::internal::FloatingEqMatcher<RawType>\ (}
+\DoxyCodeLine{01315\ \ \ \ \ \ \ *matcher\_maker)(RawType,\ RawType))\ \{}
+\DoxyCodeLine{01316\ \ \ \ \ Matcher<RawType>\ m1\ =\ matcher\_maker(0.0,\ 0.0);}
+\DoxyCodeLine{01317\ \ \ \ \ EXPECT\_TRUE(m1.Matches(0.0));}
+\DoxyCodeLine{01318\ \ \ \ \ EXPECT\_TRUE(m1.Matches(-\/0.0));}
+\DoxyCodeLine{01319\ \ \ \ \ EXPECT\_FALSE(m1.Matches(ParentType::close\_to\_positive\_zero\_));}
+\DoxyCodeLine{01320\ \ \ \ \ EXPECT\_FALSE(m1.Matches(ParentType::close\_to\_negative\_zero\_));}
+\DoxyCodeLine{01321\ \ \ \ \ EXPECT\_FALSE(m1.Matches(1.0));}
+\DoxyCodeLine{01322\ }
+\DoxyCodeLine{01323\ \ \ \ \ Matcher<RawType>\ m2\ =\ matcher\_maker(0.0,\ 1.0);}
+\DoxyCodeLine{01324\ \ \ \ \ EXPECT\_TRUE(m2.Matches(0.0));}
+\DoxyCodeLine{01325\ \ \ \ \ EXPECT\_TRUE(m2.Matches(-\/0.0));}
+\DoxyCodeLine{01326\ \ \ \ \ EXPECT\_TRUE(m2.Matches(1.0));}
+\DoxyCodeLine{01327\ \ \ \ \ EXPECT\_TRUE(m2.Matches(-\/1.0));}
+\DoxyCodeLine{01328\ \ \ \ \ EXPECT\_FALSE(m2.Matches(ParentType::close\_to\_one\_));}
+\DoxyCodeLine{01329\ \ \ \ \ EXPECT\_FALSE(m2.Matches(-\/ParentType::close\_to\_one\_));}
+\DoxyCodeLine{01330\ }
+\DoxyCodeLine{01331\ \ \ \ \ \textcolor{comment}{//\ Check\ that\ inf\ matches\ inf,\ regardless\ of\ the\ of\ the\ specified\ max}}
+\DoxyCodeLine{01332\ \ \ \ \ \textcolor{comment}{//\ absolute\ error.}}
+\DoxyCodeLine{01333\ \ \ \ \ Matcher<RawType>\ m3\ =\ matcher\_maker(ParentType::infinity\_,\ 0.0);}
+\DoxyCodeLine{01334\ \ \ \ \ EXPECT\_TRUE(m3.Matches(ParentType::infinity\_));}
+\DoxyCodeLine{01335\ \ \ \ \ EXPECT\_FALSE(m3.Matches(ParentType::close\_to\_infinity\_));}
+\DoxyCodeLine{01336\ \ \ \ \ EXPECT\_FALSE(m3.Matches(-\/ParentType::infinity\_));}
+\DoxyCodeLine{01337\ }
+\DoxyCodeLine{01338\ \ \ \ \ Matcher<RawType>\ m4\ =\ matcher\_maker(-\/ParentType::infinity\_,\ 0.0);}
+\DoxyCodeLine{01339\ \ \ \ \ EXPECT\_TRUE(m4.Matches(-\/ParentType::infinity\_));}
+\DoxyCodeLine{01340\ \ \ \ \ EXPECT\_FALSE(m4.Matches(-\/ParentType::close\_to\_infinity\_));}
+\DoxyCodeLine{01341\ \ \ \ \ EXPECT\_FALSE(m4.Matches(ParentType::infinity\_));}
+\DoxyCodeLine{01342\ }
+\DoxyCodeLine{01343\ \ \ \ \ \textcolor{comment}{//\ Test\ various\ overflow\ scenarios.}}
+\DoxyCodeLine{01344\ \ \ \ \ Matcher<RawType>\ m5\ =\ matcher\_maker(ParentType::max\_,\ ParentType::max\_);}
+\DoxyCodeLine{01345\ \ \ \ \ EXPECT\_TRUE(m5.Matches(ParentType::max\_));}
+\DoxyCodeLine{01346\ \ \ \ \ EXPECT\_FALSE(m5.Matches(-\/ParentType::max\_));}
+\DoxyCodeLine{01347\ }
+\DoxyCodeLine{01348\ \ \ \ \ Matcher<RawType>\ m6\ =\ matcher\_maker(-\/ParentType::max\_,\ ParentType::max\_);}
+\DoxyCodeLine{01349\ \ \ \ \ EXPECT\_FALSE(m6.Matches(ParentType::max\_));}
+\DoxyCodeLine{01350\ \ \ \ \ EXPECT\_TRUE(m6.Matches(-\/ParentType::max\_));}
+\DoxyCodeLine{01351\ }
+\DoxyCodeLine{01352\ \ \ \ \ Matcher<RawType>\ m7\ =\ matcher\_maker(ParentType::max\_,\ 0);}
+\DoxyCodeLine{01353\ \ \ \ \ EXPECT\_TRUE(m7.Matches(ParentType::max\_));}
+\DoxyCodeLine{01354\ \ \ \ \ EXPECT\_FALSE(m7.Matches(-\/ParentType::max\_));}
+\DoxyCodeLine{01355\ }
+\DoxyCodeLine{01356\ \ \ \ \ Matcher<RawType>\ m8\ =\ matcher\_maker(-\/ParentType::max\_,\ 0);}
+\DoxyCodeLine{01357\ \ \ \ \ EXPECT\_FALSE(m8.Matches(ParentType::max\_));}
+\DoxyCodeLine{01358\ \ \ \ \ EXPECT\_TRUE(m8.Matches(-\/ParentType::max\_));}
+\DoxyCodeLine{01359\ }
+\DoxyCodeLine{01360\ \ \ \ \ \textcolor{comment}{//\ The\ difference\ between\ max()\ and\ -\/max()\ normally\ overflows\ to\ infinity,}}
+\DoxyCodeLine{01361\ \ \ \ \ \textcolor{comment}{//\ but\ it\ should\ still\ match\ if\ the\ max\_abs\_error\ is\ also\ infinity.}}
+\DoxyCodeLine{01362\ \ \ \ \ Matcher<RawType>\ m9\ =}
+\DoxyCodeLine{01363\ \ \ \ \ \ \ \ \ matcher\_maker(ParentType::max\_,\ ParentType::infinity\_);}
+\DoxyCodeLine{01364\ \ \ \ \ EXPECT\_TRUE(m8.Matches(-\/ParentType::max\_));}
+\DoxyCodeLine{01365\ }
+\DoxyCodeLine{01366\ \ \ \ \ \textcolor{comment}{//\ matcher\_maker\ can\ produce\ a\ Matcher<const\ RawType\&>,\ which\ is\ needed\ in}}
+\DoxyCodeLine{01367\ \ \ \ \ \textcolor{comment}{//\ some\ cases.}}
+\DoxyCodeLine{01368\ \ \ \ \ Matcher<const\ RawType\&>\ m10\ =\ matcher\_maker(0.0,\ 1.0);}
+\DoxyCodeLine{01369\ \ \ \ \ EXPECT\_TRUE(m10.Matches(-\/0.0));}
+\DoxyCodeLine{01370\ \ \ \ \ EXPECT\_TRUE(m10.Matches(ParentType::close\_to\_positive\_zero\_));}
+\DoxyCodeLine{01371\ \ \ \ \ EXPECT\_FALSE(m10.Matches(ParentType::close\_to\_one\_));}
+\DoxyCodeLine{01372\ }
+\DoxyCodeLine{01373\ \ \ \ \ \textcolor{comment}{//\ matcher\_maker\ can\ produce\ a\ Matcher<RawType\&>,\ which\ is\ needed\ in\ some}}
+\DoxyCodeLine{01374\ \ \ \ \ \textcolor{comment}{//\ cases.}}
+\DoxyCodeLine{01375\ \ \ \ \ Matcher<RawType\&>\ m11\ =\ matcher\_maker(0.0,\ 1.0);}
+\DoxyCodeLine{01376\ \ \ \ \ RawType\ x\ =\ 0.0;}
+\DoxyCodeLine{01377\ \ \ \ \ EXPECT\_TRUE(m11.Matches(x));}
+\DoxyCodeLine{01378\ \ \ \ \ x\ =\ 1.0f;}
+\DoxyCodeLine{01379\ \ \ \ \ EXPECT\_TRUE(m11.Matches(x));}
+\DoxyCodeLine{01380\ \ \ \ \ x\ =\ -\/1.0f;}
+\DoxyCodeLine{01381\ \ \ \ \ EXPECT\_TRUE(m11.Matches(x));}
+\DoxyCodeLine{01382\ \ \ \ \ x\ =\ 1.1f;}
+\DoxyCodeLine{01383\ \ \ \ \ EXPECT\_FALSE(m11.Matches(x));}
+\DoxyCodeLine{01384\ \ \ \ \ x\ =\ -\/1.1f;}
+\DoxyCodeLine{01385\ \ \ \ \ EXPECT\_FALSE(m11.Matches(x));}
+\DoxyCodeLine{01386\ \ \ \}}
+\DoxyCodeLine{01387\ \};}
+\DoxyCodeLine{01388\ }
+\DoxyCodeLine{01389\ \textcolor{comment}{//\ Instantiate\ FloatingPointTest\ for\ testing\ floats.}}
+\DoxyCodeLine{01390\ \textcolor{keyword}{typedef}\ FloatingPointTest<float>\ FloatTest;}
+\DoxyCodeLine{01391\ }
+\DoxyCodeLine{01392\ TEST\_F(FloatTest,\ FloatEqApproximatelyMatchesFloats)\ \{\ TestMatches(\&FloatEq);\ \}}
+\DoxyCodeLine{01393\ }
+\DoxyCodeLine{01394\ TEST\_F(FloatTest,\ NanSensitiveFloatEqApproximatelyMatchesFloats)\ \{}
+\DoxyCodeLine{01395\ \ \ TestMatches(\&NanSensitiveFloatEq);}
+\DoxyCodeLine{01396\ \}}
+\DoxyCodeLine{01397\ }
+\DoxyCodeLine{01398\ TEST\_F(FloatTest,\ FloatEqCannotMatchNaN)\ \{}
+\DoxyCodeLine{01399\ \ \ \textcolor{comment}{//\ FloatEq\ never\ matches\ NaN.}}
+\DoxyCodeLine{01400\ \ \ Matcher<float>\ m\ =\ FloatEq(nan1\_);}
+\DoxyCodeLine{01401\ \ \ EXPECT\_FALSE(m.Matches(nan1\_));}
+\DoxyCodeLine{01402\ \ \ EXPECT\_FALSE(m.Matches(nan2\_));}
+\DoxyCodeLine{01403\ \ \ EXPECT\_FALSE(m.Matches(1.0));}
+\DoxyCodeLine{01404\ \}}
+\DoxyCodeLine{01405\ }
+\DoxyCodeLine{01406\ TEST\_F(FloatTest,\ NanSensitiveFloatEqCanMatchNaN)\ \{}
+\DoxyCodeLine{01407\ \ \ \textcolor{comment}{//\ NanSensitiveFloatEq\ will\ match\ NaN.}}
+\DoxyCodeLine{01408\ \ \ Matcher<float>\ m\ =\ NanSensitiveFloatEq(nan1\_);}
+\DoxyCodeLine{01409\ \ \ EXPECT\_TRUE(m.Matches(nan1\_));}
+\DoxyCodeLine{01410\ \ \ EXPECT\_TRUE(m.Matches(nan2\_));}
+\DoxyCodeLine{01411\ \ \ EXPECT\_FALSE(m.Matches(1.0));}
+\DoxyCodeLine{01412\ \}}
+\DoxyCodeLine{01413\ }
+\DoxyCodeLine{01414\ TEST\_F(FloatTest,\ FloatEqCanDescribeSelf)\ \{}
+\DoxyCodeLine{01415\ \ \ Matcher<float>\ m1\ =\ FloatEq(2.0f);}
+\DoxyCodeLine{01416\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 2"{}},\ Describe(m1));}
+\DoxyCodeLine{01417\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 2"{}},\ DescribeNegation(m1));}
+\DoxyCodeLine{01418\ }
+\DoxyCodeLine{01419\ \ \ Matcher<float>\ m2\ =\ FloatEq(0.5f);}
+\DoxyCodeLine{01420\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 0.5"{}},\ Describe(m2));}
+\DoxyCodeLine{01421\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 0.5"{}},\ DescribeNegation(m2));}
+\DoxyCodeLine{01422\ }
+\DoxyCodeLine{01423\ \ \ Matcher<float>\ m3\ =\ FloatEq(nan1\_);}
+\DoxyCodeLine{01424\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}never\ matches"{}},\ Describe(m3));}
+\DoxyCodeLine{01425\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ anything"{}},\ DescribeNegation(m3));}
+\DoxyCodeLine{01426\ \}}
+\DoxyCodeLine{01427\ }
+\DoxyCodeLine{01428\ TEST\_F(FloatTest,\ NanSensitiveFloatEqCanDescribeSelf)\ \{}
+\DoxyCodeLine{01429\ \ \ Matcher<float>\ m1\ =\ NanSensitiveFloatEq(2.0f);}
+\DoxyCodeLine{01430\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 2"{}},\ Describe(m1));}
+\DoxyCodeLine{01431\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 2"{}},\ DescribeNegation(m1));}
+\DoxyCodeLine{01432\ }
+\DoxyCodeLine{01433\ \ \ Matcher<float>\ m2\ =\ NanSensitiveFloatEq(0.5f);}
+\DoxyCodeLine{01434\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 0.5"{}},\ Describe(m2));}
+\DoxyCodeLine{01435\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 0.5"{}},\ DescribeNegation(m2));}
+\DoxyCodeLine{01436\ }
+\DoxyCodeLine{01437\ \ \ Matcher<float>\ m3\ =\ NanSensitiveFloatEq(nan1\_);}
+\DoxyCodeLine{01438\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ NaN"{}},\ Describe(m3));}
+\DoxyCodeLine{01439\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ NaN"{}},\ DescribeNegation(m3));}
+\DoxyCodeLine{01440\ \}}
+\DoxyCodeLine{01441\ }
+\DoxyCodeLine{01442\ \textcolor{comment}{//\ Instantiate\ FloatingPointTest\ for\ testing\ floats\ with\ a\ user-\/specified}}
+\DoxyCodeLine{01443\ \textcolor{comment}{//\ max\ absolute\ error.}}
+\DoxyCodeLine{01444\ \textcolor{keyword}{typedef}\ FloatingPointNearTest<float>\ FloatNearTest;}
+\DoxyCodeLine{01445\ }
+\DoxyCodeLine{01446\ TEST\_F(FloatNearTest,\ FloatNearMatches)\ \{\ TestNearMatches(\&FloatNear);\ \}}
+\DoxyCodeLine{01447\ }
+\DoxyCodeLine{01448\ TEST\_F(FloatNearTest,\ NanSensitiveFloatNearApproximatelyMatchesFloats)\ \{}
+\DoxyCodeLine{01449\ \ \ TestNearMatches(\&NanSensitiveFloatNear);}
+\DoxyCodeLine{01450\ \}}
+\DoxyCodeLine{01451\ }
+\DoxyCodeLine{01452\ TEST\_F(FloatNearTest,\ FloatNearCanDescribeSelf)\ \{}
+\DoxyCodeLine{01453\ \ \ Matcher<float>\ m1\ =\ FloatNear(2.0f,\ 0.5f);}
+\DoxyCodeLine{01454\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 2\ (absolute\ error\ <=\ 0.5)"{}},\ Describe(m1));}
+\DoxyCodeLine{01455\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 2\ (absolute\ error\ >\ 0.5)"{}},}
+\DoxyCodeLine{01456\ \ \ \ \ \ \ \ \ \ \ \ \ DescribeNegation(m1));}
+\DoxyCodeLine{01457\ }
+\DoxyCodeLine{01458\ \ \ Matcher<float>\ m2\ =\ FloatNear(0.5f,\ 0.5f);}
+\DoxyCodeLine{01459\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 0.5\ (absolute\ error\ <=\ 0.5)"{}},\ Describe(m2));}
+\DoxyCodeLine{01460\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 0.5\ (absolute\ error\ >\ 0.5)"{}},}
+\DoxyCodeLine{01461\ \ \ \ \ \ \ \ \ \ \ \ \ DescribeNegation(m2));}
+\DoxyCodeLine{01462\ }
+\DoxyCodeLine{01463\ \ \ Matcher<float>\ m3\ =\ FloatNear(nan1\_,\ 0.0);}
+\DoxyCodeLine{01464\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}never\ matches"{}},\ Describe(m3));}
+\DoxyCodeLine{01465\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ anything"{}},\ DescribeNegation(m3));}
+\DoxyCodeLine{01466\ \}}
+\DoxyCodeLine{01467\ }
+\DoxyCodeLine{01468\ TEST\_F(FloatNearTest,\ NanSensitiveFloatNearCanDescribeSelf)\ \{}
+\DoxyCodeLine{01469\ \ \ Matcher<float>\ m1\ =\ NanSensitiveFloatNear(2.0f,\ 0.5f);}
+\DoxyCodeLine{01470\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 2\ (absolute\ error\ <=\ 0.5)"{}},\ Describe(m1));}
+\DoxyCodeLine{01471\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 2\ (absolute\ error\ >\ 0.5)"{}},}
+\DoxyCodeLine{01472\ \ \ \ \ \ \ \ \ \ \ \ \ DescribeNegation(m1));}
+\DoxyCodeLine{01473\ }
+\DoxyCodeLine{01474\ \ \ Matcher<float>\ m2\ =\ NanSensitiveFloatNear(0.5f,\ 0.5f);}
+\DoxyCodeLine{01475\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 0.5\ (absolute\ error\ <=\ 0.5)"{}},\ Describe(m2));}
+\DoxyCodeLine{01476\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 0.5\ (absolute\ error\ >\ 0.5)"{}},}
+\DoxyCodeLine{01477\ \ \ \ \ \ \ \ \ \ \ \ \ DescribeNegation(m2));}
+\DoxyCodeLine{01478\ }
+\DoxyCodeLine{01479\ \ \ Matcher<float>\ m3\ =\ NanSensitiveFloatNear(nan1\_,\ 0.1f);}
+\DoxyCodeLine{01480\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ NaN"{}},\ Describe(m3));}
+\DoxyCodeLine{01481\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ NaN"{}},\ DescribeNegation(m3));}
+\DoxyCodeLine{01482\ \}}
+\DoxyCodeLine{01483\ }
+\DoxyCodeLine{01484\ TEST\_F(FloatNearTest,\ FloatNearCannotMatchNaN)\ \{}
+\DoxyCodeLine{01485\ \ \ \textcolor{comment}{//\ FloatNear\ never\ matches\ NaN.}}
+\DoxyCodeLine{01486\ \ \ Matcher<float>\ m\ =\ FloatNear(ParentType::nan1\_,\ 0.1f);}
+\DoxyCodeLine{01487\ \ \ EXPECT\_FALSE(m.Matches(nan1\_));}
+\DoxyCodeLine{01488\ \ \ EXPECT\_FALSE(m.Matches(nan2\_));}
+\DoxyCodeLine{01489\ \ \ EXPECT\_FALSE(m.Matches(1.0));}
+\DoxyCodeLine{01490\ \}}
+\DoxyCodeLine{01491\ }
+\DoxyCodeLine{01492\ TEST\_F(FloatNearTest,\ NanSensitiveFloatNearCanMatchNaN)\ \{}
+\DoxyCodeLine{01493\ \ \ \textcolor{comment}{//\ NanSensitiveFloatNear\ will\ match\ NaN.}}
+\DoxyCodeLine{01494\ \ \ Matcher<float>\ m\ =\ NanSensitiveFloatNear(nan1\_,\ 0.1f);}
+\DoxyCodeLine{01495\ \ \ EXPECT\_TRUE(m.Matches(nan1\_));}
+\DoxyCodeLine{01496\ \ \ EXPECT\_TRUE(m.Matches(nan2\_));}
+\DoxyCodeLine{01497\ \ \ EXPECT\_FALSE(m.Matches(1.0));}
+\DoxyCodeLine{01498\ \}}
+\DoxyCodeLine{01499\ }
+\DoxyCodeLine{01500\ \textcolor{comment}{//\ Instantiate\ FloatingPointTest\ for\ testing\ doubles.}}
+\DoxyCodeLine{01501\ \textcolor{keyword}{typedef}\ FloatingPointTest<double>\ DoubleTest;}
+\DoxyCodeLine{01502\ }
+\DoxyCodeLine{01503\ TEST\_F(DoubleTest,\ DoubleEqApproximatelyMatchesDoubles)\ \{}
+\DoxyCodeLine{01504\ \ \ TestMatches(\&DoubleEq);}
+\DoxyCodeLine{01505\ \}}
+\DoxyCodeLine{01506\ }
+\DoxyCodeLine{01507\ TEST\_F(DoubleTest,\ NanSensitiveDoubleEqApproximatelyMatchesDoubles)\ \{}
+\DoxyCodeLine{01508\ \ \ TestMatches(\&NanSensitiveDoubleEq);}
+\DoxyCodeLine{01509\ \}}
+\DoxyCodeLine{01510\ }
+\DoxyCodeLine{01511\ TEST\_F(DoubleTest,\ DoubleEqCannotMatchNaN)\ \{}
+\DoxyCodeLine{01512\ \ \ \textcolor{comment}{//\ DoubleEq\ never\ matches\ NaN.}}
+\DoxyCodeLine{01513\ \ \ Matcher<double>\ m\ =\ DoubleEq(nan1\_);}
+\DoxyCodeLine{01514\ \ \ EXPECT\_FALSE(m.Matches(nan1\_));}
+\DoxyCodeLine{01515\ \ \ EXPECT\_FALSE(m.Matches(nan2\_));}
+\DoxyCodeLine{01516\ \ \ EXPECT\_FALSE(m.Matches(1.0));}
+\DoxyCodeLine{01517\ \}}
+\DoxyCodeLine{01518\ }
+\DoxyCodeLine{01519\ TEST\_F(DoubleTest,\ NanSensitiveDoubleEqCanMatchNaN)\ \{}
+\DoxyCodeLine{01520\ \ \ \textcolor{comment}{//\ NanSensitiveDoubleEq\ will\ match\ NaN.}}
+\DoxyCodeLine{01521\ \ \ Matcher<double>\ m\ =\ NanSensitiveDoubleEq(nan1\_);}
+\DoxyCodeLine{01522\ \ \ EXPECT\_TRUE(m.Matches(nan1\_));}
+\DoxyCodeLine{01523\ \ \ EXPECT\_TRUE(m.Matches(nan2\_));}
+\DoxyCodeLine{01524\ \ \ EXPECT\_FALSE(m.Matches(1.0));}
+\DoxyCodeLine{01525\ \}}
+\DoxyCodeLine{01526\ }
+\DoxyCodeLine{01527\ TEST\_F(DoubleTest,\ DoubleEqCanDescribeSelf)\ \{}
+\DoxyCodeLine{01528\ \ \ Matcher<double>\ m1\ =\ DoubleEq(2.0);}
+\DoxyCodeLine{01529\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 2"{}},\ Describe(m1));}
+\DoxyCodeLine{01530\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 2"{}},\ DescribeNegation(m1));}
+\DoxyCodeLine{01531\ }
+\DoxyCodeLine{01532\ \ \ Matcher<double>\ m2\ =\ DoubleEq(0.5);}
+\DoxyCodeLine{01533\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 0.5"{}},\ Describe(m2));}
+\DoxyCodeLine{01534\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 0.5"{}},\ DescribeNegation(m2));}
+\DoxyCodeLine{01535\ }
+\DoxyCodeLine{01536\ \ \ Matcher<double>\ m3\ =\ DoubleEq(nan1\_);}
+\DoxyCodeLine{01537\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}never\ matches"{}},\ Describe(m3));}
+\DoxyCodeLine{01538\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ anything"{}},\ DescribeNegation(m3));}
+\DoxyCodeLine{01539\ \}}
+\DoxyCodeLine{01540\ }
+\DoxyCodeLine{01541\ TEST\_F(DoubleTest,\ NanSensitiveDoubleEqCanDescribeSelf)\ \{}
+\DoxyCodeLine{01542\ \ \ Matcher<double>\ m1\ =\ NanSensitiveDoubleEq(2.0);}
+\DoxyCodeLine{01543\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 2"{}},\ Describe(m1));}
+\DoxyCodeLine{01544\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 2"{}},\ DescribeNegation(m1));}
+\DoxyCodeLine{01545\ }
+\DoxyCodeLine{01546\ \ \ Matcher<double>\ m2\ =\ NanSensitiveDoubleEq(0.5);}
+\DoxyCodeLine{01547\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 0.5"{}},\ Describe(m2));}
+\DoxyCodeLine{01548\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 0.5"{}},\ DescribeNegation(m2));}
+\DoxyCodeLine{01549\ }
+\DoxyCodeLine{01550\ \ \ Matcher<double>\ m3\ =\ NanSensitiveDoubleEq(nan1\_);}
+\DoxyCodeLine{01551\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ NaN"{}},\ Describe(m3));}
+\DoxyCodeLine{01552\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ NaN"{}},\ DescribeNegation(m3));}
+\DoxyCodeLine{01553\ \}}
+\DoxyCodeLine{01554\ }
+\DoxyCodeLine{01555\ \textcolor{comment}{//\ Instantiate\ FloatingPointTest\ for\ testing\ floats\ with\ a\ user-\/specified}}
+\DoxyCodeLine{01556\ \textcolor{comment}{//\ max\ absolute\ error.}}
+\DoxyCodeLine{01557\ \textcolor{keyword}{typedef}\ FloatingPointNearTest<double>\ DoubleNearTest;}
+\DoxyCodeLine{01558\ }
+\DoxyCodeLine{01559\ TEST\_F(DoubleNearTest,\ DoubleNearMatches)\ \{\ TestNearMatches(\&DoubleNear);\ \}}
+\DoxyCodeLine{01560\ }
+\DoxyCodeLine{01561\ TEST\_F(DoubleNearTest,\ NanSensitiveDoubleNearApproximatelyMatchesDoubles)\ \{}
+\DoxyCodeLine{01562\ \ \ TestNearMatches(\&NanSensitiveDoubleNear);}
+\DoxyCodeLine{01563\ \}}
+\DoxyCodeLine{01564\ }
+\DoxyCodeLine{01565\ TEST\_F(DoubleNearTest,\ DoubleNearCanDescribeSelf)\ \{}
+\DoxyCodeLine{01566\ \ \ Matcher<double>\ m1\ =\ DoubleNear(2.0,\ 0.5);}
+\DoxyCodeLine{01567\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 2\ (absolute\ error\ <=\ 0.5)"{}},\ Describe(m1));}
+\DoxyCodeLine{01568\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 2\ (absolute\ error\ >\ 0.5)"{}},}
+\DoxyCodeLine{01569\ \ \ \ \ \ \ \ \ \ \ \ \ DescribeNegation(m1));}
+\DoxyCodeLine{01570\ }
+\DoxyCodeLine{01571\ \ \ Matcher<double>\ m2\ =\ DoubleNear(0.5,\ 0.5);}
+\DoxyCodeLine{01572\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 0.5\ (absolute\ error\ <=\ 0.5)"{}},\ Describe(m2));}
+\DoxyCodeLine{01573\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 0.5\ (absolute\ error\ >\ 0.5)"{}},}
+\DoxyCodeLine{01574\ \ \ \ \ \ \ \ \ \ \ \ \ DescribeNegation(m2));}
+\DoxyCodeLine{01575\ }
+\DoxyCodeLine{01576\ \ \ Matcher<double>\ m3\ =\ DoubleNear(nan1\_,\ 0.0);}
+\DoxyCodeLine{01577\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}never\ matches"{}},\ Describe(m3));}
+\DoxyCodeLine{01578\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ anything"{}},\ DescribeNegation(m3));}
+\DoxyCodeLine{01579\ \}}
+\DoxyCodeLine{01580\ }
+\DoxyCodeLine{01581\ TEST\_F(DoubleNearTest,\ ExplainsResultWhenMatchFails)\ \{}
+\DoxyCodeLine{01582\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}"{}},\ Explain(DoubleNear(2.0,\ 0.1),\ 2.05));}
+\DoxyCodeLine{01583\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 0.2\ from\ 2"{}},\ Explain(DoubleNear(2.0,\ 0.1),\ 2.2));}
+\DoxyCodeLine{01584\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ -\/0.3\ from\ 2"{}},\ Explain(DoubleNear(2.0,\ 0.1),\ 1.7));}
+\DoxyCodeLine{01585\ }
+\DoxyCodeLine{01586\ \ \ \textcolor{keyword}{const}\ std::string\ explanation\ =}
+\DoxyCodeLine{01587\ \ \ \ \ \ \ Explain(DoubleNear(2.1,\ 1e-\/10),\ 2.1\ +\ 1.2e-\/10);}
+\DoxyCodeLine{01588\ \ \ \textcolor{comment}{//\ Different\ C++\ implementations\ may\ print\ floating-\/point\ numbers}}
+\DoxyCodeLine{01589\ \ \ \textcolor{comment}{//\ slightly\ differently.}}
+\DoxyCodeLine{01590\ \ \ EXPECT\_TRUE(explanation\ ==\ \textcolor{stringliteral}{"{}which\ is\ 1.2e-\/10\ from\ 2.1"{}}\ ||\ \ \textcolor{comment}{//\ GCC}}
+\DoxyCodeLine{01591\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ explanation\ ==\ \textcolor{stringliteral}{"{}which\ is\ 1.2e-\/010\ from\ 2.1"{}})\ \ \ \textcolor{comment}{//\ MSVC}}
+\DoxyCodeLine{01592\ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{}\ where\ explanation\ is\ \(\backslash\)"{}"{}}\ <<\ explanation\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{}."{}};}
+\DoxyCodeLine{01593\ \}}
+\DoxyCodeLine{01594\ }
+\DoxyCodeLine{01595\ TEST\_F(DoubleNearTest,\ NanSensitiveDoubleNearCanDescribeSelf)\ \{}
+\DoxyCodeLine{01596\ \ \ Matcher<double>\ m1\ =\ NanSensitiveDoubleNear(2.0,\ 0.5);}
+\DoxyCodeLine{01597\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 2\ (absolute\ error\ <=\ 0.5)"{}},\ Describe(m1));}
+\DoxyCodeLine{01598\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 2\ (absolute\ error\ >\ 0.5)"{}},}
+\DoxyCodeLine{01599\ \ \ \ \ \ \ \ \ \ \ \ \ DescribeNegation(m1));}
+\DoxyCodeLine{01600\ }
+\DoxyCodeLine{01601\ \ \ Matcher<double>\ m2\ =\ NanSensitiveDoubleNear(0.5,\ 0.5);}
+\DoxyCodeLine{01602\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ approximately\ 0.5\ (absolute\ error\ <=\ 0.5)"{}},\ Describe(m2));}
+\DoxyCodeLine{01603\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ approximately\ 0.5\ (absolute\ error\ >\ 0.5)"{}},}
+\DoxyCodeLine{01604\ \ \ \ \ \ \ \ \ \ \ \ \ DescribeNegation(m2));}
+\DoxyCodeLine{01605\ }
+\DoxyCodeLine{01606\ \ \ Matcher<double>\ m3\ =\ NanSensitiveDoubleNear(nan1\_,\ 0.1);}
+\DoxyCodeLine{01607\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ NaN"{}},\ Describe(m3));}
+\DoxyCodeLine{01608\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ NaN"{}},\ DescribeNegation(m3));}
+\DoxyCodeLine{01609\ \}}
+\DoxyCodeLine{01610\ }
+\DoxyCodeLine{01611\ TEST\_F(DoubleNearTest,\ DoubleNearCannotMatchNaN)\ \{}
+\DoxyCodeLine{01612\ \ \ \textcolor{comment}{//\ DoubleNear\ never\ matches\ NaN.}}
+\DoxyCodeLine{01613\ \ \ Matcher<double>\ m\ =\ DoubleNear(ParentType::nan1\_,\ 0.1);}
+\DoxyCodeLine{01614\ \ \ EXPECT\_FALSE(m.Matches(nan1\_));}
+\DoxyCodeLine{01615\ \ \ EXPECT\_FALSE(m.Matches(nan2\_));}
+\DoxyCodeLine{01616\ \ \ EXPECT\_FALSE(m.Matches(1.0));}
+\DoxyCodeLine{01617\ \}}
+\DoxyCodeLine{01618\ }
+\DoxyCodeLine{01619\ TEST\_F(DoubleNearTest,\ NanSensitiveDoubleNearCanMatchNaN)\ \{}
+\DoxyCodeLine{01620\ \ \ \textcolor{comment}{//\ NanSensitiveDoubleNear\ will\ match\ NaN.}}
+\DoxyCodeLine{01621\ \ \ Matcher<double>\ m\ =\ NanSensitiveDoubleNear(nan1\_,\ 0.1);}
+\DoxyCodeLine{01622\ \ \ EXPECT\_TRUE(m.Matches(nan1\_));}
+\DoxyCodeLine{01623\ \ \ EXPECT\_TRUE(m.Matches(nan2\_));}
+\DoxyCodeLine{01624\ \ \ EXPECT\_FALSE(m.Matches(1.0));}
+\DoxyCodeLine{01625\ \}}
+\DoxyCodeLine{01626\ }
+\DoxyCodeLine{01627\ TEST(NotTest,\ WorksOnMoveOnlyType)\ \{}
+\DoxyCodeLine{01628\ \ \ std::unique\_ptr<int>\ p(\textcolor{keyword}{new}\ \textcolor{keywordtype}{int}(3));}
+\DoxyCodeLine{01629\ \ \ EXPECT\_THAT(p,\ Pointee(Eq(3)));}
+\DoxyCodeLine{01630\ \ \ EXPECT\_THAT(p,\ Not(Pointee(Eq(2))));}
+\DoxyCodeLine{01631\ \}}
+\DoxyCodeLine{01632\ }
+\DoxyCodeLine{01633\ TEST(AllOfTest,\ HugeMatcher)\ \{}
+\DoxyCodeLine{01634\ \ \ \textcolor{comment}{//\ Verify\ that\ using\ AllOf\ with\ many\ arguments\ doesn't\ cause}}
+\DoxyCodeLine{01635\ \ \ \textcolor{comment}{//\ the\ compiler\ to\ exceed\ template\ instantiation\ depth\ limit.}}
+\DoxyCodeLine{01636\ \ \ EXPECT\_THAT(0,\ testing::AllOf(\_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,}
+\DoxyCodeLine{01637\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ testing::AllOf(\_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_)));}
+\DoxyCodeLine{01638\ \}}
+\DoxyCodeLine{01639\ }
+\DoxyCodeLine{01640\ TEST(AnyOfTest,\ HugeMatcher)\ \{}
+\DoxyCodeLine{01641\ \ \ \textcolor{comment}{//\ Verify\ that\ using\ AnyOf\ with\ many\ arguments\ doesn't\ cause}}
+\DoxyCodeLine{01642\ \ \ \textcolor{comment}{//\ the\ compiler\ to\ exceed\ template\ instantiation\ depth\ limit.}}
+\DoxyCodeLine{01643\ \ \ EXPECT\_THAT(0,\ testing::AnyOf(\_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,}
+\DoxyCodeLine{01644\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ testing::AnyOf(\_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_,\ \_)));}
+\DoxyCodeLine{01645\ \}}
+\DoxyCodeLine{01646\ }
+\DoxyCodeLine{01647\ \textcolor{keyword}{namespace\ }adl\_test\ \{}
+\DoxyCodeLine{01648\ }
+\DoxyCodeLine{01649\ \textcolor{comment}{//\ Verifies\ that\ the\ implementation\ of\ ::testing::AllOf\ and\ ::testing::AnyOf}}
+\DoxyCodeLine{01650\ \textcolor{comment}{//\ don't\ issue\ unqualified\ recursive\ calls.\ \ If\ they\ do,\ the\ argument\ dependent}}
+\DoxyCodeLine{01651\ \textcolor{comment}{//\ name\ lookup\ will\ cause\ AllOf/AnyOf\ in\ the\ 'adl\_test'\ namespace\ to\ be\ found}}
+\DoxyCodeLine{01652\ \textcolor{comment}{//\ as\ a\ candidate\ and\ the\ compilation\ will\ break\ due\ to\ an\ ambiguous\ overload.}}
+\DoxyCodeLine{01653\ }
+\DoxyCodeLine{01654\ \textcolor{comment}{//\ The\ matcher\ must\ be\ in\ the\ same\ namespace\ as\ AllOf/AnyOf\ to\ make\ argument}}
+\DoxyCodeLine{01655\ \textcolor{comment}{//\ dependent\ lookup\ find\ those.}}
+\DoxyCodeLine{01656\ MATCHER(M,\ \textcolor{stringliteral}{"{}"{}})\ \{}
+\DoxyCodeLine{01657\ \ \ (void)arg;}
+\DoxyCodeLine{01658\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01659\ \}}
+\DoxyCodeLine{01660\ }
+\DoxyCodeLine{01661\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T1,\ \textcolor{keyword}{typename}\ T2>}
+\DoxyCodeLine{01662\ \textcolor{keywordtype}{bool}\ AllOf(\textcolor{keyword}{const}\ T1\&\ \textcolor{comment}{/*t1*/},\ \textcolor{keyword}{const}\ T2\&\ \textcolor{comment}{/*t2*/})\ \{}
+\DoxyCodeLine{01663\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01664\ \}}
+\DoxyCodeLine{01665\ }
+\DoxyCodeLine{01666\ TEST(AllOfTest,\ DoesNotCallAllOfUnqualified)\ \{}
+\DoxyCodeLine{01667\ \ \ EXPECT\_THAT(42,}
+\DoxyCodeLine{01668\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ testing::AllOf(M(),\ M(),\ M(),\ M(),\ M(),\ M(),\ M(),\ M(),\ M(),\ M()));}
+\DoxyCodeLine{01669\ \}}
+\DoxyCodeLine{01670\ }
+\DoxyCodeLine{01671\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T1,\ \textcolor{keyword}{typename}\ T2>}
+\DoxyCodeLine{01672\ \textcolor{keywordtype}{bool}\ AnyOf(\textcolor{keyword}{const}\ T1\&,\ \textcolor{keyword}{const}\ T2\&)\ \{}
+\DoxyCodeLine{01673\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01674\ \}}
+\DoxyCodeLine{01675\ }
+\DoxyCodeLine{01676\ TEST(AnyOfTest,\ DoesNotCallAnyOfUnqualified)\ \{}
+\DoxyCodeLine{01677\ \ \ EXPECT\_THAT(42,}
+\DoxyCodeLine{01678\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ testing::AnyOf(M(),\ M(),\ M(),\ M(),\ M(),\ M(),\ M(),\ M(),\ M(),\ M()));}
+\DoxyCodeLine{01679\ \}}
+\DoxyCodeLine{01680\ }
+\DoxyCodeLine{01681\ \}\ \ \textcolor{comment}{//\ namespace\ adl\_test}}
+\DoxyCodeLine{01682\ }
+\DoxyCodeLine{01683\ TEST(AllOfTest,\ WorksOnMoveOnlyType)\ \{}
+\DoxyCodeLine{01684\ \ \ std::unique\_ptr<int>\ p(\textcolor{keyword}{new}\ \textcolor{keywordtype}{int}(3));}
+\DoxyCodeLine{01685\ \ \ EXPECT\_THAT(p,\ AllOf(Pointee(Eq(3)),\ Pointee(Gt(0)),\ Pointee(Lt(5))));}
+\DoxyCodeLine{01686\ \ \ EXPECT\_THAT(p,\ Not(AllOf(Pointee(Eq(3)),\ Pointee(Gt(0)),\ Pointee(Lt(3)))));}
+\DoxyCodeLine{01687\ \}}
+\DoxyCodeLine{01688\ }
+\DoxyCodeLine{01689\ TEST(AnyOfTest,\ WorksOnMoveOnlyType)\ \{}
+\DoxyCodeLine{01690\ \ \ std::unique\_ptr<int>\ p(\textcolor{keyword}{new}\ \textcolor{keywordtype}{int}(3));}
+\DoxyCodeLine{01691\ \ \ EXPECT\_THAT(p,\ AnyOf(Pointee(Eq(5)),\ Pointee(Lt(0)),\ Pointee(Lt(5))));}
+\DoxyCodeLine{01692\ \ \ EXPECT\_THAT(p,\ Not(AnyOf(Pointee(Eq(5)),\ Pointee(Lt(0)),\ Pointee(Gt(5)))));}
+\DoxyCodeLine{01693\ \}}
+\DoxyCodeLine{01694\ }
+\DoxyCodeLine{01695\ \}\ \ \textcolor{comment}{//\ namespace}}
+\DoxyCodeLine{01696\ \}\ \ \textcolor{comment}{//\ namespace\ gmock\_matchers\_test}}
+\DoxyCodeLine{01697\ \}\ \ \textcolor{comment}{//\ namespace\ testing}}
+\DoxyCodeLine{01698\ }
+\DoxyCodeLine{01699\ GTEST\_DISABLE\_MSC\_WARNINGS\_POP\_()\ \ \textcolor{comment}{//\ 4244\ 4100}}
+
+\end{DoxyCode}

@@ -1,0 +1,23 @@
+/usr/bin/cmake -S"/home/vika/Рабочий стол/ppois/lab1/task1" -B"/home/vika/Рабочий стол/ppois/lab1/task1/build" --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start "/home/vika/Рабочий стол/ppois/lab1/task1/build/CMakeFiles" "/home/vika/Рабочий стол/ppois/lab1/task1/build//CMakeFiles/progress.marks"
+make  -f CMakeFiles/Makefile2 all
+make[1]: вход в каталог «/home/vika/Рабочий стол/ppois/lab1/task1/build»
+make  -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/depend
+make[2]: вход в каталог «/home/vika/Рабочий стол/ppois/lab1/task1/build»
+cd "/home/vika/Рабочий стол/ppois/lab1/task1/build" && /usr/bin/cmake -E cmake_depends "Unix Makefiles" "/home/vika/Рабочий стол/ppois/lab1/task1" "/home/vika/Рабочий стол/ppois/lab1/task1" "/home/vika/Рабочий стол/ppois/lab1/task1/build" "/home/vika/Рабочий стол/ppois/lab1/task1/build" "/home/vika/Рабочий стол/ppois/lab1/task1/build/CMakeFiles/tests.dir/DependInfo.cmake" "--color="
+make[2]: выход из каталога «/home/vika/Рабочий стол/ppois/lab1/task1/build»
+make  -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/build
+make[2]: вход в каталог «/home/vika/Рабочий стол/ppois/lab1/task1/build»
+[ 25%] Building CXX object CMakeFiles/tests.dir/CantorovoSet.cpp.o
+/usr/bin/c++   -g -fprofile-arcs -ftest-coverage -g -O0 -std=gnu++17 -MD -MT CMakeFiles/tests.dir/CantorovoSet.cpp.o -MF CMakeFiles/tests.dir/CantorovoSet.cpp.o.d -o CMakeFiles/tests.dir/CantorovoSet.cpp.o -c "/home/vika/Рабочий стол/ppois/lab1/task1/CantorovoSet.cpp"
+[ 50%] Building CXX object CMakeFiles/tests.dir/InputCheck.cpp.o
+/usr/bin/c++   -g -fprofile-arcs -ftest-coverage -g -O0 -std=gnu++17 -MD -MT CMakeFiles/tests.dir/InputCheck.cpp.o -MF CMakeFiles/tests.dir/InputCheck.cpp.o.d -o CMakeFiles/tests.dir/InputCheck.cpp.o -c "/home/vika/Рабочий стол/ppois/lab1/task1/InputCheck.cpp"
+[ 75%] Building CXX object CMakeFiles/tests.dir/tests.cpp.o
+/usr/bin/c++   -g -fprofile-arcs -ftest-coverage -g -O0 -std=gnu++17 -MD -MT CMakeFiles/tests.dir/tests.cpp.o -MF CMakeFiles/tests.dir/tests.cpp.o.d -o CMakeFiles/tests.dir/tests.cpp.o -c "/home/vika/Рабочий стол/ppois/lab1/task1/tests.cpp"
+[100%] Linking CXX executable tests
+/usr/bin/cmake -E cmake_link_script CMakeFiles/tests.dir/link.txt --verbose=1
+/usr/bin/c++ -g -fprofile-arcs -ftest-coverage -g -O0  -fprofile-arcs -lgcov CMakeFiles/tests.dir/CantorovoSet.cpp.o CMakeFiles/tests.dir/InputCheck.cpp.o CMakeFiles/tests.dir/tests.cpp.o -o tests  /usr/local/lib/libgtest.a /usr/local/lib/libgtest_main.a -lpthread -lgcov /usr/local/lib/libgtest.a 
+make[2]: выход из каталога «/home/vika/Рабочий стол/ppois/lab1/task1/build»
+[100%] Built target tests
+make[1]: выход из каталога «/home/vika/Рабочий стол/ppois/lab1/task1/build»
+/usr/bin/cmake -E cmake_progress_start "/home/vika/Рабочий стол/ppois/lab1/task1/build/CMakeFiles" 0

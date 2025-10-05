@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/run_tests.dir/tests.cpp.o CMakeFiles/run_tests.dir/TuringMachine.cpp.o CMakeFiles/run_tests.dir/RulesTable.cpp.o -o run_tests  lib/libgtest.a lib/libgtest_main.a lib/libgtest.a 

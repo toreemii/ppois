@@ -1,0 +1,100 @@
+Start testing: Oct 04 10:52 +03
+----------------------------------------------------------
+1/1 Testing: AllTests
+1/1 Test: AllTests
+Command: "/home/vika/Рабочий стол/ppois/lab1/task1/build/tests"
+Directory: /home/vika/Рабочий стол/ppois/lab1/task1/build
+"AllTests" start time: Oct 04 10:52 +03
+Output:
+----------------------------------------------------------
+[==========] Running 37 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 37 tests from CantorovoSetTest
+[ RUN      ] CantorovoSetTest.SimpleParse
+[       OK ] CantorovoSetTest.SimpleParse (0 ms)
+[ RUN      ] CantorovoSetTest.WithSpaces
+[       OK ] CantorovoSetTest.WithSpaces (0 ms)
+[ RUN      ] CantorovoSetTest.WithSpaces2
+[       OK ] CantorovoSetTest.WithSpaces2 (0 ms)
+[ RUN      ] CantorovoSetTest.NestedAndEmpty
+[       OK ] CantorovoSetTest.NestedAndEmpty (0 ms)
+[ RUN      ] CantorovoSetTest.Nested
+[       OK ] CantorovoSetTest.Nested (0 ms)
+[ RUN      ] CantorovoSetTest.RemoveDoubleCommas
+[       OK ] CantorovoSetTest.RemoveDoubleCommas (0 ms)
+[ RUN      ] CantorovoSetTest.RemoveDoubleCommas2
+[       OK ] CantorovoSetTest.RemoveDoubleCommas2 (0 ms)
+[ RUN      ] CantorovoSetTest.ComplexNested
+[       OK ] CantorovoSetTest.ComplexNested (0 ms)
+[ RUN      ] CantorovoSetTest.CantorAlgorithm
+[       OK ] CantorovoSetTest.CantorAlgorithm (0 ms)
+[ RUN      ] CantorovoSetTest.CantorAlgorithm2
+[       OK ] CantorovoSetTest.CantorAlgorithm2 (0 ms)
+[ RUN      ] CantorovoSetTest.EmptySet
+[       OK ] CantorovoSetTest.EmptySet (0 ms)
+[ RUN      ] CantorovoSetTest.NestedAndEmpty2
+[       OK ] CantorovoSetTest.NestedAndEmpty2 (0 ms)
+[ RUN      ] CantorovoSetTest.CantorAlgorithmDifferent
+[       OK ] CantorovoSetTest.CantorAlgorithmDifferent (0 ms)
+[ RUN      ] CantorovoSetTest.LargeSet
+[       OK ] CantorovoSetTest.LargeSet (0 ms)
+[ RUN      ] CantorovoSetTest.DeepNested
+[       OK ] CantorovoSetTest.DeepNested (0 ms)
+[ RUN      ] CantorovoSetTest.DefaultConstructor
+[       OK ] CantorovoSetTest.DefaultConstructor (0 ms)
+[ RUN      ] CantorovoSetTest.CharConstructor
+[       OK ] CantorovoSetTest.CharConstructor (0 ms)
+[ RUN      ] CantorovoSetTest.AddElement
+[       OK ] CantorovoSetTest.AddElement (0 ms)
+[ RUN      ] CantorovoSetTest.DeleteElement
+[       OK ] CantorovoSetTest.DeleteElement (0 ms)
+[ RUN      ] CantorovoSetTest.PowerOfSets
+[       OK ] CantorovoSetTest.PowerOfSets (0 ms)
+[ RUN      ] CantorovoSetTest.OperatorAssignment
+[       OK ] CantorovoSetTest.OperatorAssignment (0 ms)
+[ RUN      ] CantorovoSetTest.OperatorPlus
+[       OK ] CantorovoSetTest.OperatorPlus (0 ms)
+[ RUN      ] CantorovoSetTest.OperatorPlusEqual
+[       OK ] CantorovoSetTest.OperatorPlusEqual (0 ms)
+[ RUN      ] CantorovoSetTest.OperatorMultiply
+[       OK ] CantorovoSetTest.OperatorMultiply (0 ms)
+[ RUN      ] CantorovoSetTest.OperatorMultiplyEqual
+[       OK ] CantorovoSetTest.OperatorMultiplyEqual (0 ms)
+[ RUN      ] CantorovoSetTest.OperatorMinus
+[       OK ] CantorovoSetTest.OperatorMinus (0 ms)
+[ RUN      ] CantorovoSetTest.OperatorMinusEqual
+[       OK ] CantorovoSetTest.OperatorMinusEqual (0 ms)
+[ RUN      ] CantorovoSetTest.OperatorIndex
+[       OK ] CantorovoSetTest.OperatorIndex (0 ms)
+[ RUN      ] CantorovoSetTest.InvalidBrackets
+[       OK ] CantorovoSetTest.InvalidBrackets (0 ms)
+[ RUN      ] CantorovoSetTest.VeryDeepNested
+[       OK ] CantorovoSetTest.VeryDeepNested (0 ms)
+[ RUN      ] CantorovoSetTest.CantorSingleElement
+[       OK ] CantorovoSetTest.CantorSingleElement (0 ms)
+[ RUN      ] CantorovoSetTest.CantorEmptySet
+[       OK ] CantorovoSetTest.CantorEmptySet (0 ms)
+[ RUN      ] CantorovoSetTest.StressTestLarge
+[       OK ] CantorovoSetTest.StressTestLarge (0 ms)
+[ RUN      ] CantorovoSetTest.NestedEmptySets
+[       OK ] CantorovoSetTest.NestedEmptySets (0 ms)
+[ RUN      ] CantorovoSetTest.DuplicateElements
+[       OK ] CantorovoSetTest.DuplicateElements (0 ms)
+[ RUN      ] CantorovoSetTest.CopySet
+[       OK ] CantorovoSetTest.CopySet (0 ms)
+[ RUN      ] CantorovoSetTest.PrintBoolean
+[       OK ] CantorovoSetTest.PrintBoolean (0 ms)
+[----------] 37 tests from CantorovoSetTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 37 tests from 1 test suite ran. (1 ms total)
+[  PASSED  ] 37 tests.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"AllTests" end time: Oct 04 10:52 +03
+"AllTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 04 10:52 +03

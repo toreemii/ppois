@@ -1,0 +1,45 @@
+\doxysection{Cantorovo\+Set.\+h}
+\hypertarget{CantorovoSet_8h_source}{}\label{CantorovoSet_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}}
+\DoxyCodeLine{00006\ \{}
+\DoxyCodeLine{00007\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00008\ \ \ \ \ std::vector<std::vector<std::string>>\ elements;}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keywordtype}{void}\ nestingCheck(std::string\ \&tempElement,\ \textcolor{keywordtype}{int}\ \&depth,\ std::string\ \&str,\ \textcolor{keywordtype}{int}\ \&i);}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ std::vector<std::vector<std::string>>\ parseString(std::string\ \&str);}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ std::vector<std::vector<std::string>>\&\ getElements();}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}(std::string\ \&str);}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}();}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ cstr);}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ print();}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ printCantorovoSet();}
+\DoxyCodeLine{00021\ \ \ \ \ std::vector<std::vector<std::string>>}
+\DoxyCodeLine{00022\ \ \ \ \ CantrovoAlgorithm(std::vector<std::vector<std::string>>\ elements);}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ CopySet(std::string\ str);}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ AddElement(std::string\ strElement);}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ DeleteElement(std::string\ strElement);}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{int}\ PowerOfSets();}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator[](std::string\ str);}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\&\ operator\ =\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\&\ SecondSet);}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\ operator\ +\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\&\ SecondSet);}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\&\ operator\ +=\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\&\ SecondSet);}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\ operator\ *\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\&\ SecondSet);}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\&\ operator\ *=\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\&\ SecondSet);}
+\DoxyCodeLine{00033\ \ \ \ \ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\ operator\ -\/\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\&\ SecondSet);}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\&\ operator\ -\/=\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classCantorovoSet}{CantorovoSet}}\&\ SecondSet);}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ Boolean(\textcolor{keywordtype}{int}\ idx,}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{const}\ std::vector<std::vector<std::string>>\&\ set,}
+\DoxyCodeLine{00037\ \ \ \ \ std::vector<std::vector<std::string>>\&\ current,}
+\DoxyCodeLine{00038\ \ \ \ \ std::vector<std::vector<std::vector<std::string>>>\&\ result);}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ printBoolean(\textcolor{keyword}{const}\ std::vector<std::vector<std::string>>\&\ elements);}
+\DoxyCodeLine{00040\ \};}
+
+\end{DoxyCode}

@@ -1,0 +1,2529 @@
+\doxysection{gmock-\/matchers-\/comparisons\+\_\+test.cc}
+\hypertarget{gmock-matchers-comparisons__test_8cc_source}{}\label{gmock-matchers-comparisons__test_8cc_source}\index{googletest/googlemock/test/gmock-\/matchers-\/comparisons\_test.cc@{googletest/googlemock/test/gmock-\/matchers-\/comparisons\_test.cc}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ Copyright\ 2007,\ Google\ Inc.}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ All\ rights\ reserved.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ \textcolor{comment}{//\ Redistribution\ and\ use\ in\ source\ and\ binary\ forms,\ with\ or\ without}}
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ modification,\ are\ permitted\ provided\ that\ the\ following\ conditions\ are}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ met:}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ \ \ \ \ *\ Redistributions\ of\ source\ code\ must\ retain\ the\ above\ copyright}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ notice,\ this\ list\ of\ conditions\ and\ the\ following\ disclaimer.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ \ \ \ \ *\ Redistributions\ in\ binary\ form\ must\ reproduce\ the\ above}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ copyright\ notice,\ this\ list\ of\ conditions\ and\ the\ following\ disclaimer}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ in\ the\ documentation\ and/or\ other\ materials\ provided\ with\ the}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ distribution.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ \ \ \ \ *\ Neither\ the\ name\ of\ Google\ Inc.\ nor\ the\ names\ of\ its}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\ contributors\ may\ be\ used\ to\ endorse\ or\ promote\ products\ derived\ from}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ this\ software\ without\ specific\ prior\ written\ permission.}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\ THIS\ SOFTWARE\ IS\ PROVIDED\ BY\ THE\ COPYRIGHT\ HOLDERS\ AND\ CONTRIBUTORS}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ "{}AS\ IS"{}\ AND\ ANY\ EXPRESS\ OR\ IMPLIED\ WARRANTIES,\ INCLUDING,\ BUT\ NOT}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\ LIMITED\ TO,\ THE\ IMPLIED\ WARRANTIES\ OF\ MERCHANTABILITY\ AND\ FITNESS\ FOR}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\ A\ PARTICULAR\ PURPOSE\ ARE\ DISCLAIMED.\ IN\ NO\ EVENT\ SHALL\ THE\ COPYRIGHT}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ OWNER\ OR\ CONTRIBUTORS\ BE\ LIABLE\ FOR\ ANY\ DIRECT,\ INDIRECT,\ INCIDENTAL,}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ SPECIAL,\ EXEMPLARY,\ OR\ CONSEQUENTIAL\ DAMAGES\ (INCLUDING,\ BUT\ NOT}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\ LIMITED\ TO,\ PROCUREMENT\ OF\ SUBSTITUTE\ GOODS\ OR\ SERVICES;\ LOSS\ OF\ USE,}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\ DATA,\ OR\ PROFITS;\ OR\ BUSINESS\ INTERRUPTION)\ HOWEVER\ CAUSED\ AND\ ON\ ANY}}
+\DoxyCodeLine{00026\ \textcolor{comment}{//\ THEORY\ OF\ LIABILITY,\ WHETHER\ IN\ CONTRACT,\ STRICT\ LIABILITY,\ OR\ TORT}}
+\DoxyCodeLine{00027\ \textcolor{comment}{//\ (INCLUDING\ NEGLIGENCE\ OR\ OTHERWISE)\ ARISING\ IN\ ANY\ WAY\ OUT\ OF\ THE\ USE}}
+\DoxyCodeLine{00028\ \textcolor{comment}{//\ OF\ THIS\ SOFTWARE,\ EVEN\ IF\ ADVISED\ OF\ THE\ POSSIBILITY\ OF\ SUCH\ DAMAGE.}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{//\ Google\ Mock\ -\/\ a\ framework\ for\ writing\ C++\ mock\ classes.}}
+\DoxyCodeLine{00031\ \textcolor{comment}{//}}
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ This\ file\ tests\ some\ commonly\ used\ argument\ matchers.}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#include\ <tuple>}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#include\ "{}gmock/gmock.h"{}}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#include\ "{}test/gmock-\/matchers\_test.h"{}}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ "{}gtest/gtest.h"{}}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{comment}{//\ Silence\ warning\ C4244:\ 'initializing':\ conversion\ from\ 'int'\ to\ 'short',}}
+\DoxyCodeLine{00046\ \textcolor{comment}{//\ possible\ loss\ of\ data\ and\ C4100,\ unreferenced\ local\ parameter}}
+\DoxyCodeLine{00047\ GTEST\_DISABLE\_MSC\_WARNINGS\_PUSH\_(4244\ 4100)}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ namespace\ testing\ \{}
+\DoxyCodeLine{00050\ \textcolor{keyword}{namespace\ }gmock\_matchers\_test\ \{}
+\DoxyCodeLine{00051\ \textcolor{keyword}{namespace\ }\{}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ INSTANTIATE\_GTEST\_MATCHER\_TEST\_P(MonotonicMatcherTest);}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ TEST\_P(MonotonicMatcherTestP,\ IsPrintable)\ \{}
+\DoxyCodeLine{00056\ \ \ stringstream\ ss;}
+\DoxyCodeLine{00057\ \ \ ss\ <<\ GreaterThan(5);}
+\DoxyCodeLine{00058\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ >\ 5"{}},\ ss.str());}
+\DoxyCodeLine{00059\ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ TEST(MatchResultListenerTest,\ StreamingWorks)\ \{}
+\DoxyCodeLine{00062\ \ \ StringMatchResultListener\ listener;}
+\DoxyCodeLine{00063\ \ \ listener\ <<\ \textcolor{stringliteral}{"{}hi"{}}\ <<\ 5;}
+\DoxyCodeLine{00064\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}hi5"{}},\ listener.str());}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ listener.Clear();}
+\DoxyCodeLine{00067\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}"{}},\ listener.str());}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ listener\ <<\ 42;}
+\DoxyCodeLine{00070\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}42"{}},\ listener.str());}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \textcolor{comment}{//\ Streaming\ shouldn't\ crash\ when\ the\ underlying\ ostream\ is\ NULL.}}
+\DoxyCodeLine{00073\ \ \ DummyMatchResultListener\ dummy;}
+\DoxyCodeLine{00074\ \ \ dummy\ <<\ \textcolor{stringliteral}{"{}hi"{}}\ <<\ 5;}
+\DoxyCodeLine{00075\ \}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ TEST(MatchResultListenerTest,\ CanAccessUnderlyingStream)\ \{}
+\DoxyCodeLine{00078\ \ \ EXPECT\_TRUE(DummyMatchResultListener().stream()\ ==\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00079\ \ \ EXPECT\_TRUE(StreamMatchResultListener(\textcolor{keyword}{nullptr}).stream()\ ==\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ EXPECT\_EQ(\&std::cout,\ StreamMatchResultListener(\&std::cout).stream());}
+\DoxyCodeLine{00082\ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ TEST(MatchResultListenerTest,\ IsInterestedWorks)\ \{}
+\DoxyCodeLine{00085\ \ \ EXPECT\_TRUE(StringMatchResultListener().IsInterested());}
+\DoxyCodeLine{00086\ \ \ EXPECT\_TRUE(StreamMatchResultListener(\&std::cout).IsInterested());}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ EXPECT\_FALSE(DummyMatchResultListener().IsInterested());}
+\DoxyCodeLine{00089\ \ \ EXPECT\_FALSE(StreamMatchResultListener(\textcolor{keyword}{nullptr}).IsInterested());}
+\DoxyCodeLine{00090\ \}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \textcolor{comment}{//\ Makes\ sure\ that\ the\ MatcherInterface<T>\ interface\ doesn't}}
+\DoxyCodeLine{00093\ \textcolor{comment}{//\ change.}}
+\DoxyCodeLine{00094\ \textcolor{keyword}{class\ }EvenMatcherImpl\ :\ \textcolor{keyword}{public}\ MatcherInterface<int>\ \{}
+\DoxyCodeLine{00095\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00096\ \ \ \textcolor{keywordtype}{bool}\ MatchAndExplain(\textcolor{keywordtype}{int}\ x,}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MatchResultListener*\ \textcolor{comment}{/*\ listener\ */})\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordflow}{return}\ x\ \%\ 2\ ==\ 0;}
+\DoxyCodeLine{00099\ \ \ \}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \textcolor{keywordtype}{void}\ DescribeTo(ostream*\ os)\textcolor{keyword}{\ const\ override\ }\{\ *os\ <<\ \textcolor{stringliteral}{"{}is\ an\ even\ number"{}};\ \}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \textcolor{comment}{//\ We\ deliberately\ don't\ define\ DescribeNegationTo()\ and}}
+\DoxyCodeLine{00104\ \ \ \textcolor{comment}{//\ ExplainMatchResultTo()\ here,\ to\ make\ sure\ the\ definition\ of\ these}}
+\DoxyCodeLine{00105\ \ \ \textcolor{comment}{//\ two\ methods\ is\ optional.}}
+\DoxyCodeLine{00106\ \};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{comment}{//\ Makes\ sure\ that\ the\ MatcherInterface\ API\ doesn't\ change.}}
+\DoxyCodeLine{00109\ TEST(MatcherInterfaceTest,\ CanBeImplementedUsingPublishedAPI)\ \{}
+\DoxyCodeLine{00110\ \ \ EvenMatcherImpl\ m;}
+\DoxyCodeLine{00111\ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \textcolor{comment}{//\ Tests\ implementing\ a\ monomorphic\ matcher\ using\ MatchAndExplain().}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{keyword}{class\ }NewEvenMatcherImpl\ :\ \textcolor{keyword}{public}\ MatcherInterface<int>\ \{}
+\DoxyCodeLine{00116\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00117\ \ \ \textcolor{keywordtype}{bool}\ MatchAndExplain(\textcolor{keywordtype}{int}\ x,\ MatchResultListener*\ listener)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ match\ =\ x\ \%\ 2\ ==\ 0;}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{//\ Verifies\ that\ we\ can\ stream\ to\ a\ listener\ directly.}}
+\DoxyCodeLine{00120\ \ \ \ \ *listener\ <<\ \textcolor{stringliteral}{"{}value\ \%\ "{}}\ <<\ 2;}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordflow}{if}\ (listener-\/>stream()\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \textcolor{comment}{//\ Verifies\ that\ we\ can\ stream\ to\ a\ listener's\ underlying\ stream}}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \textcolor{comment}{//\ too.}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ *listener-\/>stream()\ <<\ \textcolor{stringliteral}{"{}\ ==\ "{}}\ <<\ (x\ \%\ 2);}
+\DoxyCodeLine{00125\ \ \ \ \ \}}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordflow}{return}\ match;}
+\DoxyCodeLine{00127\ \ \ \}}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \textcolor{keywordtype}{void}\ DescribeTo(ostream*\ os)\textcolor{keyword}{\ const\ override\ }\{\ *os\ <<\ \textcolor{stringliteral}{"{}is\ an\ even\ number"{}};\ \}}
+\DoxyCodeLine{00130\ \};}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ TEST(MatcherInterfaceTest,\ CanBeImplementedUsingNewAPI)\ \{}
+\DoxyCodeLine{00133\ \ \ Matcher<int>\ m\ =\ MakeMatcher(\textcolor{keyword}{new}\ NewEvenMatcherImpl);}
+\DoxyCodeLine{00134\ \ \ EXPECT\_TRUE(m.Matches(2));}
+\DoxyCodeLine{00135\ \ \ EXPECT\_FALSE(m.Matches(3));}
+\DoxyCodeLine{00136\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}value\ \%\ 2\ ==\ 0"{}},\ Explain(m,\ 2));}
+\DoxyCodeLine{00137\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}value\ \%\ 2\ ==\ 1"{}},\ Explain(m,\ 3));}
+\DoxyCodeLine{00138\ \}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ INSTANTIATE\_GTEST\_MATCHER\_TEST\_P(MatcherTest);}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \textcolor{comment}{//\ Tests\ default-\/constructing\ a\ matcher.}}
+\DoxyCodeLine{00143\ TEST(MatcherTest,\ CanBeDefaultConstructed)\ \{\ Matcher<double>\ m;\ \}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \textcolor{comment}{//\ Tests\ that\ Matcher<T>\ can\ be\ constructed\ from\ a\ MatcherInterface<T>*.}}
+\DoxyCodeLine{00146\ TEST(MatcherTest,\ CanBeConstructedFromMatcherInterface)\ \{}
+\DoxyCodeLine{00147\ \ \ \textcolor{keyword}{const}\ MatcherInterface<int>*\ impl\ =\ \textcolor{keyword}{new}\ EvenMatcherImpl;}
+\DoxyCodeLine{00148\ \ \ Matcher<int>\ m(impl);}
+\DoxyCodeLine{00149\ \ \ EXPECT\_TRUE(m.Matches(4));}
+\DoxyCodeLine{00150\ \ \ EXPECT\_FALSE(m.Matches(5));}
+\DoxyCodeLine{00151\ \}}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \textcolor{comment}{//\ Tests\ that\ value\ can\ be\ used\ in\ place\ of\ Eq(value).}}
+\DoxyCodeLine{00154\ TEST(MatcherTest,\ CanBeImplicitlyConstructedFromValue)\ \{}
+\DoxyCodeLine{00155\ \ \ Matcher<int>\ m1\ =\ 5;}
+\DoxyCodeLine{00156\ \ \ EXPECT\_TRUE(m1.Matches(5));}
+\DoxyCodeLine{00157\ \ \ EXPECT\_FALSE(m1.Matches(6));}
+\DoxyCodeLine{00158\ \}}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \textcolor{comment}{//\ Tests\ that\ NULL\ can\ be\ used\ in\ place\ of\ Eq(NULL).}}
+\DoxyCodeLine{00161\ TEST(MatcherTest,\ CanBeImplicitlyConstructedFromNULL)\ \{}
+\DoxyCodeLine{00162\ \ \ Matcher<int*>\ m1\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00163\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{00164\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{00165\ \ \ EXPECT\_FALSE(m1.Matches(\&n));}
+\DoxyCodeLine{00166\ \}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \textcolor{comment}{//\ Tests\ that\ matchers\ can\ be\ constructed\ from\ a\ variable\ that\ is\ not\ properly}}
+\DoxyCodeLine{00169\ \textcolor{comment}{//\ defined.\ This\ should\ be\ illegal,\ but\ many\ users\ rely\ on\ this\ accidentally.}}
+\DoxyCodeLine{00170\ \textcolor{keyword}{struct\ }Undefined\ \{}
+\DoxyCodeLine{00171\ \ \ \textcolor{keyword}{virtual}\ \string~Undefined()\ =\ 0;}
+\DoxyCodeLine{00172\ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ kInt\ =\ 1;}
+\DoxyCodeLine{00173\ \};}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ TEST(MatcherTest,\ CanBeConstructedFromUndefinedVariable)\ \{}
+\DoxyCodeLine{00176\ \ \ Matcher<int>\ m1\ =\ Undefined::kInt;}
+\DoxyCodeLine{00177\ \ \ EXPECT\_TRUE(m1.Matches(1));}
+\DoxyCodeLine{00178\ \ \ EXPECT\_FALSE(m1.Matches(2));}
+\DoxyCodeLine{00179\ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \textcolor{comment}{//\ Test\ that\ a\ matcher\ parameterized\ with\ an\ abstract\ class\ compiles.}}
+\DoxyCodeLine{00182\ TEST(MatcherTest,\ CanAcceptAbstractClass)\ \{\ Matcher<const\ Undefined\&>\ m\ =\ \_;\ \}}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \textcolor{comment}{//\ Tests\ that\ matchers\ are\ copyable.}}
+\DoxyCodeLine{00185\ TEST(MatcherTest,\ IsCopyable)\ \{}
+\DoxyCodeLine{00186\ \ \ \textcolor{comment}{//\ Tests\ the\ copy\ constructor.}}
+\DoxyCodeLine{00187\ \ \ Matcher<bool>\ m1\ =\ Eq(\textcolor{keyword}{false});}
+\DoxyCodeLine{00188\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{keyword}{false}));}
+\DoxyCodeLine{00189\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{true}));}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \textcolor{comment}{//\ Tests\ the\ assignment\ operator.}}
+\DoxyCodeLine{00192\ \ \ m1\ =\ Eq(\textcolor{keyword}{true});}
+\DoxyCodeLine{00193\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{keyword}{true}));}
+\DoxyCodeLine{00194\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{false}));}
+\DoxyCodeLine{00195\ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \textcolor{comment}{//\ Tests\ that\ Matcher<T>::DescribeTo()\ calls}}
+\DoxyCodeLine{00198\ \textcolor{comment}{//\ MatcherInterface<T>::DescribeTo().}}
+\DoxyCodeLine{00199\ TEST(MatcherTest,\ CanDescribeItself)\ \{}
+\DoxyCodeLine{00200\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ an\ even\ number"{}},\ Describe(Matcher<int>(\textcolor{keyword}{new}\ EvenMatcherImpl)));}
+\DoxyCodeLine{00201\ \}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \textcolor{comment}{//\ Tests\ Matcher<T>::MatchAndExplain().}}
+\DoxyCodeLine{00204\ TEST\_P(MatcherTestP,\ MatchAndExplain)\ \{}
+\DoxyCodeLine{00205\ \ \ Matcher<int>\ m\ =\ GreaterThan(0);}
+\DoxyCodeLine{00206\ \ \ StringMatchResultListener\ listener1;}
+\DoxyCodeLine{00207\ \ \ EXPECT\_TRUE(m.MatchAndExplain(42,\ \&listener1));}
+\DoxyCodeLine{00208\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 42\ more\ than\ 0"{}},\ listener1.str());}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ StringMatchResultListener\ listener2;}
+\DoxyCodeLine{00211\ \ \ EXPECT\_FALSE(m.MatchAndExplain(-\/9,\ \&listener2));}
+\DoxyCodeLine{00212\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 9\ less\ than\ 0"{}},\ listener2.str());}
+\DoxyCodeLine{00213\ \}}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \textcolor{comment}{//\ Tests\ that\ a\ C-\/string\ literal\ can\ be\ implicitly\ converted\ to\ a}}
+\DoxyCodeLine{00216\ \textcolor{comment}{//\ Matcher<std::string>\ or\ Matcher<const\ std::string\&>.}}
+\DoxyCodeLine{00217\ TEST(StringMatcherTest,\ CanBeImplicitlyConstructedFromCStringLiteral)\ \{}
+\DoxyCodeLine{00218\ \ \ Matcher<std::string>\ m1\ =\ \textcolor{stringliteral}{"{}hi"{}};}
+\DoxyCodeLine{00219\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}hi"{}}));}
+\DoxyCodeLine{00220\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \ \ Matcher<const\ std::string\&>\ m2\ =\ \textcolor{stringliteral}{"{}hi"{}};}
+\DoxyCodeLine{00223\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}hi"{}}));}
+\DoxyCodeLine{00224\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{00225\ \}}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \textcolor{comment}{//\ Tests\ that\ a\ string\ object\ can\ be\ implicitly\ converted\ to\ a}}
+\DoxyCodeLine{00228\ \textcolor{comment}{//\ Matcher<std::string>\ or\ Matcher<const\ std::string\&>.}}
+\DoxyCodeLine{00229\ TEST(StringMatcherTest,\ CanBeImplicitlyConstructedFromString)\ \{}
+\DoxyCodeLine{00230\ \ \ Matcher<std::string>\ m1\ =\ std::string(\textcolor{stringliteral}{"{}hi"{}});}
+\DoxyCodeLine{00231\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}hi"{}}));}
+\DoxyCodeLine{00232\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ Matcher<const\ std::string\&>\ m2\ =\ std::string(\textcolor{stringliteral}{"{}hi"{}});}
+\DoxyCodeLine{00235\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}hi"{}}));}
+\DoxyCodeLine{00236\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{00237\ \}}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{00240\ \textcolor{comment}{//\ Tests\ that\ a\ C-\/string\ literal\ can\ be\ implicitly\ converted\ to\ a}}
+\DoxyCodeLine{00241\ \textcolor{comment}{//\ Matcher<StringView>\ or\ Matcher<const\ StringView\&>.}}
+\DoxyCodeLine{00242\ TEST(StringViewMatcherTest,\ CanBeImplicitlyConstructedFromCStringLiteral)\ \{}
+\DoxyCodeLine{00243\ \ \ Matcher<internal::StringView>\ m1\ =\ \textcolor{stringliteral}{"{}cats"{}};}
+\DoxyCodeLine{00244\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}cats"{}}));}
+\DoxyCodeLine{00245\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{stringliteral}{"{}dogs"{}}));}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ Matcher<const\ internal::StringView\&>\ m2\ =\ \textcolor{stringliteral}{"{}cats"{}};}
+\DoxyCodeLine{00248\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}cats"{}}));}
+\DoxyCodeLine{00249\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}dogs"{}}));}
+\DoxyCodeLine{00250\ \}}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \textcolor{comment}{//\ Tests\ that\ a\ std::string\ object\ can\ be\ implicitly\ converted\ to\ a}}
+\DoxyCodeLine{00253\ \textcolor{comment}{//\ Matcher<StringView>\ or\ Matcher<const\ StringView\&>.}}
+\DoxyCodeLine{00254\ TEST(StringViewMatcherTest,\ CanBeImplicitlyConstructedFromString)\ \{}
+\DoxyCodeLine{00255\ \ \ Matcher<internal::StringView>\ m1\ =\ std::string(\textcolor{stringliteral}{"{}cats"{}});}
+\DoxyCodeLine{00256\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}cats"{}}));}
+\DoxyCodeLine{00257\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{stringliteral}{"{}dogs"{}}));}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \ \ Matcher<const\ internal::StringView\&>\ m2\ =\ std::string(\textcolor{stringliteral}{"{}cats"{}});}
+\DoxyCodeLine{00260\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}cats"{}}));}
+\DoxyCodeLine{00261\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}dogs"{}}));}
+\DoxyCodeLine{00262\ \}}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \textcolor{comment}{//\ Tests\ that\ a\ StringView\ object\ can\ be\ implicitly\ converted\ to\ a}}
+\DoxyCodeLine{00265\ \textcolor{comment}{//\ Matcher<StringView>\ or\ Matcher<const\ StringView\&>.}}
+\DoxyCodeLine{00266\ TEST(StringViewMatcherTest,\ CanBeImplicitlyConstructedFromStringView)\ \{}
+\DoxyCodeLine{00267\ \ \ Matcher<internal::StringView>\ m1\ =\ internal::StringView(\textcolor{stringliteral}{"{}cats"{}});}
+\DoxyCodeLine{00268\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}cats"{}}));}
+\DoxyCodeLine{00269\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{stringliteral}{"{}dogs"{}}));}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ Matcher<const\ internal::StringView\&>\ m2\ =\ internal::StringView(\textcolor{stringliteral}{"{}cats"{}});}
+\DoxyCodeLine{00272\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}cats"{}}));}
+\DoxyCodeLine{00273\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}dogs"{}}));}
+\DoxyCodeLine{00274\ \}}
+\DoxyCodeLine{00275\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \textcolor{comment}{//\ Tests\ that\ a\ std::reference\_wrapper<std::string>\ object\ can\ be\ implicitly}}
+\DoxyCodeLine{00278\ \textcolor{comment}{//\ converted\ to\ a\ Matcher<std::string>\ or\ Matcher<const\ std::string\&>\ via\ Eq().}}
+\DoxyCodeLine{00279\ TEST(StringMatcherTest,}
+\DoxyCodeLine{00280\ \ \ \ \ \ CanBeImplicitlyConstructedFromEqReferenceWrapperString)\ \{}
+\DoxyCodeLine{00281\ \ \ std::string\ value\ =\ \textcolor{stringliteral}{"{}cats"{}};}
+\DoxyCodeLine{00282\ \ \ Matcher<std::string>\ m1\ =\ Eq(std::ref(value));}
+\DoxyCodeLine{00283\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}cats"{}}));}
+\DoxyCodeLine{00284\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{stringliteral}{"{}dogs"{}}));}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ Matcher<const\ std::string\&>\ m2\ =\ Eq(std::ref(value));}
+\DoxyCodeLine{00287\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}cats"{}}));}
+\DoxyCodeLine{00288\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}dogs"{}}));}
+\DoxyCodeLine{00289\ \}}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ \textcolor{comment}{//\ Tests\ that\ MakeMatcher()\ constructs\ a\ Matcher<T>\ from\ a}}
+\DoxyCodeLine{00292\ \textcolor{comment}{//\ MatcherInterface*\ without\ requiring\ the\ user\ to\ explicitly}}
+\DoxyCodeLine{00293\ \textcolor{comment}{//\ write\ the\ type.}}
+\DoxyCodeLine{00294\ TEST(MakeMatcherTest,\ ConstructsMatcherFromMatcherInterface)\ \{}
+\DoxyCodeLine{00295\ \ \ \textcolor{keyword}{const}\ MatcherInterface<int>*\ dummy\_impl\ =\ \textcolor{keyword}{new}\ EvenMatcherImpl;}
+\DoxyCodeLine{00296\ \ \ Matcher<int>\ m\ =\ MakeMatcher(dummy\_impl);}
+\DoxyCodeLine{00297\ \}}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \textcolor{comment}{//\ Tests\ that\ MakePolymorphicMatcher()\ can\ construct\ a\ polymorphic}}
+\DoxyCodeLine{00300\ \textcolor{comment}{//\ matcher\ from\ its\ implementation\ using\ the\ old\ API.}}
+\DoxyCodeLine{00301\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ g\_bar\ =\ 1;}
+\DoxyCodeLine{00302\ \textcolor{keyword}{class\ }ReferencesBarOrIsZeroImpl\ \{}
+\DoxyCodeLine{00303\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00304\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00305\ \ \ \textcolor{keywordtype}{bool}\ MatchAndExplain(\textcolor{keyword}{const}\ T\&\ x,\ MatchResultListener*\ \textcolor{comment}{/*\ listener\ */})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00306\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{void}*\ p\ =\ \&x;}
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{keywordflow}{return}\ p\ ==\ \&g\_bar\ ||\ x\ ==\ 0;}
+\DoxyCodeLine{00308\ \ \ \}}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00310\ \ \ \textcolor{keywordtype}{void}\ DescribeTo(ostream*\ os)\textcolor{keyword}{\ const\ }\{\ *os\ <<\ \textcolor{stringliteral}{"{}g\_bar\ or\ zero"{}};\ \}}
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00312\ \ \ \textcolor{keywordtype}{void}\ DescribeNegationTo(ostream*\ os)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00313\ \ \ \ \ *os\ <<\ \textcolor{stringliteral}{"{}doesn't\ reference\ g\_bar\ and\ is\ not\ zero"{}};}
+\DoxyCodeLine{00314\ \ \ \}}
+\DoxyCodeLine{00315\ \};}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \textcolor{comment}{//\ This\ function\ verifies\ that\ MakePolymorphicMatcher()\ returns\ a}}
+\DoxyCodeLine{00318\ \textcolor{comment}{//\ PolymorphicMatcher<T>\ where\ T\ is\ the\ argument's\ type.}}
+\DoxyCodeLine{00319\ PolymorphicMatcher<ReferencesBarOrIsZeroImpl>\ ReferencesBarOrIsZero()\ \{}
+\DoxyCodeLine{00320\ \ \ \textcolor{keywordflow}{return}\ MakePolymorphicMatcher(ReferencesBarOrIsZeroImpl());}
+\DoxyCodeLine{00321\ \}}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ TEST(MakePolymorphicMatcherTest,\ ConstructsMatcherUsingOldAPI)\ \{}
+\DoxyCodeLine{00324\ \ \ \textcolor{comment}{//\ Using\ a\ polymorphic\ matcher\ to\ match\ a\ reference\ type.}}
+\DoxyCodeLine{00325\ \ \ Matcher<const\ int\&>\ m1\ =\ ReferencesBarOrIsZero();}
+\DoxyCodeLine{00326\ \ \ EXPECT\_TRUE(m1.Matches(0));}
+\DoxyCodeLine{00327\ \ \ \textcolor{comment}{//\ Verifies\ that\ the\ identity\ of\ a\ by-\/reference\ argument\ is\ preserved.}}
+\DoxyCodeLine{00328\ \ \ EXPECT\_TRUE(m1.Matches(g\_bar));}
+\DoxyCodeLine{00329\ \ \ EXPECT\_FALSE(m1.Matches(1));}
+\DoxyCodeLine{00330\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}g\_bar\ or\ zero"{}},\ Describe(m1));}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \ \ \textcolor{comment}{//\ Using\ a\ polymorphic\ matcher\ to\ match\ a\ value\ type.}}
+\DoxyCodeLine{00333\ \ \ Matcher<double>\ m2\ =\ ReferencesBarOrIsZero();}
+\DoxyCodeLine{00334\ \ \ EXPECT\_TRUE(m2.Matches(0.0));}
+\DoxyCodeLine{00335\ \ \ EXPECT\_FALSE(m2.Matches(0.1));}
+\DoxyCodeLine{00336\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}g\_bar\ or\ zero"{}},\ Describe(m2));}
+\DoxyCodeLine{00337\ \}}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \textcolor{comment}{//\ Tests\ implementing\ a\ polymorphic\ matcher\ using\ MatchAndExplain().}}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \textcolor{keyword}{class\ }PolymorphicIsEvenImpl\ \{}
+\DoxyCodeLine{00342\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00343\ \ \ \textcolor{keywordtype}{void}\ DescribeTo(ostream*\ os)\textcolor{keyword}{\ const\ }\{\ *os\ <<\ \textcolor{stringliteral}{"{}is\ even"{}};\ \}}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00345\ \ \ \textcolor{keywordtype}{void}\ DescribeNegationTo(ostream*\ os)\textcolor{keyword}{\ const\ }\{\ *os\ <<\ \textcolor{stringliteral}{"{}is\ odd"{}};\ \}}
+\DoxyCodeLine{00346\ }
+\DoxyCodeLine{00347\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00348\ \ \ \textcolor{keywordtype}{bool}\ MatchAndExplain(\textcolor{keyword}{const}\ T\&\ x,\ MatchResultListener*\ listener)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{comment}{//\ Verifies\ that\ we\ can\ stream\ to\ the\ listener\ directly.}}
+\DoxyCodeLine{00350\ \ \ \ \ *listener\ <<\ \textcolor{stringliteral}{"{}\%\ "{}}\ <<\ 2;}
+\DoxyCodeLine{00351\ \ \ \ \ \textcolor{keywordflow}{if}\ (listener-\/>stream()\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \textcolor{comment}{//\ Verifies\ that\ we\ can\ stream\ to\ the\ listener's\ underlying\ stream}}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \textcolor{comment}{//\ too.}}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ *listener-\/>stream()\ <<\ \textcolor{stringliteral}{"{}\ ==\ "{}}\ <<\ (x\ \%\ 2);}
+\DoxyCodeLine{00355\ \ \ \ \ \}}
+\DoxyCodeLine{00356\ \ \ \ \ \textcolor{keywordflow}{return}\ (x\ \%\ 2)\ ==\ 0;}
+\DoxyCodeLine{00357\ \ \ \}}
+\DoxyCodeLine{00358\ \};}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ PolymorphicMatcher<PolymorphicIsEvenImpl>\ PolymorphicIsEven()\ \{}
+\DoxyCodeLine{00361\ \ \ \textcolor{keywordflow}{return}\ MakePolymorphicMatcher(PolymorphicIsEvenImpl());}
+\DoxyCodeLine{00362\ \}}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ TEST(MakePolymorphicMatcherTest,\ ConstructsMatcherUsingNewAPI)\ \{}
+\DoxyCodeLine{00365\ \ \ \textcolor{comment}{//\ Using\ PolymorphicIsEven()\ as\ a\ Matcher<int>.}}
+\DoxyCodeLine{00366\ \ \ \textcolor{keyword}{const}\ Matcher<int>\ m1\ =\ PolymorphicIsEven();}
+\DoxyCodeLine{00367\ \ \ EXPECT\_TRUE(m1.Matches(42));}
+\DoxyCodeLine{00368\ \ \ EXPECT\_FALSE(m1.Matches(43));}
+\DoxyCodeLine{00369\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ even"{}},\ Describe(m1));}
+\DoxyCodeLine{00370\ }
+\DoxyCodeLine{00371\ \ \ \textcolor{keyword}{const}\ Matcher<int>\ not\_m1\ =\ Not(m1);}
+\DoxyCodeLine{00372\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ odd"{}},\ Describe(not\_m1));}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}\%\ 2\ ==\ 0"{}},\ Explain(m1,\ 42));}
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00376\ \ \ \textcolor{comment}{//\ Using\ PolymorphicIsEven()\ as\ a\ Matcher<char>.}}
+\DoxyCodeLine{00377\ \ \ \textcolor{keyword}{const}\ Matcher<char>\ m2\ =\ PolymorphicIsEven();}
+\DoxyCodeLine{00378\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{'\(\backslash\)x42'}));}
+\DoxyCodeLine{00379\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{'\(\backslash\)x43'}));}
+\DoxyCodeLine{00380\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ even"{}},\ Describe(m2));}
+\DoxyCodeLine{00381\ }
+\DoxyCodeLine{00382\ \ \ \textcolor{keyword}{const}\ Matcher<char>\ not\_m2\ =\ Not(m2);}
+\DoxyCodeLine{00383\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ odd"{}},\ Describe(not\_m2));}
+\DoxyCodeLine{00384\ }
+\DoxyCodeLine{00385\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}\%\ 2\ ==\ 0"{}},\ Explain(m2,\ \textcolor{stringliteral}{'\(\backslash\)x42'}));}
+\DoxyCodeLine{00386\ \}}
+\DoxyCodeLine{00387\ }
+\DoxyCodeLine{00388\ INSTANTIATE\_GTEST\_MATCHER\_TEST\_P(MatcherCastTest);}
+\DoxyCodeLine{00389\ }
+\DoxyCodeLine{00390\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<T>(m)\ works\ when\ m\ is\ a\ polymorphic\ matcher.}}
+\DoxyCodeLine{00391\ TEST\_P(MatcherCastTestP,\ FromPolymorphicMatcher)\ \{}
+\DoxyCodeLine{00392\ \ \ Matcher<int16\_t>\ m;}
+\DoxyCodeLine{00393\ \ \ \textcolor{keywordflow}{if}\ (use\_gtest\_matcher\_)\ \{}
+\DoxyCodeLine{00394\ \ \ \ \ m\ =\ MatcherCast<int16\_t>(GtestGreaterThan(int64\_t\{5\}));}
+\DoxyCodeLine{00395\ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00396\ \ \ \ \ m\ =\ MatcherCast<int16\_t>(Gt(int64\_t\{5\}));}
+\DoxyCodeLine{00397\ \ \ \}}
+\DoxyCodeLine{00398\ \ \ EXPECT\_TRUE(m.Matches(6));}
+\DoxyCodeLine{00399\ \ \ EXPECT\_FALSE(m.Matches(4));}
+\DoxyCodeLine{00400\ \}}
+\DoxyCodeLine{00401\ }
+\DoxyCodeLine{00402\ \textcolor{comment}{//\ For\ testing\ casting\ matchers\ between\ compatible\ types.}}
+\DoxyCodeLine{00403\ \textcolor{keyword}{class\ }IntValue\ \{}
+\DoxyCodeLine{00404\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00405\ \ \ \textcolor{comment}{//\ An\ int\ can\ be\ statically\ (although\ not\ implicitly)\ cast\ to\ a}}
+\DoxyCodeLine{00406\ \ \ \textcolor{comment}{//\ IntValue.}}
+\DoxyCodeLine{00407\ \ \ \textcolor{keyword}{explicit}\ IntValue(\textcolor{keywordtype}{int}\ a\_value)\ :\ value\_(a\_value)\ \{\}}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ \ \ \textcolor{keywordtype}{int}\ value()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ value\_;\ \}}
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00411\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00412\ \ \ \textcolor{keywordtype}{int}\ value\_;}
+\DoxyCodeLine{00413\ \};}
+\DoxyCodeLine{00414\ }
+\DoxyCodeLine{00415\ \textcolor{comment}{//\ For\ testing\ casting\ matchers\ between\ compatible\ types.\ This\ is\ similar\ to}}
+\DoxyCodeLine{00416\ \textcolor{comment}{//\ IntValue,\ but\ takes\ a\ non-\/const\ reference\ to\ the\ value,\ showing\ MatcherCast}}
+\DoxyCodeLine{00417\ \textcolor{comment}{//\ works\ with\ such\ types\ (and\ doesn't,\ for\ example,\ use\ a\ const\ ref\ internally).}}
+\DoxyCodeLine{00418\ \textcolor{keyword}{class\ }MutableIntView\ \{}
+\DoxyCodeLine{00419\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00420\ \ \ \textcolor{comment}{//\ An\ int\&\ can\ be\ statically\ (although\ not\ implicitly)\ cast\ to\ a}}
+\DoxyCodeLine{00421\ \ \ \textcolor{comment}{//\ MutableIntView.}}
+\DoxyCodeLine{00422\ \ \ \textcolor{keyword}{explicit}\ MutableIntView(\textcolor{keywordtype}{int}\&\ a\_value)\ :\ value\_(a\_value)\ \{\}}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \ \ \textcolor{keywordtype}{int}\&\ value()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ value\_;\ \}}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00427\ \ \ \textcolor{keywordtype}{int}\&\ value\_;}
+\DoxyCodeLine{00428\ \};}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00430\ \textcolor{comment}{//\ For\ testing\ casting\ matchers\ between\ compatible\ types.}}
+\DoxyCodeLine{00431\ \textcolor{keywordtype}{bool}\ IsPositiveIntValue(\textcolor{keyword}{const}\ IntValue\&\ foo)\ \{\ \textcolor{keywordflow}{return}\ foo.value()\ >\ 0;\ \}}
+\DoxyCodeLine{00432\ }
+\DoxyCodeLine{00433\ \textcolor{comment}{//\ For\ testing\ casting\ matchers\ between\ compatible\ types.}}
+\DoxyCodeLine{00434\ \textcolor{keywordtype}{bool}\ IsPositiveMutableIntView(MutableIntView\ foo)\ \{\ \textcolor{keywordflow}{return}\ foo.value()\ >\ 0;\ \}}
+\DoxyCodeLine{00435\ }
+\DoxyCodeLine{00436\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<T>(m)\ works\ when\ m\ is\ a\ Matcher<U>\ where\ T}}
+\DoxyCodeLine{00437\ \textcolor{comment}{//\ can\ be\ statically\ converted\ to\ U.}}
+\DoxyCodeLine{00438\ TEST(MatcherCastTest,\ FromCompatibleType)\ \{}
+\DoxyCodeLine{00439\ \ \ Matcher<double>\ m1\ =\ Eq(2.0);}
+\DoxyCodeLine{00440\ \ \ Matcher<int>\ m2\ =\ MatcherCast<int>(m1);}
+\DoxyCodeLine{00441\ \ \ EXPECT\_TRUE(m2.Matches(2));}
+\DoxyCodeLine{00442\ \ \ EXPECT\_FALSE(m2.Matches(3));}
+\DoxyCodeLine{00443\ }
+\DoxyCodeLine{00444\ \ \ Matcher<IntValue>\ m3\ =\ Truly(IsPositiveIntValue);}
+\DoxyCodeLine{00445\ \ \ Matcher<int>\ m4\ =\ MatcherCast<int>(m3);}
+\DoxyCodeLine{00446\ \ \ \textcolor{comment}{//\ In\ the\ following,\ the\ arguments\ 1\ and\ 0\ are\ statically\ converted}}
+\DoxyCodeLine{00447\ \ \ \textcolor{comment}{//\ to\ IntValue\ objects,\ and\ then\ tested\ by\ the\ IsPositiveIntValue()}}
+\DoxyCodeLine{00448\ \ \ \textcolor{comment}{//\ predicate.}}
+\DoxyCodeLine{00449\ \ \ EXPECT\_TRUE(m4.Matches(1));}
+\DoxyCodeLine{00450\ \ \ EXPECT\_FALSE(m4.Matches(0));}
+\DoxyCodeLine{00451\ }
+\DoxyCodeLine{00452\ \ \ Matcher<MutableIntView>\ m5\ =\ Truly(IsPositiveMutableIntView);}
+\DoxyCodeLine{00453\ \ \ Matcher<int>\ m6\ =\ MatcherCast<int>(m5);}
+\DoxyCodeLine{00454\ \ \ \textcolor{comment}{//\ In\ the\ following,\ the\ arguments\ 1\ and\ 0\ are\ statically\ converted\ to}}
+\DoxyCodeLine{00455\ \ \ \textcolor{comment}{//\ MutableIntView\ objects,\ and\ then\ tested\ by\ the\ IsPositiveMutableIntView()}}
+\DoxyCodeLine{00456\ \ \ \textcolor{comment}{//\ predicate.}}
+\DoxyCodeLine{00457\ \ \ EXPECT\_TRUE(m6.Matches(1));}
+\DoxyCodeLine{00458\ \ \ EXPECT\_FALSE(m6.Matches(0));}
+\DoxyCodeLine{00459\ \}}
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<T>(m)\ works\ when\ m\ is\ a\ Matcher<const\ T\&>.}}
+\DoxyCodeLine{00462\ TEST(MatcherCastTest,\ FromConstReferenceToNonReference)\ \{}
+\DoxyCodeLine{00463\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{00464\ \ \ Matcher<const\ int\&>\ m1\ =\ Ref(n);}
+\DoxyCodeLine{00465\ \ \ Matcher<int>\ m2\ =\ MatcherCast<int>(m1);}
+\DoxyCodeLine{00466\ \ \ \textcolor{keywordtype}{int}\ n1\ =\ 0;}
+\DoxyCodeLine{00467\ \ \ EXPECT\_TRUE(m2.Matches(n));}
+\DoxyCodeLine{00468\ \ \ EXPECT\_FALSE(m2.Matches(n1));}
+\DoxyCodeLine{00469\ \}}
+\DoxyCodeLine{00470\ }
+\DoxyCodeLine{00471\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<T\&>(m)\ works\ when\ m\ is\ a\ Matcher<const\ T\&>.}}
+\DoxyCodeLine{00472\ TEST(MatcherCastTest,\ FromConstReferenceToReference)\ \{}
+\DoxyCodeLine{00473\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{00474\ \ \ Matcher<const\ int\&>\ m1\ =\ Ref(n);}
+\DoxyCodeLine{00475\ \ \ Matcher<int\&>\ m2\ =\ MatcherCast<int\&>(m1);}
+\DoxyCodeLine{00476\ \ \ \textcolor{keywordtype}{int}\ n1\ =\ 0;}
+\DoxyCodeLine{00477\ \ \ EXPECT\_TRUE(m2.Matches(n));}
+\DoxyCodeLine{00478\ \ \ EXPECT\_FALSE(m2.Matches(n1));}
+\DoxyCodeLine{00479\ \}}
+\DoxyCodeLine{00480\ }
+\DoxyCodeLine{00481\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<T>(m)\ works\ when\ m\ is\ a\ Matcher<T\&>.}}
+\DoxyCodeLine{00482\ TEST(MatcherCastTest,\ FromReferenceToNonReference)\ \{}
+\DoxyCodeLine{00483\ \ \ Matcher<int\&>\ m1\ =\ Eq(0);}
+\DoxyCodeLine{00484\ \ \ Matcher<int>\ m2\ =\ MatcherCast<int>(m1);}
+\DoxyCodeLine{00485\ \ \ EXPECT\_TRUE(m2.Matches(0));}
+\DoxyCodeLine{00486\ \ \ EXPECT\_FALSE(m2.Matches(1));}
+\DoxyCodeLine{00487\ }
+\DoxyCodeLine{00488\ \ \ \textcolor{comment}{//\ Of\ course,\ reference\ identity\ isn't\ preserved\ since\ a\ copy\ is\ required.}}
+\DoxyCodeLine{00489\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{00490\ \ \ Matcher<int\&>\ m3\ =\ Ref(n);}
+\DoxyCodeLine{00491\ \ \ Matcher<int>\ m4\ =\ MatcherCast<int>(m3);}
+\DoxyCodeLine{00492\ \ \ EXPECT\_FALSE(m4.Matches(n));}
+\DoxyCodeLine{00493\ \}}
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00495\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<const\ T\&>(m)\ works\ when\ m\ is\ a\ Matcher<T>.}}
+\DoxyCodeLine{00496\ TEST(MatcherCastTest,\ FromNonReferenceToConstReference)\ \{}
+\DoxyCodeLine{00497\ \ \ Matcher<int>\ m1\ =\ Eq(0);}
+\DoxyCodeLine{00498\ \ \ Matcher<const\ int\&>\ m2\ =\ MatcherCast<const\ int\&>(m1);}
+\DoxyCodeLine{00499\ \ \ EXPECT\_TRUE(m2.Matches(0));}
+\DoxyCodeLine{00500\ \ \ EXPECT\_FALSE(m2.Matches(1));}
+\DoxyCodeLine{00501\ \}}
+\DoxyCodeLine{00502\ }
+\DoxyCodeLine{00503\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<T\&>(m)\ works\ when\ m\ is\ a\ Matcher<T>.}}
+\DoxyCodeLine{00504\ TEST(MatcherCastTest,\ FromNonReferenceToReference)\ \{}
+\DoxyCodeLine{00505\ \ \ Matcher<int>\ m1\ =\ Eq(0);}
+\DoxyCodeLine{00506\ \ \ Matcher<int\&>\ m2\ =\ MatcherCast<int\&>(m1);}
+\DoxyCodeLine{00507\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{00508\ \ \ EXPECT\_TRUE(m2.Matches(n));}
+\DoxyCodeLine{00509\ \ \ n\ =\ 1;}
+\DoxyCodeLine{00510\ \ \ EXPECT\_FALSE(m2.Matches(n));}
+\DoxyCodeLine{00511\ \}}
+\DoxyCodeLine{00512\ }
+\DoxyCodeLine{00513\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<T>(m)\ works\ when\ m\ is\ a\ Matcher<T>.}}
+\DoxyCodeLine{00514\ TEST(MatcherCastTest,\ FromSameType)\ \{}
+\DoxyCodeLine{00515\ \ \ Matcher<int>\ m1\ =\ Eq(0);}
+\DoxyCodeLine{00516\ \ \ Matcher<int>\ m2\ =\ MatcherCast<int>(m1);}
+\DoxyCodeLine{00517\ \ \ EXPECT\_TRUE(m2.Matches(0));}
+\DoxyCodeLine{00518\ \ \ EXPECT\_FALSE(m2.Matches(1));}
+\DoxyCodeLine{00519\ \}}
+\DoxyCodeLine{00520\ }
+\DoxyCodeLine{00521\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<T>(m)\ works\ when\ m\ is\ a\ value\ of\ the\ same\ type\ as\ the}}
+\DoxyCodeLine{00522\ \textcolor{comment}{//\ value\ type\ of\ the\ Matcher.}}
+\DoxyCodeLine{00523\ TEST(MatcherCastTest,\ FromAValue)\ \{}
+\DoxyCodeLine{00524\ \ \ Matcher<int>\ m\ =\ MatcherCast<int>(42);}
+\DoxyCodeLine{00525\ \ \ EXPECT\_TRUE(m.Matches(42));}
+\DoxyCodeLine{00526\ \ \ EXPECT\_FALSE(m.Matches(239));}
+\DoxyCodeLine{00527\ \}}
+\DoxyCodeLine{00528\ }
+\DoxyCodeLine{00529\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<T>(m)\ works\ when\ m\ is\ a\ value\ of\ the\ type\ implicitly}}
+\DoxyCodeLine{00530\ \textcolor{comment}{//\ convertible\ to\ the\ value\ type\ of\ the\ Matcher.}}
+\DoxyCodeLine{00531\ TEST(MatcherCastTest,\ FromAnImplicitlyConvertibleValue)\ \{}
+\DoxyCodeLine{00532\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ kExpected\ =\ \textcolor{charliteral}{'c'};}
+\DoxyCodeLine{00533\ \ \ Matcher<int>\ m\ =\ MatcherCast<int>(\textcolor{charliteral}{'c'});}
+\DoxyCodeLine{00534\ \ \ EXPECT\_TRUE(m.Matches(kExpected));}
+\DoxyCodeLine{00535\ \ \ EXPECT\_FALSE(m.Matches(kExpected\ +\ 1));}
+\DoxyCodeLine{00536\ \}}
+\DoxyCodeLine{00537\ }
+\DoxyCodeLine{00538\ \textcolor{keyword}{struct\ }NonImplicitlyConstructibleTypeWithOperatorEq\ \{}
+\DoxyCodeLine{00539\ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator==(}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \textcolor{keyword}{const}\ NonImplicitlyConstructibleTypeWithOperatorEq\&\ \textcolor{comment}{/*\ ignored\ */},}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ rhs)\ \{}
+\DoxyCodeLine{00542\ \ \ \ \ \textcolor{keywordflow}{return}\ 42\ ==\ rhs;}
+\DoxyCodeLine{00543\ \ \ \}}
+\DoxyCodeLine{00544\ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{bool}\ operator==(}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ lhs,}
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \textcolor{keyword}{const}\ NonImplicitlyConstructibleTypeWithOperatorEq\&\ \textcolor{comment}{/*\ ignored\ */})\ \{}
+\DoxyCodeLine{00547\ \ \ \ \ \textcolor{keywordflow}{return}\ lhs\ ==\ 42;}
+\DoxyCodeLine{00548\ \ \ \}}
+\DoxyCodeLine{00549\ \};}
+\DoxyCodeLine{00550\ }
+\DoxyCodeLine{00551\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<T>(m)\ works\ when\ m\ is\ a\ neither\ a\ matcher\ nor}}
+\DoxyCodeLine{00552\ \textcolor{comment}{//\ implicitly\ convertible\ to\ the\ value\ type\ of\ the\ Matcher,\ but\ the\ value\ type}}
+\DoxyCodeLine{00553\ \textcolor{comment}{//\ of\ the\ matcher\ has\ operator==()\ overload\ accepting\ m.}}
+\DoxyCodeLine{00554\ TEST(MatcherCastTest,\ NonImplicitlyConstructibleTypeWithOperatorEq)\ \{}
+\DoxyCodeLine{00555\ \ \ Matcher<NonImplicitlyConstructibleTypeWithOperatorEq>\ m1\ =}
+\DoxyCodeLine{00556\ \ \ \ \ \ \ MatcherCast<NonImplicitlyConstructibleTypeWithOperatorEq>(42);}
+\DoxyCodeLine{00557\ \ \ EXPECT\_TRUE(m1.Matches(NonImplicitlyConstructibleTypeWithOperatorEq()));}
+\DoxyCodeLine{00558\ }
+\DoxyCodeLine{00559\ \ \ Matcher<NonImplicitlyConstructibleTypeWithOperatorEq>\ m2\ =}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ MatcherCast<NonImplicitlyConstructibleTypeWithOperatorEq>(239);}
+\DoxyCodeLine{00561\ \ \ EXPECT\_FALSE(m2.Matches(NonImplicitlyConstructibleTypeWithOperatorEq()));}
+\DoxyCodeLine{00562\ }
+\DoxyCodeLine{00563\ \ \ \textcolor{comment}{//\ When\ updating\ the\ following\ lines\ please\ also\ change\ the\ comment\ to}}
+\DoxyCodeLine{00564\ \ \ \textcolor{comment}{//\ namespace\ convertible\_from\_any.}}
+\DoxyCodeLine{00565\ \ \ Matcher<int>\ m3\ =}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ MatcherCast<int>(NonImplicitlyConstructibleTypeWithOperatorEq());}
+\DoxyCodeLine{00567\ \ \ EXPECT\_TRUE(m3.Matches(42));}
+\DoxyCodeLine{00568\ \ \ EXPECT\_FALSE(m3.Matches(239));}
+\DoxyCodeLine{00569\ \}}
+\DoxyCodeLine{00570\ }
+\DoxyCodeLine{00571\ \textcolor{comment}{//\ ConvertibleFromAny\ does\ not\ work\ with\ MSVC.\ resulting\ in}}
+\DoxyCodeLine{00572\ \textcolor{comment}{//\ error\ C2440:\ 'initializing':\ cannot\ convert\ from\ 'Eq'\ to\ 'M'}}
+\DoxyCodeLine{00573\ \textcolor{comment}{//\ No\ constructor\ could\ take\ the\ source\ type,\ or\ constructor\ overload}}
+\DoxyCodeLine{00574\ \textcolor{comment}{//\ resolution\ was\ ambiguous}}
+\DoxyCodeLine{00575\ }
+\DoxyCodeLine{00576\ \textcolor{preprocessor}{\#if\ !defined\ \_MSC\_VER}}
+\DoxyCodeLine{00577\ }
+\DoxyCodeLine{00578\ \textcolor{comment}{//\ The\ below\ ConvertibleFromAny\ struct\ is\ implicitly\ constructible\ from\ anything}}
+\DoxyCodeLine{00579\ \textcolor{comment}{//\ and\ when\ in\ the\ same\ namespace\ can\ interact\ with\ other\ tests.\ In\ particular,}}
+\DoxyCodeLine{00580\ \textcolor{comment}{//\ if\ it\ is\ in\ the\ same\ namespace\ as\ other\ tests\ and\ one\ removes}}
+\DoxyCodeLine{00581\ \textcolor{comment}{//\ \ \ NonImplicitlyConstructibleTypeWithOperatorEq::operator==(int\ lhs,\ ...);}}
+\DoxyCodeLine{00582\ \textcolor{comment}{//\ then\ the\ corresponding\ test\ still\ compiles\ (and\ it\ should\ not!)\ by\ implicitly}}
+\DoxyCodeLine{00583\ \textcolor{comment}{//\ converting\ NonImplicitlyConstructibleTypeWithOperatorEq\ to\ ConvertibleFromAny}}
+\DoxyCodeLine{00584\ \textcolor{comment}{//\ in\ m3.Matcher().}}
+\DoxyCodeLine{00585\ \textcolor{keyword}{namespace\ }convertible\_from\_any\ \{}
+\DoxyCodeLine{00586\ \textcolor{comment}{//\ Implicitly\ convertible\ from\ any\ type.}}
+\DoxyCodeLine{00587\ \textcolor{keyword}{struct\ }ConvertibleFromAny\ \{}
+\DoxyCodeLine{00588\ \ \ ConvertibleFromAny(\textcolor{keywordtype}{int}\ a\_value)\ :\ value(a\_value)\ \{\}}
+\DoxyCodeLine{00589\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00590\ \ \ ConvertibleFromAny(\textcolor{keyword}{const}\ T\&\ \textcolor{comment}{/*a\_value*/})\ :\ value(-\/1)\ \{}
+\DoxyCodeLine{00591\ \ \ \ \ ADD\_FAILURE()\ <<\ \textcolor{stringliteral}{"{}Conversion\ constructor\ called"{}};}
+\DoxyCodeLine{00592\ \ \ \}}
+\DoxyCodeLine{00593\ \ \ \textcolor{keywordtype}{int}\ value;}
+\DoxyCodeLine{00594\ \};}
+\DoxyCodeLine{00595\ }
+\DoxyCodeLine{00596\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ ConvertibleFromAny\&\ a,\ \textcolor{keyword}{const}\ ConvertibleFromAny\&\ b)\ \{}
+\DoxyCodeLine{00597\ \ \ \textcolor{keywordflow}{return}\ a.value\ ==\ b.value;}
+\DoxyCodeLine{00598\ \}}
+\DoxyCodeLine{00599\ }
+\DoxyCodeLine{00600\ ostream\&\ operator<<(ostream\&\ os,\ \textcolor{keyword}{const}\ ConvertibleFromAny\&\ a)\ \{}
+\DoxyCodeLine{00601\ \ \ \textcolor{keywordflow}{return}\ os\ <<\ a.value;}
+\DoxyCodeLine{00602\ \}}
+\DoxyCodeLine{00603\ }
+\DoxyCodeLine{00604\ TEST(MatcherCastTest,\ ConversionConstructorIsUsed)\ \{}
+\DoxyCodeLine{00605\ \ \ Matcher<ConvertibleFromAny>\ m\ =\ MatcherCast<ConvertibleFromAny>(1);}
+\DoxyCodeLine{00606\ \ \ EXPECT\_TRUE(m.Matches(ConvertibleFromAny(1)));}
+\DoxyCodeLine{00607\ \ \ EXPECT\_FALSE(m.Matches(ConvertibleFromAny(2)));}
+\DoxyCodeLine{00608\ \}}
+\DoxyCodeLine{00609\ }
+\DoxyCodeLine{00610\ TEST(MatcherCastTest,\ FromConvertibleFromAny)\ \{}
+\DoxyCodeLine{00611\ \ \ Matcher<ConvertibleFromAny>\ m\ =}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ MatcherCast<ConvertibleFromAny>(Eq(ConvertibleFromAny(1)));}
+\DoxyCodeLine{00613\ \ \ EXPECT\_TRUE(m.Matches(ConvertibleFromAny(1)));}
+\DoxyCodeLine{00614\ \ \ EXPECT\_FALSE(m.Matches(ConvertibleFromAny(2)));}
+\DoxyCodeLine{00615\ \}}
+\DoxyCodeLine{00616\ \}\ \ \textcolor{comment}{//\ namespace\ convertible\_from\_any}}
+\DoxyCodeLine{00617\ }
+\DoxyCodeLine{00618\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ !defined\ \_MSC\_VER}}
+\DoxyCodeLine{00619\ }
+\DoxyCodeLine{00620\ \textcolor{keyword}{struct\ }IntReferenceWrapper\ \{}
+\DoxyCodeLine{00621\ \ \ IntReferenceWrapper(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ a\_value)\ :\ value(\&a\_value)\ \{\}}
+\DoxyCodeLine{00622\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}*\ value;}
+\DoxyCodeLine{00623\ \};}
+\DoxyCodeLine{00624\ }
+\DoxyCodeLine{00625\ \textcolor{comment}{//\ Compared\ the\ contained\ values}}
+\DoxyCodeLine{00626\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ IntReferenceWrapper\&\ a,\ \textcolor{keyword}{const}\ IntReferenceWrapper\&\ b)\ \{}
+\DoxyCodeLine{00627\ \ \ \textcolor{keywordflow}{return}\ *a.value\ ==\ *b.value;}
+\DoxyCodeLine{00628\ \}}
+\DoxyCodeLine{00629\ }
+\DoxyCodeLine{00630\ TEST(MatcherCastTest,\ ValueIsCopied)\ \{}
+\DoxyCodeLine{00631\ \ \ \{}
+\DoxyCodeLine{00632\ \ \ \ \ \textcolor{comment}{//\ When\ an\ IntReferenceWrapper\ is\ passed.}}
+\DoxyCodeLine{00633\ \ \ \ \ \textcolor{keywordtype}{int}\ n\ =\ 42;}
+\DoxyCodeLine{00634\ \ \ \ \ Matcher<IntReferenceWrapper>\ m\ =}
+\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ MatcherCast<IntReferenceWrapper>(IntReferenceWrapper(n));}
+\DoxyCodeLine{00636\ \ \ \ \ \{}
+\DoxyCodeLine{00637\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ value\ =\ 42;}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ EXPECT\_TRUE(m.Matches(value));}
+\DoxyCodeLine{00639\ \ \ \ \ \ \ value\ =\ 10;}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ EXPECT\_FALSE(m.Matches(value));}
+\DoxyCodeLine{00641\ \ \ \ \ \ \ \textcolor{comment}{//\ This\ changes\ the\ stored\ reference.}}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ n\ =\ 10;}
+\DoxyCodeLine{00643\ \ \ \ \ \ \ EXPECT\_TRUE(m.Matches(value));}
+\DoxyCodeLine{00644\ \ \ \ \ \}}
+\DoxyCodeLine{00645\ \ \ \}}
+\DoxyCodeLine{00646\ }
+\DoxyCodeLine{00647\ \ \ \{}
+\DoxyCodeLine{00648\ \ \ \ \ \textcolor{comment}{//\ When\ an\ int\ is\ passed.}}
+\DoxyCodeLine{00649\ \ \ \ \ \textcolor{keywordtype}{int}\ n\ =\ 42;}
+\DoxyCodeLine{00650\ \ \ \ \ Matcher<IntReferenceWrapper>\ m\ =\ MatcherCast<IntReferenceWrapper>(n);}
+\DoxyCodeLine{00651\ \ \ \ \ \{}
+\DoxyCodeLine{00652\ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ value\ =\ 42;}
+\DoxyCodeLine{00653\ \ \ \ \ \ \ EXPECT\_TRUE(m.Matches(value));}
+\DoxyCodeLine{00654\ \ \ \ \ \ \ value\ =\ 10;}
+\DoxyCodeLine{00655\ \ \ \ \ \ \ EXPECT\_FALSE(m.Matches(value));}
+\DoxyCodeLine{00656\ \ \ \ \ \ \ \textcolor{comment}{//\ This\ does\ not\ change\ the\ stored\ int.}}
+\DoxyCodeLine{00657\ \ \ \ \ \ \ n\ =\ 10;}
+\DoxyCodeLine{00658\ \ \ \ \ \ \ EXPECT\_FALSE(m.Matches(value));}
+\DoxyCodeLine{00659\ \ \ \ \ \}}
+\DoxyCodeLine{00660\ \ \ \}}
+\DoxyCodeLine{00661\ \}}
+\DoxyCodeLine{00662\ }
+\DoxyCodeLine{00663\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classBase}{Base}}\ \{}
+\DoxyCodeLine{00664\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00665\ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classBase}{\string~Base}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00666\ \ \ \mbox{\hyperlink{classBase}{Base}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00667\ }
+\DoxyCodeLine{00668\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00669\ \ \ \mbox{\hyperlink{classBase}{Base}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classBase}{Base}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00670\ \ \ \mbox{\hyperlink{classBase}{Base}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classBase}{Base}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00671\ \};}
+\DoxyCodeLine{00672\ }
+\DoxyCodeLine{00673\ \textcolor{keyword}{class\ }Derived\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classBase}{Base}}\ \{}
+\DoxyCodeLine{00674\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00675\ \ \ Derived()\ :\ \mbox{\hyperlink{classBase}{Base}}()\ \{\}}
+\DoxyCodeLine{00676\ \ \ \textcolor{keywordtype}{int}\ i;}
+\DoxyCodeLine{00677\ \};}
+\DoxyCodeLine{00678\ }
+\DoxyCodeLine{00679\ \textcolor{keyword}{class\ }OtherDerived\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classBase}{Base}}\ \{\};}
+\DoxyCodeLine{00680\ }
+\DoxyCodeLine{00681\ INSTANTIATE\_GTEST\_MATCHER\_TEST\_P(SafeMatcherCastTest);}
+\DoxyCodeLine{00682\ }
+\DoxyCodeLine{00683\ \textcolor{comment}{//\ Tests\ that\ SafeMatcherCast<T>(m)\ works\ when\ m\ is\ a\ polymorphic\ matcher.}}
+\DoxyCodeLine{00684\ TEST\_P(SafeMatcherCastTestP,\ FromPolymorphicMatcher)\ \{}
+\DoxyCodeLine{00685\ \ \ Matcher<char>\ m2;}
+\DoxyCodeLine{00686\ \ \ \textcolor{keywordflow}{if}\ (use\_gtest\_matcher\_)\ \{}
+\DoxyCodeLine{00687\ \ \ \ \ m2\ =\ SafeMatcherCast<char>(GtestGreaterThan(32));}
+\DoxyCodeLine{00688\ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00689\ \ \ \ \ m2\ =\ SafeMatcherCast<char>(Gt(32));}
+\DoxyCodeLine{00690\ \ \ \}}
+\DoxyCodeLine{00691\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{charliteral}{'A'}));}
+\DoxyCodeLine{00692\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{charliteral}{'\(\backslash\)n'}));}
+\DoxyCodeLine{00693\ \}}
+\DoxyCodeLine{00694\ }
+\DoxyCodeLine{00695\ \textcolor{comment}{//\ Tests\ that\ SafeMatcherCast<T>(m)\ works\ when\ m\ is\ a\ Matcher<U>\ where}}
+\DoxyCodeLine{00696\ \textcolor{comment}{//\ T\ and\ U\ are\ arithmetic\ types\ and\ T\ can\ be\ losslessly\ converted\ to}}
+\DoxyCodeLine{00697\ \textcolor{comment}{//\ U.}}
+\DoxyCodeLine{00698\ TEST(SafeMatcherCastTest,\ FromLosslesslyConvertibleArithmeticType)\ \{}
+\DoxyCodeLine{00699\ \ \ Matcher<double>\ m1\ =\ DoubleEq(1.0);}
+\DoxyCodeLine{00700\ \ \ Matcher<float>\ m2\ =\ SafeMatcherCast<float>(m1);}
+\DoxyCodeLine{00701\ \ \ EXPECT\_TRUE(m2.Matches(1.0f));}
+\DoxyCodeLine{00702\ \ \ EXPECT\_FALSE(m2.Matches(2.0f));}
+\DoxyCodeLine{00703\ }
+\DoxyCodeLine{00704\ \ \ Matcher<char>\ m3\ =\ SafeMatcherCast<char>(TypedEq<int>(\textcolor{charliteral}{'a'}));}
+\DoxyCodeLine{00705\ \ \ EXPECT\_TRUE(m3.Matches(\textcolor{charliteral}{'a'}));}
+\DoxyCodeLine{00706\ \ \ EXPECT\_FALSE(m3.Matches(\textcolor{charliteral}{'b'}));}
+\DoxyCodeLine{00707\ \}}
+\DoxyCodeLine{00708\ }
+\DoxyCodeLine{00709\ \textcolor{comment}{//\ Tests\ that\ SafeMatcherCast<T>(m)\ works\ when\ m\ is\ a\ Matcher<U>\ where\ T\ and\ U}}
+\DoxyCodeLine{00710\ \textcolor{comment}{//\ are\ pointers\ or\ references\ to\ a\ derived\ and\ a\ base\ class,\ correspondingly.}}
+\DoxyCodeLine{00711\ TEST(SafeMatcherCastTest,\ FromBaseClass)\ \{}
+\DoxyCodeLine{00712\ \ \ Derived\ d,\ d2;}
+\DoxyCodeLine{00713\ \ \ Matcher<Base*>\ m1\ =\ Eq(\&d);}
+\DoxyCodeLine{00714\ \ \ Matcher<Derived*>\ m2\ =\ SafeMatcherCast<Derived*>(m1);}
+\DoxyCodeLine{00715\ \ \ EXPECT\_TRUE(m2.Matches(\&d));}
+\DoxyCodeLine{00716\ \ \ EXPECT\_FALSE(m2.Matches(\&d2));}
+\DoxyCodeLine{00717\ }
+\DoxyCodeLine{00718\ \ \ Matcher<Base\&>\ m3\ =\ Ref(d);}
+\DoxyCodeLine{00719\ \ \ Matcher<Derived\&>\ m4\ =\ SafeMatcherCast<Derived\&>(m3);}
+\DoxyCodeLine{00720\ \ \ EXPECT\_TRUE(m4.Matches(d));}
+\DoxyCodeLine{00721\ \ \ EXPECT\_FALSE(m4.Matches(d2));}
+\DoxyCodeLine{00722\ \}}
+\DoxyCodeLine{00723\ }
+\DoxyCodeLine{00724\ \textcolor{comment}{//\ Tests\ that\ SafeMatcherCast<T>(m)\ works\ when\ m\ is\ a\ Matcher<const\ T\&>.}}
+\DoxyCodeLine{00725\ TEST(SafeMatcherCastTest,\ FromConstReferenceToNonReference)\ \{}
+\DoxyCodeLine{00726\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{00727\ \ \ Matcher<const\ int\&>\ m1\ =\ Ref(n);}
+\DoxyCodeLine{00728\ \ \ Matcher<int>\ m2\ =\ SafeMatcherCast<int>(m1);}
+\DoxyCodeLine{00729\ \ \ \textcolor{keywordtype}{int}\ n1\ =\ 0;}
+\DoxyCodeLine{00730\ \ \ EXPECT\_TRUE(m2.Matches(n));}
+\DoxyCodeLine{00731\ \ \ EXPECT\_FALSE(m2.Matches(n1));}
+\DoxyCodeLine{00732\ \}}
+\DoxyCodeLine{00733\ }
+\DoxyCodeLine{00734\ \textcolor{comment}{//\ Tests\ that\ SafeMatcherCast<T\&>(m)\ works\ when\ m\ is\ a\ Matcher<const\ T\&>.}}
+\DoxyCodeLine{00735\ TEST(SafeMatcherCastTest,\ FromConstReferenceToReference)\ \{}
+\DoxyCodeLine{00736\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{00737\ \ \ Matcher<const\ int\&>\ m1\ =\ Ref(n);}
+\DoxyCodeLine{00738\ \ \ Matcher<int\&>\ m2\ =\ SafeMatcherCast<int\&>(m1);}
+\DoxyCodeLine{00739\ \ \ \textcolor{keywordtype}{int}\ n1\ =\ 0;}
+\DoxyCodeLine{00740\ \ \ EXPECT\_TRUE(m2.Matches(n));}
+\DoxyCodeLine{00741\ \ \ EXPECT\_FALSE(m2.Matches(n1));}
+\DoxyCodeLine{00742\ \}}
+\DoxyCodeLine{00743\ }
+\DoxyCodeLine{00744\ \textcolor{comment}{//\ Tests\ that\ MatcherCast<const\ T\&>(m)\ works\ when\ m\ is\ a\ Matcher<T>.}}
+\DoxyCodeLine{00745\ TEST(SafeMatcherCastTest,\ FromNonReferenceToConstReference)\ \{}
+\DoxyCodeLine{00746\ \ \ Matcher<std::unique\_ptr<int>>\ m1\ =\ IsNull();}
+\DoxyCodeLine{00747\ \ \ Matcher<const\ std::unique\_ptr<int>\&>\ m2\ =}
+\DoxyCodeLine{00748\ \ \ \ \ \ \ SafeMatcherCast<const\ std::unique\_ptr<int>\&>(m1);}
+\DoxyCodeLine{00749\ \ \ EXPECT\_TRUE(m2.Matches(std::unique\_ptr<int>()));}
+\DoxyCodeLine{00750\ \ \ EXPECT\_FALSE(m2.Matches(std::unique\_ptr<int>(\textcolor{keyword}{new}\ \textcolor{keywordtype}{int})));}
+\DoxyCodeLine{00751\ \}}
+\DoxyCodeLine{00752\ }
+\DoxyCodeLine{00753\ \textcolor{comment}{//\ Tests\ that\ SafeMatcherCast<T\&>(m)\ works\ when\ m\ is\ a\ Matcher<T>.}}
+\DoxyCodeLine{00754\ TEST(SafeMatcherCastTest,\ FromNonReferenceToReference)\ \{}
+\DoxyCodeLine{00755\ \ \ Matcher<int>\ m1\ =\ Eq(0);}
+\DoxyCodeLine{00756\ \ \ Matcher<int\&>\ m2\ =\ SafeMatcherCast<int\&>(m1);}
+\DoxyCodeLine{00757\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{00758\ \ \ EXPECT\_TRUE(m2.Matches(n));}
+\DoxyCodeLine{00759\ \ \ n\ =\ 1;}
+\DoxyCodeLine{00760\ \ \ EXPECT\_FALSE(m2.Matches(n));}
+\DoxyCodeLine{00761\ \}}
+\DoxyCodeLine{00762\ }
+\DoxyCodeLine{00763\ \textcolor{comment}{//\ Tests\ that\ SafeMatcherCast<T>(m)\ works\ when\ m\ is\ a\ Matcher<T>.}}
+\DoxyCodeLine{00764\ TEST(SafeMatcherCastTest,\ FromSameType)\ \{}
+\DoxyCodeLine{00765\ \ \ Matcher<int>\ m1\ =\ Eq(0);}
+\DoxyCodeLine{00766\ \ \ Matcher<int>\ m2\ =\ SafeMatcherCast<int>(m1);}
+\DoxyCodeLine{00767\ \ \ EXPECT\_TRUE(m2.Matches(0));}
+\DoxyCodeLine{00768\ \ \ EXPECT\_FALSE(m2.Matches(1));}
+\DoxyCodeLine{00769\ \}}
+\DoxyCodeLine{00770\ }
+\DoxyCodeLine{00771\ \textcolor{preprocessor}{\#if\ !defined\ \_MSC\_VER}}
+\DoxyCodeLine{00772\ }
+\DoxyCodeLine{00773\ \textcolor{keyword}{namespace\ }convertible\_from\_any\ \{}
+\DoxyCodeLine{00774\ TEST(SafeMatcherCastTest,\ ConversionConstructorIsUsed)\ \{}
+\DoxyCodeLine{00775\ \ \ Matcher<ConvertibleFromAny>\ m\ =\ SafeMatcherCast<ConvertibleFromAny>(1);}
+\DoxyCodeLine{00776\ \ \ EXPECT\_TRUE(m.Matches(ConvertibleFromAny(1)));}
+\DoxyCodeLine{00777\ \ \ EXPECT\_FALSE(m.Matches(ConvertibleFromAny(2)));}
+\DoxyCodeLine{00778\ \}}
+\DoxyCodeLine{00779\ }
+\DoxyCodeLine{00780\ TEST(SafeMatcherCastTest,\ FromConvertibleFromAny)\ \{}
+\DoxyCodeLine{00781\ \ \ Matcher<ConvertibleFromAny>\ m\ =}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ SafeMatcherCast<ConvertibleFromAny>(Eq(ConvertibleFromAny(1)));}
+\DoxyCodeLine{00783\ \ \ EXPECT\_TRUE(m.Matches(ConvertibleFromAny(1)));}
+\DoxyCodeLine{00784\ \ \ EXPECT\_FALSE(m.Matches(ConvertibleFromAny(2)));}
+\DoxyCodeLine{00785\ \}}
+\DoxyCodeLine{00786\ \}\ \ \textcolor{comment}{//\ namespace\ convertible\_from\_any}}
+\DoxyCodeLine{00787\ }
+\DoxyCodeLine{00788\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ !defined\ \_MSC\_VER}}
+\DoxyCodeLine{00789\ }
+\DoxyCodeLine{00790\ TEST(SafeMatcherCastTest,\ ValueIsNotCopied)\ \{}
+\DoxyCodeLine{00791\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 42;}
+\DoxyCodeLine{00792\ \ \ Matcher<IntReferenceWrapper>\ m\ =\ SafeMatcherCast<IntReferenceWrapper>(n);}
+\DoxyCodeLine{00793\ \ \ \textcolor{comment}{//\ Verify\ that\ the\ matcher\ holds\ a\ reference\ to\ n,\ not\ to\ its\ temporary\ copy.}}
+\DoxyCodeLine{00794\ \ \ EXPECT\_TRUE(m.Matches(n));}
+\DoxyCodeLine{00795\ \}}
+\DoxyCodeLine{00796\ }
+\DoxyCodeLine{00797\ TEST(ExpectThat,\ TakesLiterals)\ \{}
+\DoxyCodeLine{00798\ \ \ EXPECT\_THAT(1,\ 1);}
+\DoxyCodeLine{00799\ \ \ EXPECT\_THAT(1.0,\ 1.0);}
+\DoxyCodeLine{00800\ \ \ EXPECT\_THAT(std::string(),\ \textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00801\ \}}
+\DoxyCodeLine{00802\ }
+\DoxyCodeLine{00803\ TEST(ExpectThat,\ TakesFunctions)\ \{}
+\DoxyCodeLine{00804\ \ \ \textcolor{keyword}{struct\ }Helper\ \{}
+\DoxyCodeLine{00805\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ Func()\ \{\}}
+\DoxyCodeLine{00806\ \ \ \};}
+\DoxyCodeLine{00807\ \ \ void\ (*func)()\ =\ Helper::Func;}
+\DoxyCodeLine{00808\ \ \ EXPECT\_THAT(func,\ Helper::Func);}
+\DoxyCodeLine{00809\ \ \ EXPECT\_THAT(func,\ \&Helper::Func);}
+\DoxyCodeLine{00810\ \}}
+\DoxyCodeLine{00811\ }
+\DoxyCodeLine{00812\ \textcolor{comment}{//\ Tests\ that\ A<T>()\ matches\ any\ value\ of\ type\ T.}}
+\DoxyCodeLine{00813\ TEST(ATest,\ MatchesAnyValue)\ \{}
+\DoxyCodeLine{00814\ \ \ \textcolor{comment}{//\ Tests\ a\ matcher\ for\ a\ value\ type.}}
+\DoxyCodeLine{00815\ \ \ Matcher<double>\ m1\ =\ A<double>();}
+\DoxyCodeLine{00816\ \ \ EXPECT\_TRUE(m1.Matches(91.43));}
+\DoxyCodeLine{00817\ \ \ EXPECT\_TRUE(m1.Matches(-\/15.32));}
+\DoxyCodeLine{00818\ }
+\DoxyCodeLine{00819\ \ \ \textcolor{comment}{//\ Tests\ a\ matcher\ for\ a\ reference\ type.}}
+\DoxyCodeLine{00820\ \ \ \textcolor{keywordtype}{int}\ a\ =\ 2;}
+\DoxyCodeLine{00821\ \ \ \textcolor{keywordtype}{int}\ b\ =\ -\/6;}
+\DoxyCodeLine{00822\ \ \ Matcher<int\&>\ m2\ =\ A<int\&>();}
+\DoxyCodeLine{00823\ \ \ EXPECT\_TRUE(m2.Matches(a));}
+\DoxyCodeLine{00824\ \ \ EXPECT\_TRUE(m2.Matches(b));}
+\DoxyCodeLine{00825\ \}}
+\DoxyCodeLine{00826\ }
+\DoxyCodeLine{00827\ TEST(ATest,\ WorksForDerivedClass)\ \{}
+\DoxyCodeLine{00828\ \ \ \mbox{\hyperlink{classBase}{Base}}\ base;}
+\DoxyCodeLine{00829\ \ \ Derived\ derived;}
+\DoxyCodeLine{00830\ \ \ EXPECT\_THAT(\&base,\ A<Base*>());}
+\DoxyCodeLine{00831\ \ \ \textcolor{comment}{//\ This\ shouldn't\ compile:\ EXPECT\_THAT(\&base,\ A<Derived*>());}}
+\DoxyCodeLine{00832\ \ \ EXPECT\_THAT(\&derived,\ A<Base*>());}
+\DoxyCodeLine{00833\ \ \ EXPECT\_THAT(\&derived,\ A<Derived*>());}
+\DoxyCodeLine{00834\ \}}
+\DoxyCodeLine{00835\ }
+\DoxyCodeLine{00836\ \textcolor{comment}{//\ Tests\ that\ A<T>()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00837\ TEST(ATest,\ CanDescribeSelf)\ \{\ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ anything"{}},\ Describe(A<bool>()));\ \}}
+\DoxyCodeLine{00838\ }
+\DoxyCodeLine{00839\ \textcolor{comment}{//\ Tests\ that\ An<T>()\ matches\ any\ value\ of\ type\ T.}}
+\DoxyCodeLine{00840\ TEST(AnTest,\ MatchesAnyValue)\ \{}
+\DoxyCodeLine{00841\ \ \ \textcolor{comment}{//\ Tests\ a\ matcher\ for\ a\ value\ type.}}
+\DoxyCodeLine{00842\ \ \ Matcher<int>\ m1\ =\ An<int>();}
+\DoxyCodeLine{00843\ \ \ EXPECT\_TRUE(m1.Matches(9143));}
+\DoxyCodeLine{00844\ \ \ EXPECT\_TRUE(m1.Matches(-\/1532));}
+\DoxyCodeLine{00845\ }
+\DoxyCodeLine{00846\ \ \ \textcolor{comment}{//\ Tests\ a\ matcher\ for\ a\ reference\ type.}}
+\DoxyCodeLine{00847\ \ \ \textcolor{keywordtype}{int}\ a\ =\ 2;}
+\DoxyCodeLine{00848\ \ \ \textcolor{keywordtype}{int}\ b\ =\ -\/6;}
+\DoxyCodeLine{00849\ \ \ Matcher<int\&>\ m2\ =\ An<int\&>();}
+\DoxyCodeLine{00850\ \ \ EXPECT\_TRUE(m2.Matches(a));}
+\DoxyCodeLine{00851\ \ \ EXPECT\_TRUE(m2.Matches(b));}
+\DoxyCodeLine{00852\ \}}
+\DoxyCodeLine{00853\ }
+\DoxyCodeLine{00854\ \textcolor{comment}{//\ Tests\ that\ An<T>()\ describes\ itself\ properly.}}
+\DoxyCodeLine{00855\ TEST(AnTest,\ CanDescribeSelf)\ \{\ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ anything"{}},\ Describe(An<int>()));\ \}}
+\DoxyCodeLine{00856\ }
+\DoxyCodeLine{00857\ \textcolor{comment}{//\ Tests\ that\ \_\ can\ be\ used\ as\ a\ matcher\ for\ any\ type\ and\ matches\ any}}
+\DoxyCodeLine{00858\ \textcolor{comment}{//\ value\ of\ that\ type.}}
+\DoxyCodeLine{00859\ TEST(UnderscoreTest,\ MatchesAnyValue)\ \{}
+\DoxyCodeLine{00860\ \ \ \textcolor{comment}{//\ Uses\ \_\ as\ a\ matcher\ for\ a\ value\ type.}}
+\DoxyCodeLine{00861\ \ \ Matcher<int>\ m1\ =\ \_;}
+\DoxyCodeLine{00862\ \ \ EXPECT\_TRUE(m1.Matches(123));}
+\DoxyCodeLine{00863\ \ \ EXPECT\_TRUE(m1.Matches(-\/242));}
+\DoxyCodeLine{00864\ }
+\DoxyCodeLine{00865\ \ \ \textcolor{comment}{//\ Uses\ \_\ as\ a\ matcher\ for\ a\ reference\ type.}}
+\DoxyCodeLine{00866\ \ \ \textcolor{keywordtype}{bool}\ a\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00867\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ b\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00868\ \ \ Matcher<const\ bool\&>\ m2\ =\ \_;}
+\DoxyCodeLine{00869\ \ \ EXPECT\_TRUE(m2.Matches(a));}
+\DoxyCodeLine{00870\ \ \ EXPECT\_TRUE(m2.Matches(b));}
+\DoxyCodeLine{00871\ \}}
+\DoxyCodeLine{00872\ }
+\DoxyCodeLine{00873\ \textcolor{comment}{//\ Tests\ that\ \_\ describes\ itself\ properly.}}
+\DoxyCodeLine{00874\ TEST(UnderscoreTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00875\ \ \ Matcher<int>\ m\ =\ \_;}
+\DoxyCodeLine{00876\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ anything"{}},\ Describe(m));}
+\DoxyCodeLine{00877\ \}}
+\DoxyCodeLine{00878\ }
+\DoxyCodeLine{00879\ \textcolor{comment}{//\ Tests\ that\ Eq(x)\ matches\ any\ value\ equal\ to\ x.}}
+\DoxyCodeLine{00880\ TEST(EqTest,\ MatchesEqualValue)\ \{}
+\DoxyCodeLine{00881\ \ \ \textcolor{comment}{//\ 2\ C-\/strings\ with\ same\ content\ but\ different\ addresses.}}
+\DoxyCodeLine{00882\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ a1[]\ =\ \textcolor{stringliteral}{"{}hi"{}};}
+\DoxyCodeLine{00883\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ a2[]\ =\ \textcolor{stringliteral}{"{}hi"{}};}
+\DoxyCodeLine{00884\ }
+\DoxyCodeLine{00885\ \ \ Matcher<const\ char*>\ m1\ =\ Eq(a1);}
+\DoxyCodeLine{00886\ \ \ EXPECT\_TRUE(m1.Matches(a1));}
+\DoxyCodeLine{00887\ \ \ EXPECT\_FALSE(m1.Matches(a2));}
+\DoxyCodeLine{00888\ \}}
+\DoxyCodeLine{00889\ }
+\DoxyCodeLine{00890\ \textcolor{comment}{//\ Tests\ that\ Eq(v)\ describes\ itself\ properly.}}
+\DoxyCodeLine{00891\ }
+\DoxyCodeLine{00892\ \textcolor{keyword}{class\ }Unprintable\ \{}
+\DoxyCodeLine{00893\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00894\ \ \ Unprintable()\ :\ c\_(\textcolor{stringliteral}{'a'})\ \{\}}
+\DoxyCodeLine{00895\ }
+\DoxyCodeLine{00896\ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ Unprintable\&\ \textcolor{comment}{/*\ rhs\ */})\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00897\ \ \ \textcolor{comment}{//\ -\/Wunused-\/private-\/field:\ dummy\ accessor\ for\ \`{}c\_`.}}
+\DoxyCodeLine{00898\ \ \ \textcolor{keywordtype}{char}\ dummy\_c()\ \{\ \textcolor{keywordflow}{return}\ c\_;\ \}}
+\DoxyCodeLine{00899\ }
+\DoxyCodeLine{00900\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00901\ \ \ \textcolor{keywordtype}{char}\ c\_;}
+\DoxyCodeLine{00902\ \};}
+\DoxyCodeLine{00903\ }
+\DoxyCodeLine{00904\ TEST(EqTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00905\ \ \ Matcher<Unprintable>\ m\ =\ Eq(Unprintable());}
+\DoxyCodeLine{00906\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ 1-\/byte\ object\ <61>"{}},\ Describe(m));}
+\DoxyCodeLine{00907\ \}}
+\DoxyCodeLine{00908\ }
+\DoxyCodeLine{00909\ \textcolor{comment}{//\ Tests\ that\ Eq(v)\ can\ be\ used\ to\ match\ any\ type\ that\ supports}}
+\DoxyCodeLine{00910\ \textcolor{comment}{//\ comparing\ with\ type\ T,\ where\ T\ is\ v's\ type.}}
+\DoxyCodeLine{00911\ TEST(EqTest,\ IsPolymorphic)\ \{}
+\DoxyCodeLine{00912\ \ \ Matcher<int>\ m1\ =\ Eq(1);}
+\DoxyCodeLine{00913\ \ \ EXPECT\_TRUE(m1.Matches(1));}
+\DoxyCodeLine{00914\ \ \ EXPECT\_FALSE(m1.Matches(2));}
+\DoxyCodeLine{00915\ }
+\DoxyCodeLine{00916\ \ \ Matcher<char>\ m2\ =\ Eq(1);}
+\DoxyCodeLine{00917\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{charliteral}{'\(\backslash\)1'}));}
+\DoxyCodeLine{00918\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{charliteral}{'a'}));}
+\DoxyCodeLine{00919\ \}}
+\DoxyCodeLine{00920\ }
+\DoxyCodeLine{00921\ \textcolor{comment}{//\ Tests\ that\ TypedEq<T>(v)\ matches\ values\ of\ type\ T\ that's\ equal\ to\ v.}}
+\DoxyCodeLine{00922\ TEST(TypedEqTest,\ ChecksEqualityForGivenType)\ \{}
+\DoxyCodeLine{00923\ \ \ Matcher<char>\ m1\ =\ TypedEq<char>(\textcolor{charliteral}{'a'});}
+\DoxyCodeLine{00924\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{charliteral}{'a'}));}
+\DoxyCodeLine{00925\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{charliteral}{'b'}));}
+\DoxyCodeLine{00926\ }
+\DoxyCodeLine{00927\ \ \ Matcher<int>\ m2\ =\ TypedEq<int>(6);}
+\DoxyCodeLine{00928\ \ \ EXPECT\_TRUE(m2.Matches(6));}
+\DoxyCodeLine{00929\ \ \ EXPECT\_FALSE(m2.Matches(7));}
+\DoxyCodeLine{00930\ \}}
+\DoxyCodeLine{00931\ }
+\DoxyCodeLine{00932\ \textcolor{comment}{//\ Tests\ that\ TypedEq(v)\ describes\ itself\ properly.}}
+\DoxyCodeLine{00933\ TEST(TypedEqTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00934\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ 2"{}},\ Describe(TypedEq<int>(2)));}
+\DoxyCodeLine{00935\ \}}
+\DoxyCodeLine{00936\ }
+\DoxyCodeLine{00937\ \textcolor{comment}{//\ Tests\ that\ TypedEq<T>(v)\ has\ type\ Matcher<T>.}}
+\DoxyCodeLine{00938\ }
+\DoxyCodeLine{00939\ \textcolor{comment}{//\ Type<T>::IsTypeOf(v)\ compiles\ if\ and\ only\ if\ the\ type\ of\ value\ v\ is\ T,\ where}}
+\DoxyCodeLine{00940\ \textcolor{comment}{//\ T\ is\ a\ "{}bare"{}\ type\ (i.e.\ not\ in\ the\ form\ of\ const\ U\ or\ U\&).\ \ If\ v's\ type\ is}}
+\DoxyCodeLine{00941\ \textcolor{comment}{//\ not\ T,\ the\ compiler\ will\ generate\ a\ message\ about\ "{}undefined\ reference"{}.}}
+\DoxyCodeLine{00942\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00943\ \textcolor{keyword}{struct\ }Type\ \{}
+\DoxyCodeLine{00944\ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ IsTypeOf(\textcolor{keyword}{const}\ T\&\ \textcolor{comment}{/*\ v\ */})\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{00945\ }
+\DoxyCodeLine{00946\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T2>}
+\DoxyCodeLine{00947\ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ IsTypeOf(T2\ v);}
+\DoxyCodeLine{00948\ \};}
+\DoxyCodeLine{00949\ }
+\DoxyCodeLine{00950\ TEST(TypedEqTest,\ HasSpecifiedType)\ \{}
+\DoxyCodeLine{00951\ \ \ \textcolor{comment}{//\ Verifies\ that\ the\ type\ of\ TypedEq<T>(v)\ is\ Matcher<T>.}}
+\DoxyCodeLine{00952\ \ \ Type<Matcher<int>>::IsTypeOf(TypedEq<int>(5));}
+\DoxyCodeLine{00953\ \ \ Type<Matcher<double>>::IsTypeOf(TypedEq<double>(5));}
+\DoxyCodeLine{00954\ \}}
+\DoxyCodeLine{00955\ }
+\DoxyCodeLine{00956\ \textcolor{comment}{//\ Tests\ that\ Ge(v)\ matches\ anything\ >=\ v.}}
+\DoxyCodeLine{00957\ TEST(GeTest,\ ImplementsGreaterThanOrEqual)\ \{}
+\DoxyCodeLine{00958\ \ \ Matcher<int>\ m1\ =\ Ge(0);}
+\DoxyCodeLine{00959\ \ \ EXPECT\_TRUE(m1.Matches(1));}
+\DoxyCodeLine{00960\ \ \ EXPECT\_TRUE(m1.Matches(0));}
+\DoxyCodeLine{00961\ \ \ EXPECT\_FALSE(m1.Matches(-\/1));}
+\DoxyCodeLine{00962\ \}}
+\DoxyCodeLine{00963\ }
+\DoxyCodeLine{00964\ \textcolor{comment}{//\ Tests\ that\ Ge(v)\ describes\ itself\ properly.}}
+\DoxyCodeLine{00965\ TEST(GeTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00966\ \ \ Matcher<int>\ m\ =\ Ge(5);}
+\DoxyCodeLine{00967\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ >=\ 5"{}},\ Describe(m));}
+\DoxyCodeLine{00968\ \}}
+\DoxyCodeLine{00969\ }
+\DoxyCodeLine{00970\ \textcolor{comment}{//\ Tests\ that\ Gt(v)\ matches\ anything\ >\ v.}}
+\DoxyCodeLine{00971\ TEST(GtTest,\ ImplementsGreaterThan)\ \{}
+\DoxyCodeLine{00972\ \ \ Matcher<double>\ m1\ =\ Gt(0);}
+\DoxyCodeLine{00973\ \ \ EXPECT\_TRUE(m1.Matches(1.0));}
+\DoxyCodeLine{00974\ \ \ EXPECT\_FALSE(m1.Matches(0.0));}
+\DoxyCodeLine{00975\ \ \ EXPECT\_FALSE(m1.Matches(-\/1.0));}
+\DoxyCodeLine{00976\ \}}
+\DoxyCodeLine{00977\ }
+\DoxyCodeLine{00978\ \textcolor{comment}{//\ Tests\ that\ Gt(v)\ describes\ itself\ properly.}}
+\DoxyCodeLine{00979\ TEST(GtTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00980\ \ \ Matcher<int>\ m\ =\ Gt(5);}
+\DoxyCodeLine{00981\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ >\ 5"{}},\ Describe(m));}
+\DoxyCodeLine{00982\ \}}
+\DoxyCodeLine{00983\ }
+\DoxyCodeLine{00984\ \textcolor{comment}{//\ Tests\ that\ Le(v)\ matches\ anything\ <=\ v.}}
+\DoxyCodeLine{00985\ TEST(LeTest,\ ImplementsLessThanOrEqual)\ \{}
+\DoxyCodeLine{00986\ \ \ Matcher<char>\ m1\ =\ Le(\textcolor{charliteral}{'b'});}
+\DoxyCodeLine{00987\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{charliteral}{'a'}));}
+\DoxyCodeLine{00988\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{charliteral}{'b'}));}
+\DoxyCodeLine{00989\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{charliteral}{'c'}));}
+\DoxyCodeLine{00990\ \}}
+\DoxyCodeLine{00991\ }
+\DoxyCodeLine{00992\ \textcolor{comment}{//\ Tests\ that\ Le(v)\ describes\ itself\ properly.}}
+\DoxyCodeLine{00993\ TEST(LeTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{00994\ \ \ Matcher<int>\ m\ =\ Le(5);}
+\DoxyCodeLine{00995\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ <=\ 5"{}},\ Describe(m));}
+\DoxyCodeLine{00996\ \}}
+\DoxyCodeLine{00997\ }
+\DoxyCodeLine{00998\ \textcolor{comment}{//\ Tests\ that\ Lt(v)\ matches\ anything\ <\ v.}}
+\DoxyCodeLine{00999\ TEST(LtTest,\ ImplementsLessThan)\ \{}
+\DoxyCodeLine{01000\ \ \ Matcher<const\ std::string\&>\ m1\ =\ Lt(\textcolor{stringliteral}{"{}Hello"{}});}
+\DoxyCodeLine{01001\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}Abc"{}}));}
+\DoxyCodeLine{01002\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01003\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{stringliteral}{"{}Hello,\ world!"{}}));}
+\DoxyCodeLine{01004\ \}}
+\DoxyCodeLine{01005\ }
+\DoxyCodeLine{01006\ \textcolor{comment}{//\ Tests\ that\ Lt(v)\ describes\ itself\ properly.}}
+\DoxyCodeLine{01007\ TEST(LtTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01008\ \ \ Matcher<int>\ m\ =\ Lt(5);}
+\DoxyCodeLine{01009\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ <\ 5"{}},\ Describe(m));}
+\DoxyCodeLine{01010\ \}}
+\DoxyCodeLine{01011\ }
+\DoxyCodeLine{01012\ \textcolor{comment}{//\ Tests\ that\ Ne(v)\ matches\ anything\ !=\ v.}}
+\DoxyCodeLine{01013\ TEST(NeTest,\ ImplementsNotEqual)\ \{}
+\DoxyCodeLine{01014\ \ \ Matcher<int>\ m1\ =\ Ne(0);}
+\DoxyCodeLine{01015\ \ \ EXPECT\_TRUE(m1.Matches(1));}
+\DoxyCodeLine{01016\ \ \ EXPECT\_TRUE(m1.Matches(-\/1));}
+\DoxyCodeLine{01017\ \ \ EXPECT\_FALSE(m1.Matches(0));}
+\DoxyCodeLine{01018\ \}}
+\DoxyCodeLine{01019\ }
+\DoxyCodeLine{01020\ \textcolor{comment}{//\ Tests\ that\ Ne(v)\ describes\ itself\ properly.}}
+\DoxyCodeLine{01021\ TEST(NeTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01022\ \ \ Matcher<int>\ m\ =\ Ne(5);}
+\DoxyCodeLine{01023\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ equal\ to\ 5"{}},\ Describe(m));}
+\DoxyCodeLine{01024\ \}}
+\DoxyCodeLine{01025\ }
+\DoxyCodeLine{01026\ \textcolor{keyword}{class\ }MoveOnly\ \{}
+\DoxyCodeLine{01027\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{01028\ \ \ \textcolor{keyword}{explicit}\ MoveOnly(\textcolor{keywordtype}{int}\ i)\ :\ i\_(i)\ \{\}}
+\DoxyCodeLine{01029\ \ \ MoveOnly(\textcolor{keyword}{const}\ MoveOnly\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{01030\ \ \ MoveOnly(MoveOnly\&\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{01031\ \ \ MoveOnly\&\ operator=(\textcolor{keyword}{const}\ MoveOnly\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{01032\ \ \ MoveOnly\&\ operator=(MoveOnly\&\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{01033\ }
+\DoxyCodeLine{01034\ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ MoveOnly\&\ other)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ i\_\ ==\ other.i\_;\ \}}
+\DoxyCodeLine{01035\ \ \ \textcolor{keywordtype}{bool}\ operator!=(\textcolor{keyword}{const}\ MoveOnly\&\ other)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ i\_\ !=\ other.i\_;\ \}}
+\DoxyCodeLine{01036\ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ MoveOnly\&\ other)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ i\_\ <\ other.i\_;\ \}}
+\DoxyCodeLine{01037\ \ \ \textcolor{keywordtype}{bool}\ operator<=(\textcolor{keyword}{const}\ MoveOnly\&\ other)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ i\_\ <=\ other.i\_;\ \}}
+\DoxyCodeLine{01038\ \ \ \textcolor{keywordtype}{bool}\ operator>(\textcolor{keyword}{const}\ MoveOnly\&\ other)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ i\_\ >\ other.i\_;\ \}}
+\DoxyCodeLine{01039\ \ \ \textcolor{keywordtype}{bool}\ operator>=(\textcolor{keyword}{const}\ MoveOnly\&\ other)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ i\_\ >=\ other.i\_;\ \}}
+\DoxyCodeLine{01040\ }
+\DoxyCodeLine{01041\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{01042\ \ \ \textcolor{keywordtype}{int}\ i\_;}
+\DoxyCodeLine{01043\ \};}
+\DoxyCodeLine{01044\ }
+\DoxyCodeLine{01045\ \textcolor{keyword}{struct\ }MoveHelper\ \{}
+\DoxyCodeLine{01046\ \ \ MOCK\_METHOD1(Call,\ \textcolor{keywordtype}{void}(MoveOnly));}
+\DoxyCodeLine{01047\ \};}
+\DoxyCodeLine{01048\ }
+\DoxyCodeLine{01049\ \textcolor{comment}{//\ Disable\ this\ test\ in\ VS\ 2015\ (version\ 14),\ where\ it\ fails\ when\ SEH\ is\ enabled}}
+\DoxyCodeLine{01050\ \textcolor{preprocessor}{\#if\ defined(\_MSC\_VER)\ \&\&\ (\_MSC\_VER\ <\ 1910)}}
+\DoxyCodeLine{01051\ TEST(ComparisonBaseTest,\ DISABLED\_WorksWithMoveOnly)\ \{}
+\DoxyCodeLine{01052\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{01053\ TEST(ComparisonBaseTest,\ WorksWithMoveOnly)\ \{}
+\DoxyCodeLine{01054\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{01055\ \ \ MoveOnly\ m\{0\};}
+\DoxyCodeLine{01056\ \ \ MoveHelper\ helper;}
+\DoxyCodeLine{01057\ }
+\DoxyCodeLine{01058\ \ \ EXPECT\_CALL(helper,\ Call(Eq(ByRef(m))));}
+\DoxyCodeLine{01059\ \ \ helper.Call(MoveOnly(0));}
+\DoxyCodeLine{01060\ \ \ EXPECT\_CALL(helper,\ Call(Ne(ByRef(m))));}
+\DoxyCodeLine{01061\ \ \ helper.Call(MoveOnly(1));}
+\DoxyCodeLine{01062\ \ \ EXPECT\_CALL(helper,\ Call(Le(ByRef(m))));}
+\DoxyCodeLine{01063\ \ \ helper.Call(MoveOnly(0));}
+\DoxyCodeLine{01064\ \ \ EXPECT\_CALL(helper,\ Call(Lt(ByRef(m))));}
+\DoxyCodeLine{01065\ \ \ helper.Call(MoveOnly(-\/1));}
+\DoxyCodeLine{01066\ \ \ EXPECT\_CALL(helper,\ Call(Ge(ByRef(m))));}
+\DoxyCodeLine{01067\ \ \ helper.Call(MoveOnly(0));}
+\DoxyCodeLine{01068\ \ \ EXPECT\_CALL(helper,\ Call(Gt(ByRef(m))));}
+\DoxyCodeLine{01069\ \ \ helper.Call(MoveOnly(1));}
+\DoxyCodeLine{01070\ \}}
+\DoxyCodeLine{01071\ }
+\DoxyCodeLine{01072\ TEST(IsEmptyTest,\ MatchesContainer)\ \{}
+\DoxyCodeLine{01073\ \ \ \textcolor{keyword}{const}\ Matcher<std::vector<int>>\ m\ =\ IsEmpty();}
+\DoxyCodeLine{01074\ \ \ std::vector<int>\ a\ =\ \{\};}
+\DoxyCodeLine{01075\ \ \ std::vector<int>\ b\ =\ \{1\};}
+\DoxyCodeLine{01076\ \ \ EXPECT\_TRUE(m.Matches(a));}
+\DoxyCodeLine{01077\ \ \ EXPECT\_FALSE(m.Matches(b));}
+\DoxyCodeLine{01078\ \}}
+\DoxyCodeLine{01079\ }
+\DoxyCodeLine{01080\ TEST(IsEmptyTest,\ MatchesStdString)\ \{}
+\DoxyCodeLine{01081\ \ \ \textcolor{keyword}{const}\ Matcher<std::string>\ m\ =\ IsEmpty();}
+\DoxyCodeLine{01082\ \ \ std::string\ a\ =\ \textcolor{stringliteral}{"{}z"{}};}
+\DoxyCodeLine{01083\ \ \ std::string\ b\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{01084\ \ \ EXPECT\_FALSE(m.Matches(a));}
+\DoxyCodeLine{01085\ \ \ EXPECT\_TRUE(m.Matches(b));}
+\DoxyCodeLine{01086\ \}}
+\DoxyCodeLine{01087\ }
+\DoxyCodeLine{01088\ TEST(IsEmptyTest,\ MatchesCString)\ \{}
+\DoxyCodeLine{01089\ \ \ \textcolor{keyword}{const}\ Matcher<const\ char*>\ m\ =\ IsEmpty();}
+\DoxyCodeLine{01090\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ a[]\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{01091\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ b[]\ =\ \textcolor{stringliteral}{"{}x"{}};}
+\DoxyCodeLine{01092\ \ \ EXPECT\_TRUE(m.Matches(a));}
+\DoxyCodeLine{01093\ \ \ EXPECT\_FALSE(m.Matches(b));}
+\DoxyCodeLine{01094\ \}}
+\DoxyCodeLine{01095\ }
+\DoxyCodeLine{01096\ \textcolor{comment}{//\ Tests\ that\ IsNull()\ matches\ any\ NULL\ pointer\ of\ any\ type.}}
+\DoxyCodeLine{01097\ TEST(IsNullTest,\ MatchesNullPointer)\ \{}
+\DoxyCodeLine{01098\ \ \ Matcher<int*>\ m1\ =\ IsNull();}
+\DoxyCodeLine{01099\ \ \ \textcolor{keywordtype}{int}*\ p1\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{01100\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{01101\ \ \ EXPECT\_TRUE(m1.Matches(p1));}
+\DoxyCodeLine{01102\ \ \ EXPECT\_FALSE(m1.Matches(\&n));}
+\DoxyCodeLine{01103\ }
+\DoxyCodeLine{01104\ \ \ Matcher<const\ char*>\ m2\ =\ IsNull();}
+\DoxyCodeLine{01105\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p2\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{01106\ \ \ EXPECT\_TRUE(m2.Matches(p2));}
+\DoxyCodeLine{01107\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}hi"{}}));}
+\DoxyCodeLine{01108\ }
+\DoxyCodeLine{01109\ \ \ Matcher<void*>\ m3\ =\ IsNull();}
+\DoxyCodeLine{01110\ \ \ \textcolor{keywordtype}{void}*\ p3\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{01111\ \ \ EXPECT\_TRUE(m3.Matches(p3));}
+\DoxyCodeLine{01112\ \ \ EXPECT\_FALSE(m3.Matches(\textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{void}*\textcolor{keyword}{>}(0xbeef)));}
+\DoxyCodeLine{01113\ \}}
+\DoxyCodeLine{01114\ }
+\DoxyCodeLine{01115\ TEST(IsNullTest,\ StdFunction)\ \{}
+\DoxyCodeLine{01116\ \ \ \textcolor{keyword}{const}\ Matcher<std::function<void()>>\ m\ =\ IsNull();}
+\DoxyCodeLine{01117\ }
+\DoxyCodeLine{01118\ \ \ EXPECT\_TRUE(m.Matches(std::function<\textcolor{keywordtype}{void}()>()));}
+\DoxyCodeLine{01119\ \ \ EXPECT\_FALSE(m.Matches([]\ \{\}));}
+\DoxyCodeLine{01120\ \}}
+\DoxyCodeLine{01121\ }
+\DoxyCodeLine{01122\ \textcolor{comment}{//\ Tests\ that\ IsNull()\ describes\ itself\ properly.}}
+\DoxyCodeLine{01123\ TEST(IsNullTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01124\ \ \ Matcher<int*>\ m\ =\ IsNull();}
+\DoxyCodeLine{01125\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ NULL"{}},\ Describe(m));}
+\DoxyCodeLine{01126\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ NULL"{}},\ DescribeNegation(m));}
+\DoxyCodeLine{01127\ \}}
+\DoxyCodeLine{01128\ }
+\DoxyCodeLine{01129\ \textcolor{comment}{//\ Tests\ that\ NotNull()\ matches\ any\ non-\/NULL\ pointer\ of\ any\ type.}}
+\DoxyCodeLine{01130\ TEST(NotNullTest,\ MatchesNonNullPointer)\ \{}
+\DoxyCodeLine{01131\ \ \ Matcher<int*>\ m1\ =\ NotNull();}
+\DoxyCodeLine{01132\ \ \ \textcolor{keywordtype}{int}*\ p1\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{01133\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{01134\ \ \ EXPECT\_FALSE(m1.Matches(p1));}
+\DoxyCodeLine{01135\ \ \ EXPECT\_TRUE(m1.Matches(\&n));}
+\DoxyCodeLine{01136\ }
+\DoxyCodeLine{01137\ \ \ Matcher<const\ char*>\ m2\ =\ NotNull();}
+\DoxyCodeLine{01138\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ p2\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{01139\ \ \ EXPECT\_FALSE(m2.Matches(p2));}
+\DoxyCodeLine{01140\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}hi"{}}));}
+\DoxyCodeLine{01141\ \}}
+\DoxyCodeLine{01142\ }
+\DoxyCodeLine{01143\ TEST(NotNullTest,\ LinkedPtr)\ \{}
+\DoxyCodeLine{01144\ \ \ \textcolor{keyword}{const}\ Matcher<std::shared\_ptr<int>>\ m\ =\ NotNull();}
+\DoxyCodeLine{01145\ \ \ \textcolor{keyword}{const}\ std::shared\_ptr<int>\ null\_p;}
+\DoxyCodeLine{01146\ \ \ \textcolor{keyword}{const}\ std::shared\_ptr<int>\ non\_null\_p(\textcolor{keyword}{new}\ \textcolor{keywordtype}{int});}
+\DoxyCodeLine{01147\ }
+\DoxyCodeLine{01148\ \ \ EXPECT\_FALSE(m.Matches(null\_p));}
+\DoxyCodeLine{01149\ \ \ EXPECT\_TRUE(m.Matches(non\_null\_p));}
+\DoxyCodeLine{01150\ \}}
+\DoxyCodeLine{01151\ }
+\DoxyCodeLine{01152\ TEST(NotNullTest,\ ReferenceToConstLinkedPtr)\ \{}
+\DoxyCodeLine{01153\ \ \ \textcolor{keyword}{const}\ Matcher<const\ std::shared\_ptr<double>\&>\ m\ =\ NotNull();}
+\DoxyCodeLine{01154\ \ \ \textcolor{keyword}{const}\ std::shared\_ptr<double>\ null\_p;}
+\DoxyCodeLine{01155\ \ \ \textcolor{keyword}{const}\ std::shared\_ptr<double>\ non\_null\_p(\textcolor{keyword}{new}\ \textcolor{keywordtype}{double});}
+\DoxyCodeLine{01156\ }
+\DoxyCodeLine{01157\ \ \ EXPECT\_FALSE(m.Matches(null\_p));}
+\DoxyCodeLine{01158\ \ \ EXPECT\_TRUE(m.Matches(non\_null\_p));}
+\DoxyCodeLine{01159\ \}}
+\DoxyCodeLine{01160\ }
+\DoxyCodeLine{01161\ TEST(NotNullTest,\ StdFunction)\ \{}
+\DoxyCodeLine{01162\ \ \ \textcolor{keyword}{const}\ Matcher<std::function<void()>>\ m\ =\ NotNull();}
+\DoxyCodeLine{01163\ }
+\DoxyCodeLine{01164\ \ \ EXPECT\_TRUE(m.Matches([]\ \{\}));}
+\DoxyCodeLine{01165\ \ \ EXPECT\_FALSE(m.Matches(std::function<\textcolor{keywordtype}{void}()>()));}
+\DoxyCodeLine{01166\ \}}
+\DoxyCodeLine{01167\ }
+\DoxyCodeLine{01168\ \textcolor{comment}{//\ Tests\ that\ NotNull()\ describes\ itself\ properly.}}
+\DoxyCodeLine{01169\ TEST(NotNullTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01170\ \ \ Matcher<int*>\ m\ =\ NotNull();}
+\DoxyCodeLine{01171\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ NULL"{}},\ Describe(m));}
+\DoxyCodeLine{01172\ \}}
+\DoxyCodeLine{01173\ }
+\DoxyCodeLine{01174\ \textcolor{comment}{//\ Tests\ that\ Ref(variable)\ matches\ an\ argument\ that\ references}}
+\DoxyCodeLine{01175\ \textcolor{comment}{//\ 'variable'.}}
+\DoxyCodeLine{01176\ TEST(RefTest,\ MatchesSameVariable)\ \{}
+\DoxyCodeLine{01177\ \ \ \textcolor{keywordtype}{int}\ a\ =\ 0;}
+\DoxyCodeLine{01178\ \ \ \textcolor{keywordtype}{int}\ b\ =\ 0;}
+\DoxyCodeLine{01179\ \ \ Matcher<int\&>\ m\ =\ Ref(a);}
+\DoxyCodeLine{01180\ \ \ EXPECT\_TRUE(m.Matches(a));}
+\DoxyCodeLine{01181\ \ \ EXPECT\_FALSE(m.Matches(b));}
+\DoxyCodeLine{01182\ \}}
+\DoxyCodeLine{01183\ }
+\DoxyCodeLine{01184\ \textcolor{comment}{//\ Tests\ that\ Ref(variable)\ describes\ itself\ properly.}}
+\DoxyCodeLine{01185\ TEST(RefTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01186\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 5;}
+\DoxyCodeLine{01187\ \ \ Matcher<int\&>\ m\ =\ Ref(n);}
+\DoxyCodeLine{01188\ \ \ stringstream\ ss;}
+\DoxyCodeLine{01189\ \ \ ss\ <<\ \textcolor{stringliteral}{"{}references\ the\ variable\ @"{}}\ <<\ \&n\ <<\ \textcolor{stringliteral}{"{}\ 5"{}};}
+\DoxyCodeLine{01190\ \ \ EXPECT\_EQ(ss.str(),\ Describe(m));}
+\DoxyCodeLine{01191\ \}}
+\DoxyCodeLine{01192\ }
+\DoxyCodeLine{01193\ \textcolor{comment}{//\ Test\ that\ Ref(non\_const\_varialbe)\ can\ be\ used\ as\ a\ matcher\ for\ a}}
+\DoxyCodeLine{01194\ \textcolor{comment}{//\ const\ reference.}}
+\DoxyCodeLine{01195\ TEST(RefTest,\ CanBeUsedAsMatcherForConstReference)\ \{}
+\DoxyCodeLine{01196\ \ \ \textcolor{keywordtype}{int}\ a\ =\ 0;}
+\DoxyCodeLine{01197\ \ \ \textcolor{keywordtype}{int}\ b\ =\ 0;}
+\DoxyCodeLine{01198\ \ \ Matcher<const\ int\&>\ m\ =\ Ref(a);}
+\DoxyCodeLine{01199\ \ \ EXPECT\_TRUE(m.Matches(a));}
+\DoxyCodeLine{01200\ \ \ EXPECT\_FALSE(m.Matches(b));}
+\DoxyCodeLine{01201\ \}}
+\DoxyCodeLine{01202\ }
+\DoxyCodeLine{01203\ \textcolor{comment}{//\ Tests\ that\ Ref(variable)\ is\ covariant,\ i.e.\ Ref(derived)\ can\ be}}
+\DoxyCodeLine{01204\ \textcolor{comment}{//\ used\ wherever\ Ref(base)\ can\ be\ used\ (Ref(derived)\ is\ a\ sub-\/type}}
+\DoxyCodeLine{01205\ \textcolor{comment}{//\ of\ Ref(base),\ but\ not\ vice\ versa.}}
+\DoxyCodeLine{01206\ }
+\DoxyCodeLine{01207\ TEST(RefTest,\ IsCovariant)\ \{}
+\DoxyCodeLine{01208\ \ \ \mbox{\hyperlink{classBase}{Base}}\ base,\ base2;}
+\DoxyCodeLine{01209\ \ \ Derived\ derived;}
+\DoxyCodeLine{01210\ \ \ Matcher<const\ Base\&>\ m1\ =\ Ref(base);}
+\DoxyCodeLine{01211\ \ \ EXPECT\_TRUE(m1.Matches(base));}
+\DoxyCodeLine{01212\ \ \ EXPECT\_FALSE(m1.Matches(base2));}
+\DoxyCodeLine{01213\ \ \ EXPECT\_FALSE(m1.Matches(derived));}
+\DoxyCodeLine{01214\ }
+\DoxyCodeLine{01215\ \ \ m1\ =\ Ref(derived);}
+\DoxyCodeLine{01216\ \ \ EXPECT\_TRUE(m1.Matches(derived));}
+\DoxyCodeLine{01217\ \ \ EXPECT\_FALSE(m1.Matches(base));}
+\DoxyCodeLine{01218\ \ \ EXPECT\_FALSE(m1.Matches(base2));}
+\DoxyCodeLine{01219\ \}}
+\DoxyCodeLine{01220\ }
+\DoxyCodeLine{01221\ TEST(RefTest,\ ExplainsResult)\ \{}
+\DoxyCodeLine{01222\ \ \ \textcolor{keywordtype}{int}\ n\ =\ 0;}
+\DoxyCodeLine{01223\ \ \ EXPECT\_THAT(Explain(Matcher<const\ int\&>(Ref(n)),\ n),}
+\DoxyCodeLine{01224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StartsWith(\textcolor{stringliteral}{"{}which\ is\ located\ @"{}}));}
+\DoxyCodeLine{01225\ }
+\DoxyCodeLine{01226\ \ \ \textcolor{keywordtype}{int}\ m\ =\ 0;}
+\DoxyCodeLine{01227\ \ \ EXPECT\_THAT(Explain(Matcher<const\ int\&>(Ref(n)),\ m),}
+\DoxyCodeLine{01228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StartsWith(\textcolor{stringliteral}{"{}which\ is\ located\ @"{}}));}
+\DoxyCodeLine{01229\ \}}
+\DoxyCodeLine{01230\ }
+\DoxyCodeLine{01231\ \textcolor{comment}{//\ Tests\ string\ comparison\ matchers.}}
+\DoxyCodeLine{01232\ }
+\DoxyCodeLine{01233\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T\ =\ std::\textcolor{keywordtype}{string}>}
+\DoxyCodeLine{01234\ std::string\ FromStringLike(internal::StringLike<T>\ str)\ \{}
+\DoxyCodeLine{01235\ \ \ \textcolor{keywordflow}{return}\ std::string(str);}
+\DoxyCodeLine{01236\ \}}
+\DoxyCodeLine{01237\ }
+\DoxyCodeLine{01238\ TEST(StringLike,\ TestConversions)\ \{}
+\DoxyCodeLine{01239\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}foo"{}},\ FromStringLike(\textcolor{stringliteral}{"{}foo"{}}));}
+\DoxyCodeLine{01240\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}foo"{}},\ FromStringLike(std::string(\textcolor{stringliteral}{"{}foo"{}})));}
+\DoxyCodeLine{01241\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01242\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}foo"{}},\ FromStringLike(internal::StringView(\textcolor{stringliteral}{"{}foo"{}})));}
+\DoxyCodeLine{01243\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01244\ }
+\DoxyCodeLine{01245\ \ \ \textcolor{comment}{//\ Non\ deducible\ types.}}
+\DoxyCodeLine{01246\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}"{}},\ FromStringLike(\{\}));}
+\DoxyCodeLine{01247\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}foo"{}},\ FromStringLike(\{\textcolor{charliteral}{'f'},\ \textcolor{charliteral}{'o'},\ \textcolor{charliteral}{'o'}\}));}
+\DoxyCodeLine{01248\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ buf[]\ =\ \textcolor{stringliteral}{"{}foo"{}};}
+\DoxyCodeLine{01249\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}foo"{}},\ FromStringLike(\{buf,\ buf\ +\ 3\}));}
+\DoxyCodeLine{01250\ \}}
+\DoxyCodeLine{01251\ }
+\DoxyCodeLine{01252\ TEST(StrEqTest,\ MatchesEqualString)\ \{}
+\DoxyCodeLine{01253\ \ \ Matcher<const\ char*>\ m\ =\ StrEq(std::string(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01254\ \ \ EXPECT\_TRUE(m.Matches(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01255\ \ \ EXPECT\_FALSE(m.Matches(\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{01256\ \ \ EXPECT\_FALSE(m.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{01257\ }
+\DoxyCodeLine{01258\ \ \ Matcher<const\ std::string\&>\ m2\ =\ StrEq(\textcolor{stringliteral}{"{}Hello"{}});}
+\DoxyCodeLine{01259\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01260\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{01261\ }
+\DoxyCodeLine{01262\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01263\ \ \ Matcher<const\ internal::StringView\&>\ m3\ =}
+\DoxyCodeLine{01264\ \ \ \ \ \ \ StrEq(internal::StringView(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01265\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}Hello"{}})));}
+\DoxyCodeLine{01266\ \ \ EXPECT\_FALSE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}hello"{}})));}
+\DoxyCodeLine{01267\ \ \ EXPECT\_FALSE(m3.Matches(internal::StringView()));}
+\DoxyCodeLine{01268\ }
+\DoxyCodeLine{01269\ \ \ Matcher<const\ internal::StringView\&>\ m\_empty\ =\ StrEq(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{01270\ \ \ EXPECT\_TRUE(m\_empty.Matches(internal::StringView(\textcolor{stringliteral}{"{}"{}})));}
+\DoxyCodeLine{01271\ \ \ EXPECT\_TRUE(m\_empty.Matches(internal::StringView()));}
+\DoxyCodeLine{01272\ \ \ EXPECT\_FALSE(m\_empty.Matches(internal::StringView(\textcolor{stringliteral}{"{}hello"{}})));}
+\DoxyCodeLine{01273\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01274\ \}}
+\DoxyCodeLine{01275\ }
+\DoxyCodeLine{01276\ TEST(StrEqTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01277\ \ \ Matcher<std::string>\ m\ =\ StrEq(\textcolor{stringliteral}{"{}Hi-\/\(\backslash\)'\(\backslash\)"{}?\(\backslash\)\(\backslash\)\(\backslash\)a\(\backslash\)b\(\backslash\)f\(\backslash\)n\(\backslash\)r\(\backslash\)t\(\backslash\)v\(\backslash\)xD3"{}});}
+\DoxyCodeLine{01278\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ \(\backslash\)"{}Hi-\/\(\backslash\)'\(\backslash\)\(\backslash\)\(\backslash\)"{}?\(\backslash\)\(\backslash\)\(\backslash\)\(\backslash\)\(\backslash\)\(\backslash\)a\(\backslash\)\(\backslash\)b\(\backslash\)\(\backslash\)f\(\backslash\)\(\backslash\)n\(\backslash\)\(\backslash\)r\(\backslash\)\(\backslash\)t\(\backslash\)\(\backslash\)v\(\backslash\)\(\backslash\)xD3\(\backslash\)"{}"{}},}
+\DoxyCodeLine{01279\ \ \ \ \ \ \ \ \ \ \ \ \ Describe(m));}
+\DoxyCodeLine{01280\ }
+\DoxyCodeLine{01281\ \ \ std::string\ str(\textcolor{stringliteral}{"{}01204500800"{}});}
+\DoxyCodeLine{01282\ \ \ str[3]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{01283\ \ \ Matcher<std::string>\ m2\ =\ StrEq(str);}
+\DoxyCodeLine{01284\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ \(\backslash\)"{}012\(\backslash\)\(\backslash\)04500800\(\backslash\)"{}"{}},\ Describe(m2));}
+\DoxyCodeLine{01285\ \ \ str[0]\ =\ str[6]\ =\ str[7]\ =\ str[9]\ =\ str[10]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{01286\ \ \ Matcher<std::string>\ m3\ =\ StrEq(str);}
+\DoxyCodeLine{01287\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ \(\backslash\)"{}\(\backslash\)\(\backslash\)012\(\backslash\)\(\backslash\)045\(\backslash\)\(\backslash\)0\(\backslash\)\(\backslash\)08\(\backslash\)\(\backslash\)0\(\backslash\)\(\backslash\)0\(\backslash\)"{}"{}},\ Describe(m3));}
+\DoxyCodeLine{01288\ \}}
+\DoxyCodeLine{01289\ }
+\DoxyCodeLine{01290\ TEST(StrNeTest,\ MatchesUnequalString)\ \{}
+\DoxyCodeLine{01291\ \ \ Matcher<const\ char*>\ m\ =\ StrNe(\textcolor{stringliteral}{"{}Hello"{}});}
+\DoxyCodeLine{01292\ \ \ EXPECT\_TRUE(m.Matches(\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{01293\ \ \ EXPECT\_TRUE(m.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{01294\ \ \ EXPECT\_FALSE(m.Matches(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01295\ }
+\DoxyCodeLine{01296\ \ \ Matcher<std::string>\ m2\ =\ StrNe(std::string(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01297\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{01298\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01299\ }
+\DoxyCodeLine{01300\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01301\ \ \ Matcher<const\ internal::StringView>\ m3\ =\ StrNe(internal::StringView(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01302\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}"{}})));}
+\DoxyCodeLine{01303\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView()));}
+\DoxyCodeLine{01304\ \ \ EXPECT\_FALSE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}Hello"{}})));}
+\DoxyCodeLine{01305\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01306\ \}}
+\DoxyCodeLine{01307\ }
+\DoxyCodeLine{01308\ TEST(StrNeTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01309\ \ \ Matcher<const\ char*>\ m\ =\ StrNe(\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{01310\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ equal\ to\ \(\backslash\)"{}Hi\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{01311\ \}}
+\DoxyCodeLine{01312\ }
+\DoxyCodeLine{01313\ TEST(StrCaseEqTest,\ MatchesEqualStringIgnoringCase)\ \{}
+\DoxyCodeLine{01314\ \ \ Matcher<const\ char*>\ m\ =\ StrCaseEq(std::string(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01315\ \ \ EXPECT\_TRUE(m.Matches(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01316\ \ \ EXPECT\_TRUE(m.Matches(\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{01317\ \ \ EXPECT\_FALSE(m.Matches(\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{01318\ \ \ EXPECT\_FALSE(m.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{01319\ }
+\DoxyCodeLine{01320\ \ \ Matcher<const\ std::string\&>\ m2\ =\ StrCaseEq(\textcolor{stringliteral}{"{}Hello"{}});}
+\DoxyCodeLine{01321\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{01322\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{01323\ }
+\DoxyCodeLine{01324\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01325\ \ \ Matcher<const\ internal::StringView\&>\ m3\ =}
+\DoxyCodeLine{01326\ \ \ \ \ \ \ StrCaseEq(internal::StringView(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01327\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}Hello"{}})));}
+\DoxyCodeLine{01328\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}hello"{}})));}
+\DoxyCodeLine{01329\ \ \ EXPECT\_FALSE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}Hi"{}})));}
+\DoxyCodeLine{01330\ \ \ EXPECT\_FALSE(m3.Matches(internal::StringView()));}
+\DoxyCodeLine{01331\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01332\ \}}
+\DoxyCodeLine{01333\ }
+\DoxyCodeLine{01334\ TEST(StrCaseEqTest,\ MatchesEqualStringWith0IgnoringCase)\ \{}
+\DoxyCodeLine{01335\ \ \ std::string\ str1(\textcolor{stringliteral}{"{}oabocdooeoo"{}});}
+\DoxyCodeLine{01336\ \ \ std::string\ str2(\textcolor{stringliteral}{"{}OABOCDOOEOO"{}});}
+\DoxyCodeLine{01337\ \ \ Matcher<const\ std::string\&>\ m0\ =\ StrCaseEq(str1);}
+\DoxyCodeLine{01338\ \ \ EXPECT\_FALSE(m0.Matches(str2\ +\ std::string(1,\ \textcolor{charliteral}{'\(\backslash\)0'})));}
+\DoxyCodeLine{01339\ }
+\DoxyCodeLine{01340\ \ \ str1[3]\ =\ str2[3]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{01341\ \ \ Matcher<const\ std::string\&>\ m1\ =\ StrCaseEq(str1);}
+\DoxyCodeLine{01342\ \ \ EXPECT\_TRUE(m1.Matches(str2));}
+\DoxyCodeLine{01343\ }
+\DoxyCodeLine{01344\ \ \ str1[0]\ =\ str1[6]\ =\ str1[7]\ =\ str1[10]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{01345\ \ \ str2[0]\ =\ str2[6]\ =\ str2[7]\ =\ str2[10]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{01346\ \ \ Matcher<const\ std::string\&>\ m2\ =\ StrCaseEq(str1);}
+\DoxyCodeLine{01347\ \ \ str1[9]\ =\ str2[9]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{01348\ \ \ EXPECT\_FALSE(m2.Matches(str2));}
+\DoxyCodeLine{01349\ }
+\DoxyCodeLine{01350\ \ \ Matcher<const\ std::string\&>\ m3\ =\ StrCaseEq(str1);}
+\DoxyCodeLine{01351\ \ \ EXPECT\_TRUE(m3.Matches(str2));}
+\DoxyCodeLine{01352\ }
+\DoxyCodeLine{01353\ \ \ EXPECT\_FALSE(m3.Matches(str2\ +\ \textcolor{stringliteral}{"{}x"{}}));}
+\DoxyCodeLine{01354\ \ \ str2.append(1,\ \textcolor{charliteral}{'\(\backslash\)0'});}
+\DoxyCodeLine{01355\ \ \ EXPECT\_FALSE(m3.Matches(str2));}
+\DoxyCodeLine{01356\ \ \ EXPECT\_FALSE(m3.Matches(std::string(str2,\ 0,\ 9)));}
+\DoxyCodeLine{01357\ \}}
+\DoxyCodeLine{01358\ }
+\DoxyCodeLine{01359\ TEST(StrCaseEqTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01360\ \ \ Matcher<std::string>\ m\ =\ StrCaseEq(\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{01361\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ (ignoring\ case)\ \(\backslash\)"{}Hi\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{01362\ \}}
+\DoxyCodeLine{01363\ }
+\DoxyCodeLine{01364\ TEST(StrCaseNeTest,\ MatchesUnequalStringIgnoringCase)\ \{}
+\DoxyCodeLine{01365\ \ \ Matcher<const\ char*>\ m\ =\ StrCaseNe(\textcolor{stringliteral}{"{}Hello"{}});}
+\DoxyCodeLine{01366\ \ \ EXPECT\_TRUE(m.Matches(\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{01367\ \ \ EXPECT\_TRUE(m.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{01368\ \ \ EXPECT\_FALSE(m.Matches(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01369\ \ \ EXPECT\_FALSE(m.Matches(\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{01370\ }
+\DoxyCodeLine{01371\ \ \ Matcher<std::string>\ m2\ =\ StrCaseNe(std::string(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01372\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{01373\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01374\ }
+\DoxyCodeLine{01375\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01376\ \ \ Matcher<const\ internal::StringView>\ m3\ =}
+\DoxyCodeLine{01377\ \ \ \ \ \ \ StrCaseNe(internal::StringView(\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{01378\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}Hi"{}})));}
+\DoxyCodeLine{01379\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView()));}
+\DoxyCodeLine{01380\ \ \ EXPECT\_FALSE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}Hello"{}})));}
+\DoxyCodeLine{01381\ \ \ EXPECT\_FALSE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}hello"{}})));}
+\DoxyCodeLine{01382\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01383\ \}}
+\DoxyCodeLine{01384\ }
+\DoxyCodeLine{01385\ TEST(StrCaseNeTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01386\ \ \ Matcher<const\ char*>\ m\ =\ StrCaseNe(\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{01387\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ equal\ to\ (ignoring\ case)\ \(\backslash\)"{}Hi\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{01388\ \}}
+\DoxyCodeLine{01389\ }
+\DoxyCodeLine{01390\ \textcolor{comment}{//\ Tests\ that\ HasSubstr()\ works\ for\ matching\ string-\/typed\ values.}}
+\DoxyCodeLine{01391\ TEST(HasSubstrTest,\ WorksForStringClasses)\ \{}
+\DoxyCodeLine{01392\ \ \ \textcolor{keyword}{const}\ Matcher<std::string>\ m1\ =\ HasSubstr(\textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{01393\ \ \ EXPECT\_TRUE(m1.Matches(std::string(\textcolor{stringliteral}{"{}I\ love\ food."{}})));}
+\DoxyCodeLine{01394\ \ \ EXPECT\_FALSE(m1.Matches(std::string(\textcolor{stringliteral}{"{}tofo"{}})));}
+\DoxyCodeLine{01395\ }
+\DoxyCodeLine{01396\ \ \ \textcolor{keyword}{const}\ Matcher<const\ std::string\&>\ m2\ =\ HasSubstr(\textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{01397\ \ \ EXPECT\_TRUE(m2.Matches(std::string(\textcolor{stringliteral}{"{}I\ love\ food."{}})));}
+\DoxyCodeLine{01398\ \ \ EXPECT\_FALSE(m2.Matches(std::string(\textcolor{stringliteral}{"{}tofo"{}})));}
+\DoxyCodeLine{01399\ }
+\DoxyCodeLine{01400\ \ \ \textcolor{keyword}{const}\ Matcher<std::string>\ m\_empty\ =\ HasSubstr(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{01401\ \ \ EXPECT\_TRUE(m\_empty.Matches(std::string()));}
+\DoxyCodeLine{01402\ \ \ EXPECT\_TRUE(m\_empty.Matches(std::string(\textcolor{stringliteral}{"{}not\ empty"{}})));}
+\DoxyCodeLine{01403\ \}}
+\DoxyCodeLine{01404\ }
+\DoxyCodeLine{01405\ \textcolor{comment}{//\ Tests\ that\ HasSubstr()\ works\ for\ matching\ C-\/string-\/typed\ values.}}
+\DoxyCodeLine{01406\ TEST(HasSubstrTest,\ WorksForCStrings)\ \{}
+\DoxyCodeLine{01407\ \ \ \textcolor{keyword}{const}\ Matcher<char*>\ m1\ =\ HasSubstr(\textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{01408\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{keyword}{const\_cast<}\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(\textcolor{stringliteral}{"{}I\ love\ food."{}})));}
+\DoxyCodeLine{01409\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{const\_cast<}\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(\textcolor{stringliteral}{"{}tofo"{}})));}
+\DoxyCodeLine{01410\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{01411\ }
+\DoxyCodeLine{01412\ \ \ \textcolor{keyword}{const}\ Matcher<const\ char*>\ m2\ =\ HasSubstr(\textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{01413\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}I\ love\ food."{}}));}
+\DoxyCodeLine{01414\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}tofo"{}}));}
+\DoxyCodeLine{01415\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{01416\ }
+\DoxyCodeLine{01417\ \ \ \textcolor{keyword}{const}\ Matcher<const\ char*>\ m\_empty\ =\ HasSubstr(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{01418\ \ \ EXPECT\_TRUE(m\_empty.Matches(\textcolor{stringliteral}{"{}not\ empty"{}}));}
+\DoxyCodeLine{01419\ \ \ EXPECT\_TRUE(m\_empty.Matches(\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{01420\ \ \ EXPECT\_FALSE(m\_empty.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{01421\ \}}
+\DoxyCodeLine{01422\ }
+\DoxyCodeLine{01423\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01424\ \textcolor{comment}{//\ Tests\ that\ HasSubstr()\ works\ for\ matching\ StringView-\/typed\ values.}}
+\DoxyCodeLine{01425\ TEST(HasSubstrTest,\ WorksForStringViewClasses)\ \{}
+\DoxyCodeLine{01426\ \ \ \textcolor{keyword}{const}\ Matcher<internal::StringView>\ m1\ =}
+\DoxyCodeLine{01427\ \ \ \ \ \ \ HasSubstr(internal::StringView(\textcolor{stringliteral}{"{}foo"{}}));}
+\DoxyCodeLine{01428\ \ \ EXPECT\_TRUE(m1.Matches(internal::StringView(\textcolor{stringliteral}{"{}I\ love\ food."{}})));}
+\DoxyCodeLine{01429\ \ \ EXPECT\_FALSE(m1.Matches(internal::StringView(\textcolor{stringliteral}{"{}tofo"{}})));}
+\DoxyCodeLine{01430\ \ \ EXPECT\_FALSE(m1.Matches(internal::StringView()));}
+\DoxyCodeLine{01431\ }
+\DoxyCodeLine{01432\ \ \ \textcolor{keyword}{const}\ Matcher<const\ internal::StringView\&>\ m2\ =\ HasSubstr(\textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{01433\ \ \ EXPECT\_TRUE(m2.Matches(internal::StringView(\textcolor{stringliteral}{"{}I\ love\ food."{}})));}
+\DoxyCodeLine{01434\ \ \ EXPECT\_FALSE(m2.Matches(internal::StringView(\textcolor{stringliteral}{"{}tofo"{}})));}
+\DoxyCodeLine{01435\ \ \ EXPECT\_FALSE(m2.Matches(internal::StringView()));}
+\DoxyCodeLine{01436\ }
+\DoxyCodeLine{01437\ \ \ \textcolor{keyword}{const}\ Matcher<const\ internal::StringView\&>\ m3\ =\ HasSubstr(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{01438\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}foo"{}})));}
+\DoxyCodeLine{01439\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}"{}})));}
+\DoxyCodeLine{01440\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView()));}
+\DoxyCodeLine{01441\ \}}
+\DoxyCodeLine{01442\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01443\ }
+\DoxyCodeLine{01444\ \textcolor{comment}{//\ Tests\ that\ HasSubstr(s)\ describes\ itself\ properly.}}
+\DoxyCodeLine{01445\ TEST(HasSubstrTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01446\ \ \ Matcher<std::string>\ m\ =\ HasSubstr(\textcolor{stringliteral}{"{}foo\(\backslash\)n\(\backslash\)"{}"{}});}
+\DoxyCodeLine{01447\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}has\ substring\ \(\backslash\)"{}foo\(\backslash\)\(\backslash\)n\(\backslash\)\(\backslash\)\(\backslash\)"{}\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{01448\ \}}
+\DoxyCodeLine{01449\ }
+\DoxyCodeLine{01450\ INSTANTIATE\_GTEST\_MATCHER\_TEST\_P(KeyTest);}
+\DoxyCodeLine{01451\ }
+\DoxyCodeLine{01452\ TEST(KeyTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01453\ \ \ Matcher<const\ pair<std::string,\ int>\&>\ m\ =\ Key(\textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{01454\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}has\ a\ key\ that\ is\ equal\ to\ \(\backslash\)"{}foo\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{01455\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}doesn't\ have\ a\ key\ that\ is\ equal\ to\ \(\backslash\)"{}foo\(\backslash\)"{}"{}},\ DescribeNegation(m));}
+\DoxyCodeLine{01456\ \}}
+\DoxyCodeLine{01457\ }
+\DoxyCodeLine{01458\ TEST\_P(KeyTestP,\ ExplainsResult)\ \{}
+\DoxyCodeLine{01459\ \ \ Matcher<pair<int,\ bool>>\ m\ =\ Key(GreaterThan(10));}
+\DoxyCodeLine{01460\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}whose\ first\ field\ is\ a\ value\ which\ is\ 5\ less\ than\ 10"{}},}
+\DoxyCodeLine{01461\ \ \ \ \ \ \ \ \ \ \ \ \ Explain(m,\ make\_pair(5,\ \textcolor{keyword}{true})));}
+\DoxyCodeLine{01462\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}whose\ first\ field\ is\ a\ value\ which\ is\ 5\ more\ than\ 10"{}},}
+\DoxyCodeLine{01463\ \ \ \ \ \ \ \ \ \ \ \ \ Explain(m,\ make\_pair(15,\ \textcolor{keyword}{true})));}
+\DoxyCodeLine{01464\ \}}
+\DoxyCodeLine{01465\ }
+\DoxyCodeLine{01466\ TEST(KeyTest,\ MatchesCorrectly)\ \{}
+\DoxyCodeLine{01467\ \ \ pair<int,\ std::string>\ p(25,\ \textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{01468\ \ \ EXPECT\_THAT(p,\ Key(25));}
+\DoxyCodeLine{01469\ \ \ EXPECT\_THAT(p,\ Not(Key(42)));}
+\DoxyCodeLine{01470\ \ \ EXPECT\_THAT(p,\ Key(Ge(20)));}
+\DoxyCodeLine{01471\ \ \ EXPECT\_THAT(p,\ Not(Key(Lt(25))));}
+\DoxyCodeLine{01472\ \}}
+\DoxyCodeLine{01473\ }
+\DoxyCodeLine{01474\ TEST(KeyTest,\ WorksWithMoveOnly)\ \{}
+\DoxyCodeLine{01475\ \ \ pair<std::unique\_ptr<int>,\ std::unique\_ptr<int>>\ p;}
+\DoxyCodeLine{01476\ \ \ EXPECT\_THAT(p,\ Key(Eq(\textcolor{keyword}{nullptr})));}
+\DoxyCodeLine{01477\ \}}
+\DoxyCodeLine{01478\ }
+\DoxyCodeLine{01479\ INSTANTIATE\_GTEST\_MATCHER\_TEST\_P(PairTest);}
+\DoxyCodeLine{01480\ }
+\DoxyCodeLine{01481\ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{size\_t}\ I>}
+\DoxyCodeLine{01482\ \textcolor{keyword}{struct\ }Tag\ \{\};}
+\DoxyCodeLine{01483\ }
+\DoxyCodeLine{01484\ \textcolor{keyword}{struct\ }PairWithGet\ \{}
+\DoxyCodeLine{01485\ \ \ \textcolor{keywordtype}{int}\ member\_1;}
+\DoxyCodeLine{01486\ \ \ std::string\ member\_2;}
+\DoxyCodeLine{01487\ \ \ \textcolor{keyword}{using\ }first\_type\ =\ int;}
+\DoxyCodeLine{01488\ \ \ \textcolor{keyword}{using\ }second\_type\ =\ std::string;}
+\DoxyCodeLine{01489\ }
+\DoxyCodeLine{01490\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\&\ GetImpl(Tag<0>)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ member\_1;\ \}}
+\DoxyCodeLine{01491\ \ \ \textcolor{keyword}{const}\ std::string\&\ GetImpl(Tag<1>)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ member\_2;\ \}}
+\DoxyCodeLine{01492\ \};}
+\DoxyCodeLine{01493\ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{size\_t}\ I>}
+\DoxyCodeLine{01494\ \textcolor{keyword}{auto}\ get(\textcolor{keyword}{const}\ PairWithGet\&\ value)\ -\/>\ \textcolor{keyword}{decltype}(value.GetImpl(Tag<I>()))\ \{}
+\DoxyCodeLine{01495\ \ \ \textcolor{keywordflow}{return}\ value.GetImpl(Tag<I>());}
+\DoxyCodeLine{01496\ \}}
+\DoxyCodeLine{01497\ TEST(PairTest,\ MatchesPairWithGetCorrectly)\ \{}
+\DoxyCodeLine{01498\ \ \ PairWithGet\ p\{25,\ \textcolor{stringliteral}{"{}foo"{}}\};}
+\DoxyCodeLine{01499\ \ \ EXPECT\_THAT(p,\ Key(25));}
+\DoxyCodeLine{01500\ \ \ EXPECT\_THAT(p,\ Not(Key(42)));}
+\DoxyCodeLine{01501\ \ \ EXPECT\_THAT(p,\ Key(Ge(20)));}
+\DoxyCodeLine{01502\ \ \ EXPECT\_THAT(p,\ Not(Key(Lt(25))));}
+\DoxyCodeLine{01503\ }
+\DoxyCodeLine{01504\ \ \ std::vector<PairWithGet>\ v\ =\ \{\{11,\ \textcolor{stringliteral}{"{}Foo"{}}\},\ \{29,\ \textcolor{stringliteral}{"{}gMockIsBestMock"{}}\}\};}
+\DoxyCodeLine{01505\ \ \ EXPECT\_THAT(v,\ Contains(Key(29)));}
+\DoxyCodeLine{01506\ \}}
+\DoxyCodeLine{01507\ }
+\DoxyCodeLine{01508\ TEST(KeyTest,\ SafelyCastsInnerMatcher)\ \{}
+\DoxyCodeLine{01509\ \ \ Matcher<int>\ is\_positive\ =\ Gt(0);}
+\DoxyCodeLine{01510\ \ \ Matcher<int>\ is\_negative\ =\ Lt(0);}
+\DoxyCodeLine{01511\ \ \ pair<char,\ bool>\ p(\textcolor{charliteral}{'a'},\ \textcolor{keyword}{true});}
+\DoxyCodeLine{01512\ \ \ EXPECT\_THAT(p,\ Key(is\_positive));}
+\DoxyCodeLine{01513\ \ \ EXPECT\_THAT(p,\ Not(Key(is\_negative)));}
+\DoxyCodeLine{01514\ \}}
+\DoxyCodeLine{01515\ }
+\DoxyCodeLine{01516\ TEST(KeyTest,\ InsideContainsUsingMap)\ \{}
+\DoxyCodeLine{01517\ \ \ map<int,\ char>\ container;}
+\DoxyCodeLine{01518\ \ \ container.insert(make\_pair(1,\ \textcolor{charliteral}{'a'}));}
+\DoxyCodeLine{01519\ \ \ container.insert(make\_pair(2,\ \textcolor{charliteral}{'b'}));}
+\DoxyCodeLine{01520\ \ \ container.insert(make\_pair(4,\ \textcolor{charliteral}{'c'}));}
+\DoxyCodeLine{01521\ \ \ EXPECT\_THAT(container,\ Contains(Key(1)));}
+\DoxyCodeLine{01522\ \ \ EXPECT\_THAT(container,\ Not(Contains(Key(3))));}
+\DoxyCodeLine{01523\ \}}
+\DoxyCodeLine{01524\ }
+\DoxyCodeLine{01525\ TEST(KeyTest,\ InsideContainsUsingMultimap)\ \{}
+\DoxyCodeLine{01526\ \ \ multimap<int,\ char>\ container;}
+\DoxyCodeLine{01527\ \ \ container.insert(make\_pair(1,\ \textcolor{charliteral}{'a'}));}
+\DoxyCodeLine{01528\ \ \ container.insert(make\_pair(2,\ \textcolor{charliteral}{'b'}));}
+\DoxyCodeLine{01529\ \ \ container.insert(make\_pair(4,\ \textcolor{charliteral}{'c'}));}
+\DoxyCodeLine{01530\ }
+\DoxyCodeLine{01531\ \ \ EXPECT\_THAT(container,\ Not(Contains(Key(25))));}
+\DoxyCodeLine{01532\ \ \ container.insert(make\_pair(25,\ \textcolor{charliteral}{'d'}));}
+\DoxyCodeLine{01533\ \ \ EXPECT\_THAT(container,\ Contains(Key(25)));}
+\DoxyCodeLine{01534\ \ \ container.insert(make\_pair(25,\ \textcolor{charliteral}{'e'}));}
+\DoxyCodeLine{01535\ \ \ EXPECT\_THAT(container,\ Contains(Key(25)));}
+\DoxyCodeLine{01536\ }
+\DoxyCodeLine{01537\ \ \ EXPECT\_THAT(container,\ Contains(Key(1)));}
+\DoxyCodeLine{01538\ \ \ EXPECT\_THAT(container,\ Not(Contains(Key(3))));}
+\DoxyCodeLine{01539\ \}}
+\DoxyCodeLine{01540\ }
+\DoxyCodeLine{01541\ TEST(PairTest,\ Typing)\ \{}
+\DoxyCodeLine{01542\ \ \ \textcolor{comment}{//\ Test\ verifies\ the\ following\ type\ conversions\ can\ be\ compiled.}}
+\DoxyCodeLine{01543\ \ \ Matcher<const\ pair<const\ char*,\ int>\&>\ m1\ =\ Pair(\textcolor{stringliteral}{"{}foo"{}},\ 42);}
+\DoxyCodeLine{01544\ \ \ Matcher<const\ pair<const\ char*,\ int>>\ m2\ =\ Pair(\textcolor{stringliteral}{"{}foo"{}},\ 42);}
+\DoxyCodeLine{01545\ \ \ Matcher<pair<const\ char*,\ int>>\ m3\ =\ Pair(\textcolor{stringliteral}{"{}foo"{}},\ 42);}
+\DoxyCodeLine{01546\ }
+\DoxyCodeLine{01547\ \ \ Matcher<pair<int,\ const\ std::string>>\ m4\ =\ Pair(25,\ \textcolor{stringliteral}{"{}42"{}});}
+\DoxyCodeLine{01548\ \ \ Matcher<pair<const\ std::string,\ int>>\ m5\ =\ Pair(\textcolor{stringliteral}{"{}25"{}},\ 42);}
+\DoxyCodeLine{01549\ \}}
+\DoxyCodeLine{01550\ }
+\DoxyCodeLine{01551\ TEST(PairTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01552\ \ \ Matcher<const\ pair<std::string,\ int>\&>\ m1\ =\ Pair(\textcolor{stringliteral}{"{}foo"{}},\ 42);}
+\DoxyCodeLine{01553\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{01554\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}has\ a\ first\ field\ that\ is\ equal\ to\ \(\backslash\)"{}foo\(\backslash\)"{}"{}}}
+\DoxyCodeLine{01555\ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ and\ has\ a\ second\ field\ that\ is\ equal\ to\ 42"{}},}
+\DoxyCodeLine{01556\ \ \ \ \ \ \ Describe(m1));}
+\DoxyCodeLine{01557\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{01558\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}has\ a\ first\ field\ that\ isn't\ equal\ to\ \(\backslash\)"{}foo\(\backslash\)"{}"{}}}
+\DoxyCodeLine{01559\ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ or\ has\ a\ second\ field\ that\ isn't\ equal\ to\ 42"{}},}
+\DoxyCodeLine{01560\ \ \ \ \ \ \ DescribeNegation(m1));}
+\DoxyCodeLine{01561\ \ \ \textcolor{comment}{//\ Double\ and\ triple\ negation\ (1\ or\ 2\ times\ not\ and\ description\ of\ negation).}}
+\DoxyCodeLine{01562\ \ \ Matcher<const\ pair<int,\ int>\&>\ m2\ =\ Not(Pair(Not(13),\ 42));}
+\DoxyCodeLine{01563\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{01564\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}has\ a\ first\ field\ that\ isn't\ equal\ to\ 13"{}}}
+\DoxyCodeLine{01565\ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ and\ has\ a\ second\ field\ that\ is\ equal\ to\ 42"{}},}
+\DoxyCodeLine{01566\ \ \ \ \ \ \ DescribeNegation(m2));}
+\DoxyCodeLine{01567\ \}}
+\DoxyCodeLine{01568\ }
+\DoxyCodeLine{01569\ TEST\_P(PairTestP,\ CanExplainMatchResultTo)\ \{}
+\DoxyCodeLine{01570\ \ \ \textcolor{comment}{//\ If\ neither\ field\ matches,\ Pair()\ should\ explain\ about\ the\ first}}
+\DoxyCodeLine{01571\ \ \ \textcolor{comment}{//\ field.}}
+\DoxyCodeLine{01572\ \ \ \textcolor{keyword}{const}\ Matcher<pair<int,\ int>>\ m\ =\ Pair(GreaterThan(0),\ GreaterThan(0));}
+\DoxyCodeLine{01573\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}whose\ first\ field\ does\ not\ match,\ which\ is\ 1\ less\ than\ 0"{}},}
+\DoxyCodeLine{01574\ \ \ \ \ \ \ \ \ \ \ \ \ Explain(m,\ make\_pair(-\/1,\ -\/2)));}
+\DoxyCodeLine{01575\ }
+\DoxyCodeLine{01576\ \ \ \textcolor{comment}{//\ If\ the\ first\ field\ matches\ but\ the\ second\ doesn't,\ Pair()\ should}}
+\DoxyCodeLine{01577\ \ \ \textcolor{comment}{//\ explain\ about\ the\ second\ field.}}
+\DoxyCodeLine{01578\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}whose\ second\ field\ does\ not\ match,\ which\ is\ 2\ less\ than\ 0"{}},}
+\DoxyCodeLine{01579\ \ \ \ \ \ \ \ \ \ \ \ \ Explain(m,\ make\_pair(1,\ -\/2)));}
+\DoxyCodeLine{01580\ }
+\DoxyCodeLine{01581\ \ \ \textcolor{comment}{//\ If\ the\ first\ field\ doesn't\ match\ but\ the\ second\ does,\ Pair()}}
+\DoxyCodeLine{01582\ \ \ \textcolor{comment}{//\ should\ explain\ about\ the\ first\ field.}}
+\DoxyCodeLine{01583\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}whose\ first\ field\ does\ not\ match,\ which\ is\ 1\ less\ than\ 0"{}},}
+\DoxyCodeLine{01584\ \ \ \ \ \ \ \ \ \ \ \ \ Explain(m,\ make\_pair(-\/1,\ 2)));}
+\DoxyCodeLine{01585\ }
+\DoxyCodeLine{01586\ \ \ \textcolor{comment}{//\ If\ both\ fields\ match,\ Pair()\ should\ explain\ about\ them\ both.}}
+\DoxyCodeLine{01587\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{01588\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}whose\ both\ fields\ match,\ where\ the\ first\ field\ is\ a\ value\ "{}}}
+\DoxyCodeLine{01589\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}which\ is\ 1\ more\ than\ 0,\ and\ the\ second\ field\ is\ a\ value\ "{}}}
+\DoxyCodeLine{01590\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}which\ is\ 2\ more\ than\ 0"{}},}
+\DoxyCodeLine{01591\ \ \ \ \ \ \ Explain(m,\ make\_pair(1,\ 2)));}
+\DoxyCodeLine{01592\ }
+\DoxyCodeLine{01593\ \ \ \textcolor{comment}{//\ If\ only\ the\ first\ match\ has\ an\ explanation,\ only\ this\ explanation\ should}}
+\DoxyCodeLine{01594\ \ \ \textcolor{comment}{//\ be\ printed.}}
+\DoxyCodeLine{01595\ \ \ \textcolor{keyword}{const}\ Matcher<pair<int,\ int>>\ explain\_first\ =\ Pair(GreaterThan(0),\ 0);}
+\DoxyCodeLine{01596\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{01597\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}whose\ both\ fields\ match,\ where\ the\ first\ field\ is\ a\ value\ "{}}}
+\DoxyCodeLine{01598\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}which\ is\ 1\ more\ than\ 0"{}},}
+\DoxyCodeLine{01599\ \ \ \ \ \ \ Explain(explain\_first,\ make\_pair(1,\ 0)));}
+\DoxyCodeLine{01600\ }
+\DoxyCodeLine{01601\ \ \ \textcolor{comment}{//\ If\ only\ the\ second\ match\ has\ an\ explanation,\ only\ this\ explanation\ should}}
+\DoxyCodeLine{01602\ \ \ \textcolor{comment}{//\ be\ printed.}}
+\DoxyCodeLine{01603\ \ \ \textcolor{keyword}{const}\ Matcher<pair<int,\ int>>\ explain\_second\ =\ Pair(0,\ GreaterThan(0));}
+\DoxyCodeLine{01604\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{01605\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}whose\ both\ fields\ match,\ where\ the\ second\ field\ is\ a\ value\ "{}}}
+\DoxyCodeLine{01606\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}which\ is\ 1\ more\ than\ 0"{}},}
+\DoxyCodeLine{01607\ \ \ \ \ \ \ Explain(explain\_second,\ make\_pair(0,\ 1)));}
+\DoxyCodeLine{01608\ \}}
+\DoxyCodeLine{01609\ }
+\DoxyCodeLine{01610\ TEST(PairTest,\ MatchesCorrectly)\ \{}
+\DoxyCodeLine{01611\ \ \ pair<int,\ std::string>\ p(25,\ \textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{01612\ }
+\DoxyCodeLine{01613\ \ \ \textcolor{comment}{//\ Both\ fields\ match.}}
+\DoxyCodeLine{01614\ \ \ EXPECT\_THAT(p,\ Pair(25,\ \textcolor{stringliteral}{"{}foo"{}}));}
+\DoxyCodeLine{01615\ \ \ EXPECT\_THAT(p,\ Pair(Ge(20),\ HasSubstr(\textcolor{stringliteral}{"{}o"{}})));}
+\DoxyCodeLine{01616\ }
+\DoxyCodeLine{01617\ \ \ \textcolor{comment}{//\ 'first'\ doesn't\ match,\ but\ 'second'\ matches.}}
+\DoxyCodeLine{01618\ \ \ EXPECT\_THAT(p,\ Not(Pair(42,\ \textcolor{stringliteral}{"{}foo"{}})));}
+\DoxyCodeLine{01619\ \ \ EXPECT\_THAT(p,\ Not(Pair(Lt(25),\ \textcolor{stringliteral}{"{}foo"{}})));}
+\DoxyCodeLine{01620\ }
+\DoxyCodeLine{01621\ \ \ \textcolor{comment}{//\ 'first'\ matches,\ but\ 'second'\ doesn't\ match.}}
+\DoxyCodeLine{01622\ \ \ EXPECT\_THAT(p,\ Not(Pair(25,\ \textcolor{stringliteral}{"{}bar"{}})));}
+\DoxyCodeLine{01623\ \ \ EXPECT\_THAT(p,\ Not(Pair(25,\ Not(\textcolor{stringliteral}{"{}foo"{}}))));}
+\DoxyCodeLine{01624\ }
+\DoxyCodeLine{01625\ \ \ \textcolor{comment}{//\ Neither\ field\ matches.}}
+\DoxyCodeLine{01626\ \ \ EXPECT\_THAT(p,\ Not(Pair(13,\ \textcolor{stringliteral}{"{}bar"{}})));}
+\DoxyCodeLine{01627\ \ \ EXPECT\_THAT(p,\ Not(Pair(Lt(13),\ HasSubstr(\textcolor{stringliteral}{"{}a"{}}))));}
+\DoxyCodeLine{01628\ \}}
+\DoxyCodeLine{01629\ }
+\DoxyCodeLine{01630\ TEST(PairTest,\ WorksWithMoveOnly)\ \{}
+\DoxyCodeLine{01631\ \ \ pair<std::unique\_ptr<int>,\ std::unique\_ptr<int>>\ p;}
+\DoxyCodeLine{01632\ \ \ p.second\ =\ std::make\_unique<int>(7);}
+\DoxyCodeLine{01633\ \ \ EXPECT\_THAT(p,\ Pair(Eq(\textcolor{keyword}{nullptr}),\ Ne(\textcolor{keyword}{nullptr})));}
+\DoxyCodeLine{01634\ \}}
+\DoxyCodeLine{01635\ }
+\DoxyCodeLine{01636\ TEST(PairTest,\ SafelyCastsInnerMatchers)\ \{}
+\DoxyCodeLine{01637\ \ \ Matcher<int>\ is\_positive\ =\ Gt(0);}
+\DoxyCodeLine{01638\ \ \ Matcher<int>\ is\_negative\ =\ Lt(0);}
+\DoxyCodeLine{01639\ \ \ pair<char,\ bool>\ p(\textcolor{charliteral}{'a'},\ \textcolor{keyword}{true});}
+\DoxyCodeLine{01640\ \ \ EXPECT\_THAT(p,\ Pair(is\_positive,\ \_));}
+\DoxyCodeLine{01641\ \ \ EXPECT\_THAT(p,\ Not(Pair(is\_negative,\ \_)));}
+\DoxyCodeLine{01642\ \ \ EXPECT\_THAT(p,\ Pair(\_,\ is\_positive));}
+\DoxyCodeLine{01643\ \ \ EXPECT\_THAT(p,\ Not(Pair(\_,\ is\_negative)));}
+\DoxyCodeLine{01644\ \}}
+\DoxyCodeLine{01645\ }
+\DoxyCodeLine{01646\ TEST(PairTest,\ InsideContainsUsingMap)\ \{}
+\DoxyCodeLine{01647\ \ \ map<int,\ char>\ container;}
+\DoxyCodeLine{01648\ \ \ container.insert(make\_pair(1,\ \textcolor{charliteral}{'a'}));}
+\DoxyCodeLine{01649\ \ \ container.insert(make\_pair(2,\ \textcolor{charliteral}{'b'}));}
+\DoxyCodeLine{01650\ \ \ container.insert(make\_pair(4,\ \textcolor{charliteral}{'c'}));}
+\DoxyCodeLine{01651\ \ \ EXPECT\_THAT(container,\ Contains(Pair(1,\ \textcolor{charliteral}{'a'})));}
+\DoxyCodeLine{01652\ \ \ EXPECT\_THAT(container,\ Contains(Pair(1,\ \_)));}
+\DoxyCodeLine{01653\ \ \ EXPECT\_THAT(container,\ Contains(Pair(\_,\ \textcolor{charliteral}{'a'})));}
+\DoxyCodeLine{01654\ \ \ EXPECT\_THAT(container,\ Not(Contains(Pair(3,\ \_))));}
+\DoxyCodeLine{01655\ \}}
+\DoxyCodeLine{01656\ }
+\DoxyCodeLine{01657\ INSTANTIATE\_GTEST\_MATCHER\_TEST\_P(FieldsAreTest);}
+\DoxyCodeLine{01658\ }
+\DoxyCodeLine{01659\ TEST(FieldsAreTest,\ MatchesCorrectly)\ \{}
+\DoxyCodeLine{01660\ \ \ std::tuple<int,\ std::string,\ double>\ p(25,\ \textcolor{stringliteral}{"{}foo"{}},\ .5);}
+\DoxyCodeLine{01661\ }
+\DoxyCodeLine{01662\ \ \ \textcolor{comment}{//\ All\ fields\ match.}}
+\DoxyCodeLine{01663\ \ \ EXPECT\_THAT(p,\ FieldsAre(25,\ \textcolor{stringliteral}{"{}foo"{}},\ .5));}
+\DoxyCodeLine{01664\ \ \ EXPECT\_THAT(p,\ FieldsAre(Ge(20),\ HasSubstr(\textcolor{stringliteral}{"{}o"{}}),\ DoubleEq(.5)));}
+\DoxyCodeLine{01665\ }
+\DoxyCodeLine{01666\ \ \ \textcolor{comment}{//\ Some\ don't\ match.}}
+\DoxyCodeLine{01667\ \ \ EXPECT\_THAT(p,\ Not(FieldsAre(26,\ \textcolor{stringliteral}{"{}foo"{}},\ .5)));}
+\DoxyCodeLine{01668\ \ \ EXPECT\_THAT(p,\ Not(FieldsAre(25,\ \textcolor{stringliteral}{"{}fo"{}},\ .5)));}
+\DoxyCodeLine{01669\ \ \ EXPECT\_THAT(p,\ Not(FieldsAre(25,\ \textcolor{stringliteral}{"{}foo"{}},\ .6)));}
+\DoxyCodeLine{01670\ \}}
+\DoxyCodeLine{01671\ }
+\DoxyCodeLine{01672\ TEST(FieldsAreTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01673\ \ \ Matcher<const\ pair<std::string,\ int>\&>\ m1\ =\ FieldsAre(\textcolor{stringliteral}{"{}foo"{}},\ 42);}
+\DoxyCodeLine{01674\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{01675\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}has\ field\ \#0\ that\ is\ equal\ to\ \(\backslash\)"{}foo\(\backslash\)"{}"{}}}
+\DoxyCodeLine{01676\ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ and\ has\ field\ \#1\ that\ is\ equal\ to\ 42"{}},}
+\DoxyCodeLine{01677\ \ \ \ \ \ \ Describe(m1));}
+\DoxyCodeLine{01678\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{01679\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}has\ field\ \#0\ that\ isn't\ equal\ to\ \(\backslash\)"{}foo\(\backslash\)"{}"{}}}
+\DoxyCodeLine{01680\ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ or\ has\ field\ \#1\ that\ isn't\ equal\ to\ 42"{}},}
+\DoxyCodeLine{01681\ \ \ \ \ \ \ DescribeNegation(m1));}
+\DoxyCodeLine{01682\ \}}
+\DoxyCodeLine{01683\ }
+\DoxyCodeLine{01684\ TEST\_P(FieldsAreTestP,\ CanExplainMatchResultTo)\ \{}
+\DoxyCodeLine{01685\ \ \ \textcolor{comment}{//\ The\ first\ one\ that\ fails\ is\ the\ one\ that\ gives\ the\ error.}}
+\DoxyCodeLine{01686\ \ \ Matcher<std::tuple<int,\ int,\ int>>\ m\ =}
+\DoxyCodeLine{01687\ \ \ \ \ \ \ FieldsAre(GreaterThan(0),\ GreaterThan(0),\ GreaterThan(0));}
+\DoxyCodeLine{01688\ }
+\DoxyCodeLine{01689\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}whose\ field\ \#0\ does\ not\ match,\ which\ is\ 1\ less\ than\ 0"{}},}
+\DoxyCodeLine{01690\ \ \ \ \ \ \ \ \ \ \ \ \ Explain(m,\ std::make\_tuple(-\/1,\ -\/2,\ -\/3)));}
+\DoxyCodeLine{01691\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}whose\ field\ \#1\ does\ not\ match,\ which\ is\ 2\ less\ than\ 0"{}},}
+\DoxyCodeLine{01692\ \ \ \ \ \ \ \ \ \ \ \ \ Explain(m,\ std::make\_tuple(1,\ -\/2,\ -\/3)));}
+\DoxyCodeLine{01693\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}whose\ field\ \#2\ does\ not\ match,\ which\ is\ 3\ less\ than\ 0"{}},}
+\DoxyCodeLine{01694\ \ \ \ \ \ \ \ \ \ \ \ \ Explain(m,\ std::make\_tuple(1,\ 2,\ -\/3)));}
+\DoxyCodeLine{01695\ }
+\DoxyCodeLine{01696\ \ \ \textcolor{comment}{//\ If\ they\ all\ match,\ we\ get\ a\ long\ explanation\ of\ success.}}
+\DoxyCodeLine{01697\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{01698\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}whose\ all\ elements\ match,\ "{}}}
+\DoxyCodeLine{01699\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}where\ field\ \#0\ is\ a\ value\ which\ is\ 1\ more\ than\ 0"{}}}
+\DoxyCodeLine{01700\ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ and\ field\ \#1\ is\ a\ value\ which\ is\ 2\ more\ than\ 0"{}}}
+\DoxyCodeLine{01701\ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ and\ field\ \#2\ is\ a\ value\ which\ is\ 3\ more\ than\ 0"{}},}
+\DoxyCodeLine{01702\ \ \ \ \ \ \ Explain(m,\ std::make\_tuple(1,\ 2,\ 3)));}
+\DoxyCodeLine{01703\ }
+\DoxyCodeLine{01704\ \ \ \textcolor{comment}{//\ Only\ print\ those\ that\ have\ an\ explanation.}}
+\DoxyCodeLine{01705\ \ \ m\ =\ FieldsAre(GreaterThan(0),\ 0,\ GreaterThan(0));}
+\DoxyCodeLine{01706\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{01707\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}whose\ all\ elements\ match,\ "{}}}
+\DoxyCodeLine{01708\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}where\ field\ \#0\ is\ a\ value\ which\ is\ 1\ more\ than\ 0"{}}}
+\DoxyCodeLine{01709\ \ \ \ \ \ \ \textcolor{stringliteral}{"{},\ and\ field\ \#2\ is\ a\ value\ which\ is\ 3\ more\ than\ 0"{}},}
+\DoxyCodeLine{01710\ \ \ \ \ \ \ Explain(m,\ std::make\_tuple(1,\ 0,\ 3)));}
+\DoxyCodeLine{01711\ }
+\DoxyCodeLine{01712\ \ \ \textcolor{comment}{//\ If\ only\ one\ has\ an\ explanation,\ then\ print\ that\ one.}}
+\DoxyCodeLine{01713\ \ \ m\ =\ FieldsAre(0,\ GreaterThan(0),\ 0);}
+\DoxyCodeLine{01714\ \ \ EXPECT\_EQ(}
+\DoxyCodeLine{01715\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}whose\ all\ elements\ match,\ "{}}}
+\DoxyCodeLine{01716\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}where\ field\ \#1\ is\ a\ value\ which\ is\ 1\ more\ than\ 0"{}},}
+\DoxyCodeLine{01717\ \ \ \ \ \ \ Explain(m,\ std::make\_tuple(0,\ 1,\ 0)));}
+\DoxyCodeLine{01718\ \}}
+\DoxyCodeLine{01719\ }
+\DoxyCodeLine{01720\ \textcolor{preprocessor}{\#if\ defined(\_\_cpp\_structured\_bindings)\ \&\&\ \_\_cpp\_structured\_bindings\ >=\ 201606}}
+\DoxyCodeLine{01721\ TEST(FieldsAreTest,\ StructuredBindings)\ \{}
+\DoxyCodeLine{01722\ \ \ \textcolor{comment}{//\ testing::FieldsAre\ can\ also\ match\ aggregates\ and\ such\ with\ C++17\ and\ up.}}
+\DoxyCodeLine{01723\ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{classMyType}{MyType}}\ \{}
+\DoxyCodeLine{01724\ \ \ \ \ \textcolor{keywordtype}{int}\ i;}
+\DoxyCodeLine{01725\ \ \ \ \ std::string\ str;}
+\DoxyCodeLine{01726\ \ \ \};}
+\DoxyCodeLine{01727\ \ \ EXPECT\_THAT((\mbox{\hyperlink{classMyType}{MyType}}\{17,\ \textcolor{stringliteral}{"{}foo"{}}\}),\ FieldsAre(Eq(17),\ HasSubstr(\textcolor{stringliteral}{"{}oo"{}})));}
+\DoxyCodeLine{01728\ }
+\DoxyCodeLine{01729\ \ \ \textcolor{comment}{//\ Test\ all\ the\ supported\ arities.}}
+\DoxyCodeLine{01730\ \ \ \textcolor{keyword}{struct\ }MyVarType1\ \{}
+\DoxyCodeLine{01731\ \ \ \ \ \textcolor{keywordtype}{int}\ a;}
+\DoxyCodeLine{01732\ \ \ \};}
+\DoxyCodeLine{01733\ \ \ EXPECT\_THAT(MyVarType1\{\},\ FieldsAre(0));}
+\DoxyCodeLine{01734\ \ \ \textcolor{keyword}{struct\ }MyVarType2\ \{}
+\DoxyCodeLine{01735\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b;}
+\DoxyCodeLine{01736\ \ \ \};}
+\DoxyCodeLine{01737\ \ \ EXPECT\_THAT(MyVarType2\{\},\ FieldsAre(0,\ 0));}
+\DoxyCodeLine{01738\ \ \ \textcolor{keyword}{struct\ }MyVarType3\ \{}
+\DoxyCodeLine{01739\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c;}
+\DoxyCodeLine{01740\ \ \ \};}
+\DoxyCodeLine{01741\ \ \ EXPECT\_THAT(MyVarType3\{\},\ FieldsAre(0,\ 0,\ 0));}
+\DoxyCodeLine{01742\ \ \ \textcolor{keyword}{struct\ }MyVarType4\ \{}
+\DoxyCodeLine{01743\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d;}
+\DoxyCodeLine{01744\ \ \ \};}
+\DoxyCodeLine{01745\ \ \ EXPECT\_THAT(MyVarType4\{\},\ FieldsAre(0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01746\ \ \ \textcolor{keyword}{struct\ }MyVarType5\ \{}
+\DoxyCodeLine{01747\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e;}
+\DoxyCodeLine{01748\ \ \ \};}
+\DoxyCodeLine{01749\ \ \ EXPECT\_THAT(MyVarType5\{\},\ FieldsAre(0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01750\ \ \ \textcolor{keyword}{struct\ }MyVarType6\ \{}
+\DoxyCodeLine{01751\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f;}
+\DoxyCodeLine{01752\ \ \ \};}
+\DoxyCodeLine{01753\ \ \ EXPECT\_THAT(MyVarType6\{\},\ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01754\ \ \ \textcolor{keyword}{struct\ }MyVarType7\ \{}
+\DoxyCodeLine{01755\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g;}
+\DoxyCodeLine{01756\ \ \ \};}
+\DoxyCodeLine{01757\ \ \ EXPECT\_THAT(MyVarType7\{\},\ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01758\ \ \ \textcolor{keyword}{struct\ }MyVarType8\ \{}
+\DoxyCodeLine{01759\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h;}
+\DoxyCodeLine{01760\ \ \ \};}
+\DoxyCodeLine{01761\ \ \ EXPECT\_THAT(MyVarType8\{\},\ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01762\ \ \ \textcolor{keyword}{struct\ }MyVarType9\ \{}
+\DoxyCodeLine{01763\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h,\ i;}
+\DoxyCodeLine{01764\ \ \ \};}
+\DoxyCodeLine{01765\ \ \ EXPECT\_THAT(MyVarType9\{\},\ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01766\ \ \ \textcolor{keyword}{struct\ }MyVarType10\ \{}
+\DoxyCodeLine{01767\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h,\ i,\ j;}
+\DoxyCodeLine{01768\ \ \ \};}
+\DoxyCodeLine{01769\ \ \ EXPECT\_THAT(MyVarType10\{\},\ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01770\ \ \ \textcolor{keyword}{struct\ }MyVarType11\ \{}
+\DoxyCodeLine{01771\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h,\ i,\ j,\ k;}
+\DoxyCodeLine{01772\ \ \ \};}
+\DoxyCodeLine{01773\ \ \ EXPECT\_THAT(MyVarType11\{\},\ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01774\ \ \ \textcolor{keyword}{struct\ }MyVarType12\ \{}
+\DoxyCodeLine{01775\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h,\ i,\ j,\ k,\ l;}
+\DoxyCodeLine{01776\ \ \ \};}
+\DoxyCodeLine{01777\ \ \ EXPECT\_THAT(MyVarType12\{\},\ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01778\ \ \ \textcolor{keyword}{struct\ }MyVarType13\ \{}
+\DoxyCodeLine{01779\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h,\ i,\ j,\ k,\ l,\ m;}
+\DoxyCodeLine{01780\ \ \ \};}
+\DoxyCodeLine{01781\ \ \ EXPECT\_THAT(MyVarType13\{\},\ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01782\ \ \ \textcolor{keyword}{struct\ }MyVarType14\ \{}
+\DoxyCodeLine{01783\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h,\ i,\ j,\ k,\ l,\ m,\ n;}
+\DoxyCodeLine{01784\ \ \ \};}
+\DoxyCodeLine{01785\ \ \ EXPECT\_THAT(MyVarType14\{\},}
+\DoxyCodeLine{01786\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01787\ \ \ \textcolor{keyword}{struct\ }MyVarType15\ \{}
+\DoxyCodeLine{01788\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h,\ i,\ j,\ k,\ l,\ m,\ n,\ o;}
+\DoxyCodeLine{01789\ \ \ \};}
+\DoxyCodeLine{01790\ \ \ EXPECT\_THAT(MyVarType15\{\},}
+\DoxyCodeLine{01791\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01792\ \ \ \textcolor{keyword}{struct\ }MyVarType16\ \{}
+\DoxyCodeLine{01793\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h,\ i,\ j,\ k,\ l,\ m,\ n,\ o,\ p;}
+\DoxyCodeLine{01794\ \ \ \};}
+\DoxyCodeLine{01795\ \ \ EXPECT\_THAT(MyVarType16\{\},}
+\DoxyCodeLine{01796\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01797\ \ \ \textcolor{keyword}{struct\ }MyVarType17\ \{}
+\DoxyCodeLine{01798\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h,\ i,\ j,\ k,\ l,\ m,\ n,\ o,\ p,\ q;}
+\DoxyCodeLine{01799\ \ \ \};}
+\DoxyCodeLine{01800\ \ \ EXPECT\_THAT(MyVarType17\{\},}
+\DoxyCodeLine{01801\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01802\ \ \ \textcolor{keyword}{struct\ }MyVarType18\ \{}
+\DoxyCodeLine{01803\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h,\ i,\ j,\ k,\ l,\ m,\ n,\ o,\ p,\ q,\ r;}
+\DoxyCodeLine{01804\ \ \ \};}
+\DoxyCodeLine{01805\ \ \ EXPECT\_THAT(MyVarType18\{\},}
+\DoxyCodeLine{01806\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01807\ \ \ \textcolor{keyword}{struct\ }MyVarType19\ \{}
+\DoxyCodeLine{01808\ \ \ \ \ \textcolor{keywordtype}{int}\ a,\ b,\ c,\ d,\ e,\ f,\ g,\ h,\ i,\ j,\ k,\ l,\ m,\ n,\ o,\ p,\ q,\ r,\ s;}
+\DoxyCodeLine{01809\ \ \ \};}
+\DoxyCodeLine{01810\ \ \ EXPECT\_THAT(MyVarType19\{\},\ FieldsAre(0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,\ 0,}
+\DoxyCodeLine{01811\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,\ 0,\ 0,\ 0,\ 0));}
+\DoxyCodeLine{01812\ \}}
+\DoxyCodeLine{01813\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{01814\ }
+\DoxyCodeLine{01815\ TEST(PairTest,\ UseGetInsteadOfMembers)\ \{}
+\DoxyCodeLine{01816\ \ \ PairWithGet\ pair\{7,\ \textcolor{stringliteral}{"{}ABC"{}}\};}
+\DoxyCodeLine{01817\ \ \ EXPECT\_THAT(pair,\ Pair(7,\ \textcolor{stringliteral}{"{}ABC"{}}));}
+\DoxyCodeLine{01818\ \ \ EXPECT\_THAT(pair,\ Pair(Ge(7),\ HasSubstr(\textcolor{stringliteral}{"{}AB"{}})));}
+\DoxyCodeLine{01819\ \ \ EXPECT\_THAT(pair,\ Not(Pair(Lt(7),\ \textcolor{stringliteral}{"{}ABC"{}})));}
+\DoxyCodeLine{01820\ }
+\DoxyCodeLine{01821\ \ \ std::vector<PairWithGet>\ v\ =\ \{\{11,\ \textcolor{stringliteral}{"{}Foo"{}}\},\ \{29,\ \textcolor{stringliteral}{"{}gMockIsBestMock"{}}\}\};}
+\DoxyCodeLine{01822\ \ \ EXPECT\_THAT(v,}
+\DoxyCodeLine{01823\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ElementsAre(Pair(11,\ std::string(\textcolor{stringliteral}{"{}Foo"{}})),\ Pair(Ge(10),\ Not(\textcolor{stringliteral}{"{}"{}}))));}
+\DoxyCodeLine{01824\ \}}
+\DoxyCodeLine{01825\ }
+\DoxyCodeLine{01826\ \textcolor{comment}{//\ Tests\ StartsWith(s).}}
+\DoxyCodeLine{01827\ }
+\DoxyCodeLine{01828\ TEST(StartsWithTest,\ MatchesStringWithGivenPrefix)\ \{}
+\DoxyCodeLine{01829\ \ \ \textcolor{keyword}{const}\ Matcher<const\ char*>\ m1\ =\ StartsWith(std::string(\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{01830\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{01831\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{01832\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{01833\ }
+\DoxyCodeLine{01834\ \ \ \textcolor{keyword}{const}\ Matcher<const\ std::string\&>\ m2\ =\ StartsWith(\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{01835\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{01836\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}Hi\ Hi!"{}}));}
+\DoxyCodeLine{01837\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}High"{}}));}
+\DoxyCodeLine{01838\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}H"{}}));}
+\DoxyCodeLine{01839\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}\ Hi"{}}));}
+\DoxyCodeLine{01840\ }
+\DoxyCodeLine{01841\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01842\ \ \ \textcolor{keyword}{const}\ Matcher<internal::StringView>\ m\_empty\ =}
+\DoxyCodeLine{01843\ \ \ \ \ \ \ StartsWith(internal::StringView(\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{01844\ \ \ EXPECT\_TRUE(m\_empty.Matches(internal::StringView()));}
+\DoxyCodeLine{01845\ \ \ EXPECT\_TRUE(m\_empty.Matches(internal::StringView(\textcolor{stringliteral}{"{}"{}})));}
+\DoxyCodeLine{01846\ \ \ EXPECT\_TRUE(m\_empty.Matches(internal::StringView(\textcolor{stringliteral}{"{}not\ empty"{}})));}
+\DoxyCodeLine{01847\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01848\ \}}
+\DoxyCodeLine{01849\ }
+\DoxyCodeLine{01850\ TEST(StartsWithTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01851\ \ \ Matcher<const\ std::string>\ m\ =\ StartsWith(\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{01852\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}starts\ with\ \(\backslash\)"{}Hi\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{01853\ \}}
+\DoxyCodeLine{01854\ }
+\DoxyCodeLine{01855\ TEST(StartsWithTest,\ WorksWithStringMatcherOnStringViewMatchee)\ \{}
+\DoxyCodeLine{01856\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01857\ \ \ EXPECT\_THAT(internal::StringView(\textcolor{stringliteral}{"{}talk\ to\ me\ goose"{}}),}
+\DoxyCodeLine{01858\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StartsWith(std::string(\textcolor{stringliteral}{"{}talk"{}})));}
+\DoxyCodeLine{01859\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{01860\ \ \ GTEST\_SKIP()\ <<\ \textcolor{stringliteral}{"{}Not\ applicable\ without\ internal::StringView."{}};}
+\DoxyCodeLine{01861\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01862\ \}}
+\DoxyCodeLine{01863\ }
+\DoxyCodeLine{01864\ \textcolor{comment}{//\ Tests\ EndsWith(s).}}
+\DoxyCodeLine{01865\ }
+\DoxyCodeLine{01866\ TEST(EndsWithTest,\ MatchesStringWithGivenSuffix)\ \{}
+\DoxyCodeLine{01867\ \ \ \textcolor{keyword}{const}\ Matcher<const\ char*>\ m1\ =\ EndsWith(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{01868\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{01869\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{01870\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{01871\ }
+\DoxyCodeLine{01872\ \ \ \textcolor{keyword}{const}\ Matcher<const\ std::string\&>\ m2\ =\ EndsWith(std::string(\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{01873\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{01874\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}Wow\ Hi\ Hi"{}}));}
+\DoxyCodeLine{01875\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}Super\ Hi"{}}));}
+\DoxyCodeLine{01876\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}i"{}}));}
+\DoxyCodeLine{01877\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}Hi\ "{}}));}
+\DoxyCodeLine{01878\ }
+\DoxyCodeLine{01879\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01880\ \ \ \textcolor{keyword}{const}\ Matcher<const\ internal::StringView\&>\ m4\ =}
+\DoxyCodeLine{01881\ \ \ \ \ \ \ EndsWith(internal::StringView(\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{01882\ \ \ EXPECT\_TRUE(m4.Matches(\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{01883\ \ \ EXPECT\_TRUE(m4.Matches(\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{01884\ \ \ EXPECT\_TRUE(m4.Matches(internal::StringView()));}
+\DoxyCodeLine{01885\ \ \ EXPECT\_TRUE(m4.Matches(internal::StringView(\textcolor{stringliteral}{"{}"{}})));}
+\DoxyCodeLine{01886\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01887\ \}}
+\DoxyCodeLine{01888\ }
+\DoxyCodeLine{01889\ TEST(EndsWithTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01890\ \ \ Matcher<const\ std::string>\ m\ =\ EndsWith(\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{01891\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}ends\ with\ \(\backslash\)"{}Hi\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{01892\ \}}
+\DoxyCodeLine{01893\ }
+\DoxyCodeLine{01894\ \textcolor{comment}{//\ Tests\ WhenBase64Unescaped.}}
+\DoxyCodeLine{01895\ }
+\DoxyCodeLine{01896\ TEST(WhenBase64UnescapedTest,\ MatchesUnescapedBase64Strings)\ \{}
+\DoxyCodeLine{01897\ \ \ \textcolor{keyword}{const}\ Matcher<const\ char*>\ m1\ =\ WhenBase64Unescaped(EndsWith(\textcolor{stringliteral}{"{}!"{}}));}
+\DoxyCodeLine{01898\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{stringliteral}{"{}invalid\ base64"{}}));}
+\DoxyCodeLine{01899\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{stringliteral}{"{}aGVsbG8gd29ybGQ="{}}));\ \ \textcolor{comment}{//\ hello\ world}}
+\DoxyCodeLine{01900\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}aGVsbG8gd29ybGQh"{}}));\ \ \ \textcolor{comment}{//\ hello\ world!}}
+\DoxyCodeLine{01901\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}+/-\/\_IQ"{}}));\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \(\backslash\)xfb\(\backslash\)xff\(\backslash\)xbf!}}
+\DoxyCodeLine{01902\ }
+\DoxyCodeLine{01903\ \ \ \textcolor{keyword}{const}\ Matcher<const\ std::string\&>\ m2\ =\ WhenBase64Unescaped(EndsWith(\textcolor{stringliteral}{"{}!"{}}));}
+\DoxyCodeLine{01904\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}invalid\ base64"{}}));}
+\DoxyCodeLine{01905\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}aGVsbG8gd29ybGQ="{}}));\ \ \textcolor{comment}{//\ hello\ world}}
+\DoxyCodeLine{01906\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}aGVsbG8gd29ybGQh"{}}));\ \ \ \textcolor{comment}{//\ hello\ world!}}
+\DoxyCodeLine{01907\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}+/-\/\_IQ"{}}));\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \(\backslash\)xfb\(\backslash\)xff\(\backslash\)xbf!}}
+\DoxyCodeLine{01908\ }
+\DoxyCodeLine{01909\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01910\ \ \ \textcolor{keyword}{const}\ Matcher<const\ internal::StringView\&>\ m3\ =}
+\DoxyCodeLine{01911\ \ \ \ \ \ \ WhenBase64Unescaped(EndsWith(\textcolor{stringliteral}{"{}!"{}}));}
+\DoxyCodeLine{01912\ \ \ EXPECT\_FALSE(m3.Matches(\textcolor{stringliteral}{"{}invalid\ base64"{}}));}
+\DoxyCodeLine{01913\ \ \ EXPECT\_FALSE(m3.Matches(\textcolor{stringliteral}{"{}aGVsbG8gd29ybGQ="{}}));\ \ \textcolor{comment}{//\ hello\ world}}
+\DoxyCodeLine{01914\ \ \ EXPECT\_TRUE(m3.Matches(\textcolor{stringliteral}{"{}aGVsbG8gd29ybGQh"{}}));\ \ \ \textcolor{comment}{//\ hello\ world!}}
+\DoxyCodeLine{01915\ \ \ EXPECT\_TRUE(m3.Matches(\textcolor{stringliteral}{"{}+/-\/\_IQ"{}}));\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \(\backslash\)xfb\(\backslash\)xff\(\backslash\)xbf!}}
+\DoxyCodeLine{01916\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01917\ \}}
+\DoxyCodeLine{01918\ }
+\DoxyCodeLine{01919\ TEST(WhenBase64UnescapedTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01920\ \ \ \textcolor{keyword}{const}\ Matcher<const\ char*>\ m\ =\ WhenBase64Unescaped(EndsWith(\textcolor{stringliteral}{"{}!"{}}));}
+\DoxyCodeLine{01921\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}matches\ after\ Base64Unescape\ ends\ with\ \(\backslash\)"{}!\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{01922\ \}}
+\DoxyCodeLine{01923\ }
+\DoxyCodeLine{01924\ \textcolor{comment}{//\ Tests\ MatchesRegex().}}
+\DoxyCodeLine{01925\ }
+\DoxyCodeLine{01926\ TEST(MatchesRegexTest,\ MatchesStringMatchingGivenRegex)\ \{}
+\DoxyCodeLine{01927\ \ \ \textcolor{keyword}{const}\ Matcher<const\ char*>\ m1\ =\ MatchesRegex(\textcolor{stringliteral}{"{}a.*z"{}});}
+\DoxyCodeLine{01928\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}az"{}}));}
+\DoxyCodeLine{01929\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}abcz"{}}));}
+\DoxyCodeLine{01930\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{01931\ }
+\DoxyCodeLine{01932\ \ \ \textcolor{keyword}{const}\ Matcher<const\ std::string\&>\ m2\ =\ MatchesRegex(\textcolor{keyword}{new}\ RE(\textcolor{stringliteral}{"{}a.*z"{}}));}
+\DoxyCodeLine{01933\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}azbz"{}}));}
+\DoxyCodeLine{01934\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}az1"{}}));}
+\DoxyCodeLine{01935\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}1az"{}}));}
+\DoxyCodeLine{01936\ }
+\DoxyCodeLine{01937\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01938\ \ \ \textcolor{keyword}{const}\ Matcher<const\ internal::StringView\&>\ m3\ =\ MatchesRegex(\textcolor{stringliteral}{"{}a.*z"{}});}
+\DoxyCodeLine{01939\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}az"{}})));}
+\DoxyCodeLine{01940\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}abcz"{}})));}
+\DoxyCodeLine{01941\ \ \ EXPECT\_FALSE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}1az"{}})));}
+\DoxyCodeLine{01942\ \ \ EXPECT\_FALSE(m3.Matches(internal::StringView()));}
+\DoxyCodeLine{01943\ \ \ \textcolor{keyword}{const}\ Matcher<const\ internal::StringView\&>\ m4\ =}
+\DoxyCodeLine{01944\ \ \ \ \ \ \ MatchesRegex(internal::StringView(\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{01945\ \ \ EXPECT\_TRUE(m4.Matches(internal::StringView(\textcolor{stringliteral}{"{}"{}})));}
+\DoxyCodeLine{01946\ \ \ EXPECT\_TRUE(m4.Matches(internal::StringView()));}
+\DoxyCodeLine{01947\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01948\ \}}
+\DoxyCodeLine{01949\ }
+\DoxyCodeLine{01950\ TEST(MatchesRegexTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01951\ \ \ Matcher<const\ std::string>\ m1\ =\ MatchesRegex(std::string(\textcolor{stringliteral}{"{}Hi.*"{}}));}
+\DoxyCodeLine{01952\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}matches\ regular\ expression\ \(\backslash\)"{}Hi.*\(\backslash\)"{}"{}},\ Describe(m1));}
+\DoxyCodeLine{01953\ }
+\DoxyCodeLine{01954\ \ \ Matcher<const\ char*>\ m2\ =\ MatchesRegex(\textcolor{keyword}{new}\ RE(\textcolor{stringliteral}{"{}a.*"{}}));}
+\DoxyCodeLine{01955\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}matches\ regular\ expression\ \(\backslash\)"{}a.*\(\backslash\)"{}"{}},\ Describe(m2));}
+\DoxyCodeLine{01956\ }
+\DoxyCodeLine{01957\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01958\ \ \ Matcher<const\ internal::StringView>\ m3\ =\ MatchesRegex(\textcolor{keyword}{new}\ RE(\textcolor{stringliteral}{"{}0.*"{}}));}
+\DoxyCodeLine{01959\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}matches\ regular\ expression\ \(\backslash\)"{}0.*\(\backslash\)"{}"{}},\ Describe(m3));}
+\DoxyCodeLine{01960\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01961\ \}}
+\DoxyCodeLine{01962\ }
+\DoxyCodeLine{01963\ \textcolor{comment}{//\ Tests\ ContainsRegex().}}
+\DoxyCodeLine{01964\ }
+\DoxyCodeLine{01965\ TEST(ContainsRegexTest,\ MatchesStringContainingGivenRegex)\ \{}
+\DoxyCodeLine{01966\ \ \ \textcolor{keyword}{const}\ Matcher<const\ char*>\ m1\ =\ ContainsRegex(std::string(\textcolor{stringliteral}{"{}a.*z"{}}));}
+\DoxyCodeLine{01967\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}az"{}}));}
+\DoxyCodeLine{01968\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{stringliteral}{"{}0abcz1"{}}));}
+\DoxyCodeLine{01969\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{01970\ }
+\DoxyCodeLine{01971\ \ \ \textcolor{keyword}{const}\ Matcher<const\ std::string\&>\ m2\ =\ ContainsRegex(\textcolor{keyword}{new}\ RE(\textcolor{stringliteral}{"{}a.*z"{}}));}
+\DoxyCodeLine{01972\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}azbz"{}}));}
+\DoxyCodeLine{01973\ \ \ EXPECT\_TRUE(m2.Matches(\textcolor{stringliteral}{"{}az1"{}}));}
+\DoxyCodeLine{01974\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{stringliteral}{"{}1a"{}}));}
+\DoxyCodeLine{01975\ }
+\DoxyCodeLine{01976\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01977\ \ \ \textcolor{keyword}{const}\ Matcher<const\ internal::StringView\&>\ m3\ =\ ContainsRegex(\textcolor{keyword}{new}\ RE(\textcolor{stringliteral}{"{}a.*z"{}}));}
+\DoxyCodeLine{01978\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}azbz"{}})));}
+\DoxyCodeLine{01979\ \ \ EXPECT\_TRUE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}az1"{}})));}
+\DoxyCodeLine{01980\ \ \ EXPECT\_FALSE(m3.Matches(internal::StringView(\textcolor{stringliteral}{"{}1a"{}})));}
+\DoxyCodeLine{01981\ \ \ EXPECT\_FALSE(m3.Matches(internal::StringView()));}
+\DoxyCodeLine{01982\ \ \ \textcolor{keyword}{const}\ Matcher<const\ internal::StringView\&>\ m4\ =}
+\DoxyCodeLine{01983\ \ \ \ \ \ \ ContainsRegex(internal::StringView(\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{01984\ \ \ EXPECT\_TRUE(m4.Matches(internal::StringView(\textcolor{stringliteral}{"{}"{}})));}
+\DoxyCodeLine{01985\ \ \ EXPECT\_TRUE(m4.Matches(internal::StringView()));}
+\DoxyCodeLine{01986\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01987\ \}}
+\DoxyCodeLine{01988\ }
+\DoxyCodeLine{01989\ TEST(ContainsRegexTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{01990\ \ \ Matcher<const\ std::string>\ m1\ =\ ContainsRegex(\textcolor{stringliteral}{"{}Hi.*"{}});}
+\DoxyCodeLine{01991\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}contains\ regular\ expression\ \(\backslash\)"{}Hi.*\(\backslash\)"{}"{}},\ Describe(m1));}
+\DoxyCodeLine{01992\ }
+\DoxyCodeLine{01993\ \ \ Matcher<const\ char*>\ m2\ =\ ContainsRegex(\textcolor{keyword}{new}\ RE(\textcolor{stringliteral}{"{}a.*"{}}));}
+\DoxyCodeLine{01994\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}contains\ regular\ expression\ \(\backslash\)"{}a.*\(\backslash\)"{}"{}},\ Describe(m2));}
+\DoxyCodeLine{01995\ }
+\DoxyCodeLine{01996\ \textcolor{preprocessor}{\#if\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{01997\ \ \ Matcher<const\ internal::StringView>\ m3\ =\ ContainsRegex(\textcolor{keyword}{new}\ RE(\textcolor{stringliteral}{"{}0.*"{}}));}
+\DoxyCodeLine{01998\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}contains\ regular\ expression\ \(\backslash\)"{}0.*\(\backslash\)"{}"{}},\ Describe(m3));}
+\DoxyCodeLine{01999\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_INTERNAL\_HAS\_STRING\_VIEW}}
+\DoxyCodeLine{02000\ \}}
+\DoxyCodeLine{02001\ }
+\DoxyCodeLine{02002\ \textcolor{comment}{//\ Tests\ for\ wide\ strings.}}
+\DoxyCodeLine{02003\ \textcolor{preprocessor}{\#if\ GTEST\_HAS\_STD\_WSTRING}}
+\DoxyCodeLine{02004\ TEST(StdWideStrEqTest,\ MatchesEqual)\ \{}
+\DoxyCodeLine{02005\ \ \ Matcher<const\ wchar\_t*>\ m\ =\ StrEq(::std::wstring(L\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{02006\ \ \ EXPECT\_TRUE(m.Matches(L\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{02007\ \ \ EXPECT\_FALSE(m.Matches(L\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{02008\ \ \ EXPECT\_FALSE(m.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{02009\ }
+\DoxyCodeLine{02010\ \ \ Matcher<const\ ::std::wstring\&>\ m2\ =\ StrEq(L\textcolor{stringliteral}{"{}Hello"{}});}
+\DoxyCodeLine{02011\ \ \ EXPECT\_TRUE(m2.Matches(L\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{02012\ \ \ EXPECT\_FALSE(m2.Matches(L\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{02013\ }
+\DoxyCodeLine{02014\ \ \ Matcher<const\ ::std::wstring\&>\ m3\ =\ StrEq(L\textcolor{stringliteral}{"{}\(\backslash\)xD3\(\backslash\)x576\(\backslash\)x8D3\(\backslash\)xC74D"{}});}
+\DoxyCodeLine{02015\ \ \ EXPECT\_TRUE(m3.Matches(L\textcolor{stringliteral}{"{}\(\backslash\)xD3\(\backslash\)x576\(\backslash\)x8D3\(\backslash\)xC74D"{}}));}
+\DoxyCodeLine{02016\ \ \ EXPECT\_FALSE(m3.Matches(L\textcolor{stringliteral}{"{}\(\backslash\)xD3\(\backslash\)x576\(\backslash\)x8D3\(\backslash\)xC74E"{}}));}
+\DoxyCodeLine{02017\ }
+\DoxyCodeLine{02018\ \ \ ::std::wstring\ str(L\textcolor{stringliteral}{"{}01204500800"{}});}
+\DoxyCodeLine{02019\ \ \ str[3]\ =\ L\textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{02020\ \ \ Matcher<const\ ::std::wstring\&>\ m4\ =\ StrEq(str);}
+\DoxyCodeLine{02021\ \ \ EXPECT\_TRUE(m4.Matches(str));}
+\DoxyCodeLine{02022\ \ \ str[0]\ =\ str[6]\ =\ str[7]\ =\ str[9]\ =\ str[10]\ =\ L\textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{02023\ \ \ Matcher<const\ ::std::wstring\&>\ m5\ =\ StrEq(str);}
+\DoxyCodeLine{02024\ \ \ EXPECT\_TRUE(m5.Matches(str));}
+\DoxyCodeLine{02025\ \}}
+\DoxyCodeLine{02026\ }
+\DoxyCodeLine{02027\ TEST(StdWideStrEqTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{02028\ \ \ Matcher<::std::wstring>\ m\ =\ StrEq(L\textcolor{stringliteral}{"{}Hi-\/\(\backslash\)'\(\backslash\)"{}?\(\backslash\)\(\backslash\)\(\backslash\)a\(\backslash\)b\(\backslash\)f\(\backslash\)n\(\backslash\)r\(\backslash\)t\(\backslash\)v"{}});}
+\DoxyCodeLine{02029\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ L\(\backslash\)"{}Hi-\/\(\backslash\)'\(\backslash\)\(\backslash\)\(\backslash\)"{}?\(\backslash\)\(\backslash\)\(\backslash\)\(\backslash\)\(\backslash\)\(\backslash\)a\(\backslash\)\(\backslash\)b\(\backslash\)\(\backslash\)f\(\backslash\)\(\backslash\)n\(\backslash\)\(\backslash\)r\(\backslash\)\(\backslash\)t\(\backslash\)\(\backslash\)v\(\backslash\)"{}"{}},}
+\DoxyCodeLine{02030\ \ \ \ \ \ \ \ \ \ \ \ \ Describe(m));}
+\DoxyCodeLine{02031\ }
+\DoxyCodeLine{02032\ \ \ Matcher<::std::wstring>\ m2\ =\ StrEq(L\textcolor{stringliteral}{"{}\(\backslash\)xD3\(\backslash\)x576\(\backslash\)x8D3\(\backslash\)xC74D"{}});}
+\DoxyCodeLine{02033\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ L\(\backslash\)"{}\(\backslash\)\(\backslash\)xD3\(\backslash\)\(\backslash\)x576\(\backslash\)\(\backslash\)x8D3\(\backslash\)\(\backslash\)xC74D\(\backslash\)"{}"{}},\ Describe(m2));}
+\DoxyCodeLine{02034\ }
+\DoxyCodeLine{02035\ \ \ ::std::wstring\ str(L\textcolor{stringliteral}{"{}01204500800"{}});}
+\DoxyCodeLine{02036\ \ \ str[3]\ =\ L\textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{02037\ \ \ Matcher<const\ ::std::wstring\&>\ m4\ =\ StrEq(str);}
+\DoxyCodeLine{02038\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ L\(\backslash\)"{}012\(\backslash\)\(\backslash\)04500800\(\backslash\)"{}"{}},\ Describe(m4));}
+\DoxyCodeLine{02039\ \ \ str[0]\ =\ str[6]\ =\ str[7]\ =\ str[9]\ =\ str[10]\ =\ L\textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{02040\ \ \ Matcher<const\ ::std::wstring\&>\ m5\ =\ StrEq(str);}
+\DoxyCodeLine{02041\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ L\(\backslash\)"{}\(\backslash\)\(\backslash\)012\(\backslash\)\(\backslash\)045\(\backslash\)\(\backslash\)0\(\backslash\)\(\backslash\)08\(\backslash\)\(\backslash\)0\(\backslash\)\(\backslash\)0\(\backslash\)"{}"{}},\ Describe(m5));}
+\DoxyCodeLine{02042\ \}}
+\DoxyCodeLine{02043\ }
+\DoxyCodeLine{02044\ TEST(StdWideStrNeTest,\ MatchesUnequalString)\ \{}
+\DoxyCodeLine{02045\ \ \ Matcher<const\ wchar\_t*>\ m\ =\ StrNe(L\textcolor{stringliteral}{"{}Hello"{}});}
+\DoxyCodeLine{02046\ \ \ EXPECT\_TRUE(m.Matches(L\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{02047\ \ \ EXPECT\_TRUE(m.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{02048\ \ \ EXPECT\_FALSE(m.Matches(L\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{02049\ }
+\DoxyCodeLine{02050\ \ \ Matcher<::std::wstring>\ m2\ =\ StrNe(::std::wstring(L\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{02051\ \ \ EXPECT\_TRUE(m2.Matches(L\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{02052\ \ \ EXPECT\_FALSE(m2.Matches(L\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{02053\ \}}
+\DoxyCodeLine{02054\ }
+\DoxyCodeLine{02055\ TEST(StdWideStrNeTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{02056\ \ \ Matcher<const\ wchar\_t*>\ m\ =\ StrNe(L\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{02057\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ equal\ to\ L\(\backslash\)"{}Hi\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{02058\ \}}
+\DoxyCodeLine{02059\ }
+\DoxyCodeLine{02060\ TEST(StdWideStrCaseEqTest,\ MatchesEqualStringIgnoringCase)\ \{}
+\DoxyCodeLine{02061\ \ \ Matcher<const\ wchar\_t*>\ m\ =\ StrCaseEq(::std::wstring(L\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{02062\ \ \ EXPECT\_TRUE(m.Matches(L\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{02063\ \ \ EXPECT\_TRUE(m.Matches(L\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{02064\ \ \ EXPECT\_FALSE(m.Matches(L\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{02065\ \ \ EXPECT\_FALSE(m.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{02066\ }
+\DoxyCodeLine{02067\ \ \ Matcher<const\ ::std::wstring\&>\ m2\ =\ StrCaseEq(L\textcolor{stringliteral}{"{}Hello"{}});}
+\DoxyCodeLine{02068\ \ \ EXPECT\_TRUE(m2.Matches(L\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{02069\ \ \ EXPECT\_FALSE(m2.Matches(L\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{02070\ \}}
+\DoxyCodeLine{02071\ }
+\DoxyCodeLine{02072\ TEST(StdWideStrCaseEqTest,\ MatchesEqualStringWith0IgnoringCase)\ \{}
+\DoxyCodeLine{02073\ \ \ ::std::wstring\ str1(L\textcolor{stringliteral}{"{}oabocdooeoo"{}});}
+\DoxyCodeLine{02074\ \ \ ::std::wstring\ str2(L\textcolor{stringliteral}{"{}OABOCDOOEOO"{}});}
+\DoxyCodeLine{02075\ \ \ Matcher<const\ ::std::wstring\&>\ m0\ =\ StrCaseEq(str1);}
+\DoxyCodeLine{02076\ \ \ EXPECT\_FALSE(m0.Matches(str2\ +\ ::std::wstring(1,\ L\textcolor{charliteral}{'\(\backslash\)0'})));}
+\DoxyCodeLine{02077\ }
+\DoxyCodeLine{02078\ \ \ str1[3]\ =\ str2[3]\ =\ L\textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{02079\ \ \ Matcher<const\ ::std::wstring\&>\ m1\ =\ StrCaseEq(str1);}
+\DoxyCodeLine{02080\ \ \ EXPECT\_TRUE(m1.Matches(str2));}
+\DoxyCodeLine{02081\ }
+\DoxyCodeLine{02082\ \ \ str1[0]\ =\ str1[6]\ =\ str1[7]\ =\ str1[10]\ =\ L\textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{02083\ \ \ str2[0]\ =\ str2[6]\ =\ str2[7]\ =\ str2[10]\ =\ L\textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{02084\ \ \ Matcher<const\ ::std::wstring\&>\ m2\ =\ StrCaseEq(str1);}
+\DoxyCodeLine{02085\ \ \ str1[9]\ =\ str2[9]\ =\ L\textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{02086\ \ \ EXPECT\_FALSE(m2.Matches(str2));}
+\DoxyCodeLine{02087\ }
+\DoxyCodeLine{02088\ \ \ Matcher<const\ ::std::wstring\&>\ m3\ =\ StrCaseEq(str1);}
+\DoxyCodeLine{02089\ \ \ EXPECT\_TRUE(m3.Matches(str2));}
+\DoxyCodeLine{02090\ }
+\DoxyCodeLine{02091\ \ \ EXPECT\_FALSE(m3.Matches(str2\ +\ L\textcolor{stringliteral}{"{}x"{}}));}
+\DoxyCodeLine{02092\ \ \ str2.append(1,\ L\textcolor{charliteral}{'\(\backslash\)0'});}
+\DoxyCodeLine{02093\ \ \ EXPECT\_FALSE(m3.Matches(str2));}
+\DoxyCodeLine{02094\ \ \ EXPECT\_FALSE(m3.Matches(::std::wstring(str2,\ 0,\ 9)));}
+\DoxyCodeLine{02095\ \}}
+\DoxyCodeLine{02096\ }
+\DoxyCodeLine{02097\ TEST(StdWideStrCaseEqTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{02098\ \ \ Matcher<::std::wstring>\ m\ =\ StrCaseEq(L\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{02099\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ (ignoring\ case)\ L\(\backslash\)"{}Hi\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{02100\ \}}
+\DoxyCodeLine{02101\ }
+\DoxyCodeLine{02102\ TEST(StdWideStrCaseNeTest,\ MatchesUnequalStringIgnoringCase)\ \{}
+\DoxyCodeLine{02103\ \ \ Matcher<const\ wchar\_t*>\ m\ =\ StrCaseNe(L\textcolor{stringliteral}{"{}Hello"{}});}
+\DoxyCodeLine{02104\ \ \ EXPECT\_TRUE(m.Matches(L\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{02105\ \ \ EXPECT\_TRUE(m.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{02106\ \ \ EXPECT\_FALSE(m.Matches(L\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{02107\ \ \ EXPECT\_FALSE(m.Matches(L\textcolor{stringliteral}{"{}hello"{}}));}
+\DoxyCodeLine{02108\ }
+\DoxyCodeLine{02109\ \ \ Matcher<::std::wstring>\ m2\ =\ StrCaseNe(::std::wstring(L\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{02110\ \ \ EXPECT\_TRUE(m2.Matches(L\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{02111\ \ \ EXPECT\_FALSE(m2.Matches(L\textcolor{stringliteral}{"{}Hello"{}}));}
+\DoxyCodeLine{02112\ \}}
+\DoxyCodeLine{02113\ }
+\DoxyCodeLine{02114\ TEST(StdWideStrCaseNeTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{02115\ \ \ Matcher<const\ wchar\_t*>\ m\ =\ StrCaseNe(L\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{02116\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ equal\ to\ (ignoring\ case)\ L\(\backslash\)"{}Hi\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{02117\ \}}
+\DoxyCodeLine{02118\ }
+\DoxyCodeLine{02119\ \textcolor{comment}{//\ Tests\ that\ HasSubstr()\ works\ for\ matching\ wstring-\/typed\ values.}}
+\DoxyCodeLine{02120\ TEST(StdWideHasSubstrTest,\ WorksForStringClasses)\ \{}
+\DoxyCodeLine{02121\ \ \ \textcolor{keyword}{const}\ Matcher<::std::wstring>\ m1\ =\ HasSubstr(L\textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{02122\ \ \ EXPECT\_TRUE(m1.Matches(::std::wstring(L\textcolor{stringliteral}{"{}I\ love\ food."{}})));}
+\DoxyCodeLine{02123\ \ \ EXPECT\_FALSE(m1.Matches(::std::wstring(L\textcolor{stringliteral}{"{}tofo"{}})));}
+\DoxyCodeLine{02124\ }
+\DoxyCodeLine{02125\ \ \ \textcolor{keyword}{const}\ Matcher<const\ ::std::wstring\&>\ m2\ =\ HasSubstr(L\textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{02126\ \ \ EXPECT\_TRUE(m2.Matches(::std::wstring(L\textcolor{stringliteral}{"{}I\ love\ food."{}})));}
+\DoxyCodeLine{02127\ \ \ EXPECT\_FALSE(m2.Matches(::std::wstring(L\textcolor{stringliteral}{"{}tofo"{}})));}
+\DoxyCodeLine{02128\ \}}
+\DoxyCodeLine{02129\ }
+\DoxyCodeLine{02130\ \textcolor{comment}{//\ Tests\ that\ HasSubstr()\ works\ for\ matching\ C-\/wide-\/string-\/typed\ values.}}
+\DoxyCodeLine{02131\ TEST(StdWideHasSubstrTest,\ WorksForCStrings)\ \{}
+\DoxyCodeLine{02132\ \ \ \textcolor{keyword}{const}\ Matcher<wchar\_t*>\ m1\ =\ HasSubstr(L\textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{02133\ \ \ EXPECT\_TRUE(m1.Matches(\textcolor{keyword}{const\_cast<}\textcolor{keywordtype}{wchar\_t}*\textcolor{keyword}{>}(L\textcolor{stringliteral}{"{}I\ love\ food."{}})));}
+\DoxyCodeLine{02134\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{const\_cast<}\textcolor{keywordtype}{wchar\_t}*\textcolor{keyword}{>}(L\textcolor{stringliteral}{"{}tofo"{}})));}
+\DoxyCodeLine{02135\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{02136\ }
+\DoxyCodeLine{02137\ \ \ \textcolor{keyword}{const}\ Matcher<const\ wchar\_t*>\ m2\ =\ HasSubstr(L\textcolor{stringliteral}{"{}foo"{}});}
+\DoxyCodeLine{02138\ \ \ EXPECT\_TRUE(m2.Matches(L\textcolor{stringliteral}{"{}I\ love\ food."{}}));}
+\DoxyCodeLine{02139\ \ \ EXPECT\_FALSE(m2.Matches(L\textcolor{stringliteral}{"{}tofo"{}}));}
+\DoxyCodeLine{02140\ \ \ EXPECT\_FALSE(m2.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{02141\ \}}
+\DoxyCodeLine{02142\ }
+\DoxyCodeLine{02143\ \textcolor{comment}{//\ Tests\ that\ HasSubstr(s)\ describes\ itself\ properly.}}
+\DoxyCodeLine{02144\ TEST(StdWideHasSubstrTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{02145\ \ \ Matcher<::std::wstring>\ m\ =\ HasSubstr(L\textcolor{stringliteral}{"{}foo\(\backslash\)n\(\backslash\)"{}"{}});}
+\DoxyCodeLine{02146\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}has\ substring\ L\(\backslash\)"{}foo\(\backslash\)\(\backslash\)n\(\backslash\)\(\backslash\)\(\backslash\)"{}\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{02147\ \}}
+\DoxyCodeLine{02148\ }
+\DoxyCodeLine{02149\ \textcolor{comment}{//\ Tests\ StartsWith(s).}}
+\DoxyCodeLine{02150\ }
+\DoxyCodeLine{02151\ TEST(StdWideStartsWithTest,\ MatchesStringWithGivenPrefix)\ \{}
+\DoxyCodeLine{02152\ \ \ \textcolor{keyword}{const}\ Matcher<const\ wchar\_t*>\ m1\ =\ StartsWith(::std::wstring(L\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{02153\ \ \ EXPECT\_TRUE(m1.Matches(L\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{02154\ \ \ EXPECT\_TRUE(m1.Matches(L\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{02155\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{02156\ }
+\DoxyCodeLine{02157\ \ \ \textcolor{keyword}{const}\ Matcher<const\ ::std::wstring\&>\ m2\ =\ StartsWith(L\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{02158\ \ \ EXPECT\_TRUE(m2.Matches(L\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{02159\ \ \ EXPECT\_TRUE(m2.Matches(L\textcolor{stringliteral}{"{}Hi\ Hi!"{}}));}
+\DoxyCodeLine{02160\ \ \ EXPECT\_TRUE(m2.Matches(L\textcolor{stringliteral}{"{}High"{}}));}
+\DoxyCodeLine{02161\ \ \ EXPECT\_FALSE(m2.Matches(L\textcolor{stringliteral}{"{}H"{}}));}
+\DoxyCodeLine{02162\ \ \ EXPECT\_FALSE(m2.Matches(L\textcolor{stringliteral}{"{}\ Hi"{}}));}
+\DoxyCodeLine{02163\ \}}
+\DoxyCodeLine{02164\ }
+\DoxyCodeLine{02165\ TEST(StdWideStartsWithTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{02166\ \ \ Matcher<const\ ::std::wstring>\ m\ =\ StartsWith(L\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{02167\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}starts\ with\ L\(\backslash\)"{}Hi\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{02168\ \}}
+\DoxyCodeLine{02169\ }
+\DoxyCodeLine{02170\ \textcolor{comment}{//\ Tests\ EndsWith(s).}}
+\DoxyCodeLine{02171\ }
+\DoxyCodeLine{02172\ TEST(StdWideEndsWithTest,\ MatchesStringWithGivenSuffix)\ \{}
+\DoxyCodeLine{02173\ \ \ \textcolor{keyword}{const}\ Matcher<const\ wchar\_t*>\ m1\ =\ EndsWith(L\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{02174\ \ \ EXPECT\_TRUE(m1.Matches(L\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{02175\ \ \ EXPECT\_TRUE(m1.Matches(L\textcolor{stringliteral}{"{}"{}}));}
+\DoxyCodeLine{02176\ \ \ EXPECT\_FALSE(m1.Matches(\textcolor{keyword}{nullptr}));}
+\DoxyCodeLine{02177\ }
+\DoxyCodeLine{02178\ \ \ \textcolor{keyword}{const}\ Matcher<const\ ::std::wstring\&>\ m2\ =\ EndsWith(::std::wstring(L\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{02179\ \ \ EXPECT\_TRUE(m2.Matches(L\textcolor{stringliteral}{"{}Hi"{}}));}
+\DoxyCodeLine{02180\ \ \ EXPECT\_TRUE(m2.Matches(L\textcolor{stringliteral}{"{}Wow\ Hi\ Hi"{}}));}
+\DoxyCodeLine{02181\ \ \ EXPECT\_TRUE(m2.Matches(L\textcolor{stringliteral}{"{}Super\ Hi"{}}));}
+\DoxyCodeLine{02182\ \ \ EXPECT\_FALSE(m2.Matches(L\textcolor{stringliteral}{"{}i"{}}));}
+\DoxyCodeLine{02183\ \ \ EXPECT\_FALSE(m2.Matches(L\textcolor{stringliteral}{"{}Hi\ "{}}));}
+\DoxyCodeLine{02184\ \}}
+\DoxyCodeLine{02185\ }
+\DoxyCodeLine{02186\ TEST(StdWideEndsWithTest,\ CanDescribeSelf)\ \{}
+\DoxyCodeLine{02187\ \ \ Matcher<const\ ::std::wstring>\ m\ =\ EndsWith(L\textcolor{stringliteral}{"{}Hi"{}});}
+\DoxyCodeLine{02188\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}ends\ with\ L\(\backslash\)"{}Hi\(\backslash\)"{}"{}},\ Describe(m));}
+\DoxyCodeLine{02189\ \}}
+\DoxyCodeLine{02190\ }
+\DoxyCodeLine{02191\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_HAS\_STD\_WSTRING}}
+\DoxyCodeLine{02192\ }
+\DoxyCodeLine{02193\ TEST(ExplainMatchResultTest,\ WorksWithPolymorphicMatcher)\ \{}
+\DoxyCodeLine{02194\ \ \ StringMatchResultListener\ listener1;}
+\DoxyCodeLine{02195\ \ \ EXPECT\_TRUE(ExplainMatchResult(PolymorphicIsEven(),\ 42,\ \&listener1));}
+\DoxyCodeLine{02196\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}\%\ 2\ ==\ 0"{}},\ listener1.str());}
+\DoxyCodeLine{02197\ }
+\DoxyCodeLine{02198\ \ \ StringMatchResultListener\ listener2;}
+\DoxyCodeLine{02199\ \ \ EXPECT\_FALSE(ExplainMatchResult(Ge(42),\ 1.5,\ \&listener2));}
+\DoxyCodeLine{02200\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}"{}},\ listener2.str());}
+\DoxyCodeLine{02201\ \}}
+\DoxyCodeLine{02202\ }
+\DoxyCodeLine{02203\ TEST(ExplainMatchResultTest,\ WorksWithMonomorphicMatcher)\ \{}
+\DoxyCodeLine{02204\ \ \ \textcolor{keyword}{const}\ Matcher<int>\ is\_even\ =\ PolymorphicIsEven();}
+\DoxyCodeLine{02205\ \ \ StringMatchResultListener\ listener1;}
+\DoxyCodeLine{02206\ \ \ EXPECT\_TRUE(ExplainMatchResult(is\_even,\ 42,\ \&listener1));}
+\DoxyCodeLine{02207\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}\%\ 2\ ==\ 0"{}},\ listener1.str());}
+\DoxyCodeLine{02208\ }
+\DoxyCodeLine{02209\ \ \ \textcolor{keyword}{const}\ Matcher<const\ double\&>\ is\_zero\ =\ Eq(0);}
+\DoxyCodeLine{02210\ \ \ StringMatchResultListener\ listener2;}
+\DoxyCodeLine{02211\ \ \ EXPECT\_FALSE(ExplainMatchResult(is\_zero,\ 1.5,\ \&listener2));}
+\DoxyCodeLine{02212\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}"{}},\ listener2.str());}
+\DoxyCodeLine{02213\ \}}
+\DoxyCodeLine{02214\ }
+\DoxyCodeLine{02215\ MATCHER(ConstructNoArg,\ \textcolor{stringliteral}{"{}"{}})\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{02216\ MATCHER\_P(Construct1Arg,\ arg1,\ \textcolor{stringliteral}{"{}"{}})\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{02217\ MATCHER\_P2(Construct2Args,\ arg1,\ arg2,\ \textcolor{stringliteral}{"{}"{}})\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{02218\ }
+\DoxyCodeLine{02219\ TEST(MatcherConstruct,\ ExplicitVsImplicit)\ \{}
+\DoxyCodeLine{02220\ \ \ \{}
+\DoxyCodeLine{02221\ \ \ \ \ \textcolor{comment}{//\ No\ arg\ constructor\ can\ be\ constructed\ with\ empty\ brace.}}
+\DoxyCodeLine{02222\ \ \ \ \ ConstructNoArgMatcher\ m\ =\ \{\};}
+\DoxyCodeLine{02223\ \ \ \ \ (void)m;}
+\DoxyCodeLine{02224\ \ \ \ \ \textcolor{comment}{//\ And\ with\ no\ args}}
+\DoxyCodeLine{02225\ \ \ \ \ ConstructNoArgMatcher\ m2;}
+\DoxyCodeLine{02226\ \ \ \ \ (void)m2;}
+\DoxyCodeLine{02227\ \ \ \}}
+\DoxyCodeLine{02228\ \ \ \{}
+\DoxyCodeLine{02229\ \ \ \ \ \textcolor{comment}{//\ The\ one\ arg\ constructor\ has\ an\ explicit\ constructor.}}
+\DoxyCodeLine{02230\ \ \ \ \ \textcolor{comment}{//\ This\ is\ to\ prevent\ the\ implicit\ conversion.}}
+\DoxyCodeLine{02231\ \ \ \ \ \textcolor{keyword}{using\ }M\ =\ Construct1ArgMatcherP<int>;}
+\DoxyCodeLine{02232\ \ \ \ \ EXPECT\_TRUE((std::is\_constructible<M,\ int>::value));}
+\DoxyCodeLine{02233\ \ \ \ \ EXPECT\_FALSE((std::is\_convertible<int,\ M>::value));}
+\DoxyCodeLine{02234\ \ \ \}}
+\DoxyCodeLine{02235\ \ \ \{}
+\DoxyCodeLine{02236\ \ \ \ \ \textcolor{comment}{//\ Multiple\ arg\ matchers\ can\ be\ constructed\ with\ an\ implicit\ construction.}}
+\DoxyCodeLine{02237\ \ \ \ \ Construct2ArgsMatcherP2<int,\ double>\ m\ =\ \{1,\ 2.2\};}
+\DoxyCodeLine{02238\ \ \ \ \ (void)m;}
+\DoxyCodeLine{02239\ \ \ \}}
+\DoxyCodeLine{02240\ \}}
+\DoxyCodeLine{02241\ }
+\DoxyCodeLine{02242\ MATCHER\_P(Really,\ inner\_matcher,\ \textcolor{stringliteral}{"{}"{}})\ \{}
+\DoxyCodeLine{02243\ \ \ \textcolor{keywordflow}{return}\ ExplainMatchResult(inner\_matcher,\ arg,\ result\_listener);}
+\DoxyCodeLine{02244\ \}}
+\DoxyCodeLine{02245\ }
+\DoxyCodeLine{02246\ TEST(ExplainMatchResultTest,\ WorksInsideMATCHER)\ \{}
+\DoxyCodeLine{02247\ \ \ EXPECT\_THAT(0,\ Really(Eq(0)));}
+\DoxyCodeLine{02248\ \}}
+\DoxyCodeLine{02249\ }
+\DoxyCodeLine{02250\ TEST(DescribeMatcherTest,\ WorksWithValue)\ \{}
+\DoxyCodeLine{02251\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ equal\ to\ 42"{}},\ DescribeMatcher<int>(42));}
+\DoxyCodeLine{02252\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ equal\ to\ 42"{}},\ DescribeMatcher<int>(42,\ \textcolor{keyword}{true}));}
+\DoxyCodeLine{02253\ \}}
+\DoxyCodeLine{02254\ }
+\DoxyCodeLine{02255\ TEST(DescribeMatcherTest,\ WorksWithMonomorphicMatcher)\ \{}
+\DoxyCodeLine{02256\ \ \ \textcolor{keyword}{const}\ Matcher<int>\ monomorphic\ =\ Le(0);}
+\DoxyCodeLine{02257\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ <=\ 0"{}},\ DescribeMatcher<int>(monomorphic));}
+\DoxyCodeLine{02258\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}isn't\ <=\ 0"{}},\ DescribeMatcher<int>(monomorphic,\ \textcolor{keyword}{true}));}
+\DoxyCodeLine{02259\ \}}
+\DoxyCodeLine{02260\ }
+\DoxyCodeLine{02261\ TEST(DescribeMatcherTest,\ WorksWithPolymorphicMatcher)\ \{}
+\DoxyCodeLine{02262\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ even"{}},\ DescribeMatcher<int>(PolymorphicIsEven()));}
+\DoxyCodeLine{02263\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ odd"{}},\ DescribeMatcher<int>(PolymorphicIsEven(),\ \textcolor{keyword}{true}));}
+\DoxyCodeLine{02264\ \}}
+\DoxyCodeLine{02265\ }
+\DoxyCodeLine{02266\ MATCHER\_P(FieldIIs,\ inner\_matcher,\ \textcolor{stringliteral}{"{}"{}})\ \{}
+\DoxyCodeLine{02267\ \ \ \textcolor{keywordflow}{return}\ ExplainMatchResult(inner\_matcher,\ arg.i,\ result\_listener);}
+\DoxyCodeLine{02268\ \}}
+\DoxyCodeLine{02269\ }
+\DoxyCodeLine{02270\ \textcolor{preprocessor}{\#if\ GTEST\_HAS\_RTTI}}
+\DoxyCodeLine{02271\ TEST(WhenDynamicCastToTest,\ SameType)\ \{}
+\DoxyCodeLine{02272\ \ \ Derived\ derived;}
+\DoxyCodeLine{02273\ \ \ derived.i\ =\ 4;}
+\DoxyCodeLine{02274\ }
+\DoxyCodeLine{02275\ \ \ \textcolor{comment}{//\ Right\ type.\ A\ pointer\ is\ passed\ down.}}
+\DoxyCodeLine{02276\ \ \ \mbox{\hyperlink{classBase}{Base}}*\ as\_base\_ptr\ =\ \&derived;}
+\DoxyCodeLine{02277\ \ \ EXPECT\_THAT(as\_base\_ptr,\ WhenDynamicCastTo<Derived*>(Not(IsNull())));}
+\DoxyCodeLine{02278\ \ \ EXPECT\_THAT(as\_base\_ptr,\ WhenDynamicCastTo<Derived*>(Pointee(FieldIIs(4))));}
+\DoxyCodeLine{02279\ \ \ EXPECT\_THAT(as\_base\_ptr,}
+\DoxyCodeLine{02280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Not(WhenDynamicCastTo<Derived*>(Pointee(FieldIIs(5)))));}
+\DoxyCodeLine{02281\ \}}
+\DoxyCodeLine{02282\ }
+\DoxyCodeLine{02283\ TEST(WhenDynamicCastToTest,\ WrongTypes)\ \{}
+\DoxyCodeLine{02284\ \ \ \mbox{\hyperlink{classBase}{Base}}\ base;}
+\DoxyCodeLine{02285\ \ \ Derived\ derived;}
+\DoxyCodeLine{02286\ \ \ OtherDerived\ other\_derived;}
+\DoxyCodeLine{02287\ }
+\DoxyCodeLine{02288\ \ \ \textcolor{comment}{//\ Wrong\ types.\ NULL\ is\ passed.}}
+\DoxyCodeLine{02289\ \ \ EXPECT\_THAT(\&base,\ Not(WhenDynamicCastTo<Derived*>(Pointee(\_))));}
+\DoxyCodeLine{02290\ \ \ EXPECT\_THAT(\&base,\ WhenDynamicCastTo<Derived*>(IsNull()));}
+\DoxyCodeLine{02291\ \ \ \mbox{\hyperlink{classBase}{Base}}*\ as\_base\_ptr\ =\ \&derived;}
+\DoxyCodeLine{02292\ \ \ EXPECT\_THAT(as\_base\_ptr,\ Not(WhenDynamicCastTo<OtherDerived*>(Pointee(\_))));}
+\DoxyCodeLine{02293\ \ \ EXPECT\_THAT(as\_base\_ptr,\ WhenDynamicCastTo<OtherDerived*>(IsNull()));}
+\DoxyCodeLine{02294\ \ \ as\_base\_ptr\ =\ \&other\_derived;}
+\DoxyCodeLine{02295\ \ \ EXPECT\_THAT(as\_base\_ptr,\ Not(WhenDynamicCastTo<Derived*>(Pointee(\_))));}
+\DoxyCodeLine{02296\ \ \ EXPECT\_THAT(as\_base\_ptr,\ WhenDynamicCastTo<Derived*>(IsNull()));}
+\DoxyCodeLine{02297\ \}}
+\DoxyCodeLine{02298\ }
+\DoxyCodeLine{02299\ TEST(WhenDynamicCastToTest,\ AlreadyNull)\ \{}
+\DoxyCodeLine{02300\ \ \ \textcolor{comment}{//\ Already\ NULL.}}
+\DoxyCodeLine{02301\ \ \ \mbox{\hyperlink{classBase}{Base}}*\ as\_base\_ptr\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{02302\ \ \ EXPECT\_THAT(as\_base\_ptr,\ WhenDynamicCastTo<Derived*>(IsNull()));}
+\DoxyCodeLine{02303\ \}}
+\DoxyCodeLine{02304\ }
+\DoxyCodeLine{02305\ \textcolor{keyword}{struct\ }AmbiguousCastTypes\ \{}
+\DoxyCodeLine{02306\ \ \ \textcolor{keyword}{class\ }VirtualDerived\ :\ \textcolor{keyword}{public}\ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classBase}{Base}}\ \{\};}
+\DoxyCodeLine{02307\ \ \ \textcolor{keyword}{class\ }DerivedSub1\ :\ \textcolor{keyword}{public}\ VirtualDerived\ \{\};}
+\DoxyCodeLine{02308\ \ \ \textcolor{keyword}{class\ }DerivedSub2\ :\ \textcolor{keyword}{public}\ VirtualDerived\ \{\};}
+\DoxyCodeLine{02309\ \ \ \textcolor{keyword}{class\ }ManyDerivedInHierarchy\ :\ \textcolor{keyword}{public}\ DerivedSub1,\ \textcolor{keyword}{public}\ DerivedSub2\ \{\};}
+\DoxyCodeLine{02310\ \};}
+\DoxyCodeLine{02311\ }
+\DoxyCodeLine{02312\ TEST(WhenDynamicCastToTest,\ AmbiguousCast)\ \{}
+\DoxyCodeLine{02313\ \ \ AmbiguousCastTypes::DerivedSub1\ sub1;}
+\DoxyCodeLine{02314\ \ \ AmbiguousCastTypes::ManyDerivedInHierarchy\ many\_derived;}
+\DoxyCodeLine{02315\ \ \ \textcolor{comment}{//\ Multiply\ derived\ from\ Base.\ dynamic\_cast<>\ returns\ NULL.}}
+\DoxyCodeLine{02316\ \ \ \mbox{\hyperlink{classBase}{Base}}*\ as\_base\_ptr\ =}
+\DoxyCodeLine{02317\ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}AmbiguousCastTypes::DerivedSub1*\textcolor{keyword}{>}(\&many\_derived);}
+\DoxyCodeLine{02318\ \ \ EXPECT\_THAT(as\_base\_ptr,}
+\DoxyCodeLine{02319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ WhenDynamicCastTo<AmbiguousCastTypes::VirtualDerived*>(IsNull()));}
+\DoxyCodeLine{02320\ \ \ as\_base\_ptr\ =\ \&sub1;}
+\DoxyCodeLine{02321\ \ \ EXPECT\_THAT(}
+\DoxyCodeLine{02322\ \ \ \ \ \ \ as\_base\_ptr,}
+\DoxyCodeLine{02323\ \ \ \ \ \ \ WhenDynamicCastTo<AmbiguousCastTypes::VirtualDerived*>(Not(IsNull())));}
+\DoxyCodeLine{02324\ \}}
+\DoxyCodeLine{02325\ }
+\DoxyCodeLine{02326\ TEST(WhenDynamicCastToTest,\ Describe)\ \{}
+\DoxyCodeLine{02327\ \ \ Matcher<Base*>\ matcher\ =\ WhenDynamicCastTo<Derived*>(Pointee(\_));}
+\DoxyCodeLine{02328\ \ \ \textcolor{keyword}{const}\ std::string\ prefix\ =}
+\DoxyCodeLine{02329\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}when\ dynamic\_cast\ to\ "{}}\ +\ internal::GetTypeName<Derived*>()\ +\ \textcolor{stringliteral}{"{},\ "{}};}
+\DoxyCodeLine{02330\ \ \ EXPECT\_EQ(prefix\ +\ \textcolor{stringliteral}{"{}points\ to\ a\ value\ that\ is\ anything"{}},\ Describe(matcher));}
+\DoxyCodeLine{02331\ \ \ EXPECT\_EQ(prefix\ +\ \textcolor{stringliteral}{"{}does\ not\ point\ to\ a\ value\ that\ is\ anything"{}},}
+\DoxyCodeLine{02332\ \ \ \ \ \ \ \ \ \ \ \ \ DescribeNegation(matcher));}
+\DoxyCodeLine{02333\ \}}
+\DoxyCodeLine{02334\ }
+\DoxyCodeLine{02335\ TEST(WhenDynamicCastToTest,\ Explain)\ \{}
+\DoxyCodeLine{02336\ \ \ Matcher<Base*>\ matcher\ =\ WhenDynamicCastTo<Derived*>(Pointee(\_));}
+\DoxyCodeLine{02337\ \ \ \mbox{\hyperlink{classBase}{Base}}*\ null\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{02338\ \ \ EXPECT\_THAT(Explain(matcher,\ null),\ HasSubstr(\textcolor{stringliteral}{"{}NULL"{}}));}
+\DoxyCodeLine{02339\ \ \ Derived\ derived;}
+\DoxyCodeLine{02340\ \ \ EXPECT\_TRUE(matcher.Matches(\&derived));}
+\DoxyCodeLine{02341\ \ \ EXPECT\_THAT(Explain(matcher,\ \&derived),\ HasSubstr(\textcolor{stringliteral}{"{}which\ points\ to\ "{}}));}
+\DoxyCodeLine{02342\ }
+\DoxyCodeLine{02343\ \ \ \textcolor{comment}{//\ With\ references,\ the\ matcher\ itself\ can\ fail.\ Test\ for\ that\ one.}}
+\DoxyCodeLine{02344\ \ \ Matcher<const\ Base\&>\ ref\_matcher\ =\ WhenDynamicCastTo<const\ OtherDerived\&>(\_);}
+\DoxyCodeLine{02345\ \ \ EXPECT\_THAT(Explain(ref\_matcher,\ derived),}
+\DoxyCodeLine{02346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ HasSubstr(\textcolor{stringliteral}{"{}which\ cannot\ be\ dynamic\_cast"{}}));}
+\DoxyCodeLine{02347\ \}}
+\DoxyCodeLine{02348\ }
+\DoxyCodeLine{02349\ TEST(WhenDynamicCastToTest,\ GoodReference)\ \{}
+\DoxyCodeLine{02350\ \ \ Derived\ derived;}
+\DoxyCodeLine{02351\ \ \ derived.i\ =\ 4;}
+\DoxyCodeLine{02352\ \ \ \mbox{\hyperlink{classBase}{Base}}\&\ as\_base\_ref\ =\ derived;}
+\DoxyCodeLine{02353\ \ \ EXPECT\_THAT(as\_base\_ref,\ WhenDynamicCastTo<const\ Derived\&>(FieldIIs(4)));}
+\DoxyCodeLine{02354\ \ \ EXPECT\_THAT(as\_base\_ref,\ WhenDynamicCastTo<const\ Derived\&>(Not(FieldIIs(5))));}
+\DoxyCodeLine{02355\ \}}
+\DoxyCodeLine{02356\ }
+\DoxyCodeLine{02357\ TEST(WhenDynamicCastToTest,\ BadReference)\ \{}
+\DoxyCodeLine{02358\ \ \ Derived\ derived;}
+\DoxyCodeLine{02359\ \ \ \mbox{\hyperlink{classBase}{Base}}\&\ as\_base\_ref\ =\ derived;}
+\DoxyCodeLine{02360\ \ \ EXPECT\_THAT(as\_base\_ref,\ Not(WhenDynamicCastTo<const\ OtherDerived\&>(\_)));}
+\DoxyCodeLine{02361\ \}}
+\DoxyCodeLine{02362\ \textcolor{preprocessor}{\#endif\ \ }\textcolor{comment}{//\ GTEST\_HAS\_RTTI}}
+\DoxyCodeLine{02363\ }
+\DoxyCodeLine{02364\ \textcolor{keyword}{class\ }DivisibleByImpl\ \{}
+\DoxyCodeLine{02365\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{02366\ \ \ \textcolor{keyword}{explicit}\ DivisibleByImpl(\textcolor{keywordtype}{int}\ a\_divider)\ :\ divider\_(a\_divider)\ \{\}}
+\DoxyCodeLine{02367\ }
+\DoxyCodeLine{02368\ \ \ \textcolor{comment}{//\ For\ testing\ using\ ExplainMatchResultTo()\ with\ polymorphic\ matchers.}}
+\DoxyCodeLine{02369\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{02370\ \ \ \textcolor{keywordtype}{bool}\ MatchAndExplain(\textcolor{keyword}{const}\ T\&\ n,\ MatchResultListener*\ listener)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{02371\ \ \ \ \ *listener\ <<\ \textcolor{stringliteral}{"{}which\ is\ "{}}\ <<\ (n\ \%\ divider\_)\ <<\ \textcolor{stringliteral}{"{}\ modulo\ "{}}\ <<\ divider\_;}
+\DoxyCodeLine{02372\ \ \ \ \ \textcolor{keywordflow}{return}\ (n\ \%\ divider\_)\ ==\ 0;}
+\DoxyCodeLine{02373\ \ \ \}}
+\DoxyCodeLine{02374\ }
+\DoxyCodeLine{02375\ \ \ \textcolor{keywordtype}{void}\ DescribeTo(ostream*\ os)\textcolor{keyword}{\ const\ }\{\ *os\ <<\ \textcolor{stringliteral}{"{}is\ divisible\ by\ "{}}\ <<\ divider\_;\ \}}
+\DoxyCodeLine{02376\ }
+\DoxyCodeLine{02377\ \ \ \textcolor{keywordtype}{void}\ DescribeNegationTo(ostream*\ os)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{02378\ \ \ \ \ *os\ <<\ \textcolor{stringliteral}{"{}is\ not\ divisible\ by\ "{}}\ <<\ divider\_;}
+\DoxyCodeLine{02379\ \ \ \}}
+\DoxyCodeLine{02380\ }
+\DoxyCodeLine{02381\ \ \ \textcolor{keywordtype}{void}\ set\_divider(\textcolor{keywordtype}{int}\ a\_divider)\ \{\ divider\_\ =\ a\_divider;\ \}}
+\DoxyCodeLine{02382\ \ \ \textcolor{keywordtype}{int}\ divider()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ divider\_;\ \}}
+\DoxyCodeLine{02383\ }
+\DoxyCodeLine{02384\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{02385\ \ \ \textcolor{keywordtype}{int}\ divider\_;}
+\DoxyCodeLine{02386\ \};}
+\DoxyCodeLine{02387\ }
+\DoxyCodeLine{02388\ PolymorphicMatcher<DivisibleByImpl>\ DivisibleBy(\textcolor{keywordtype}{int}\ n)\ \{}
+\DoxyCodeLine{02389\ \ \ \textcolor{keywordflow}{return}\ MakePolymorphicMatcher(DivisibleByImpl(n));}
+\DoxyCodeLine{02390\ \}}
+\DoxyCodeLine{02391\ }
+\DoxyCodeLine{02392\ \textcolor{comment}{//\ Tests\ that\ when\ AllOf()\ fails,\ only\ the\ first\ failing\ matcher\ is}}
+\DoxyCodeLine{02393\ \textcolor{comment}{//\ asked\ to\ explain\ why.}}
+\DoxyCodeLine{02394\ TEST(ExplainMatchResultTest,\ AllOf\_False\_False)\ \{}
+\DoxyCodeLine{02395\ \ \ \textcolor{keyword}{const}\ Matcher<int>\ m\ =\ AllOf(DivisibleBy(4),\ DivisibleBy(3));}
+\DoxyCodeLine{02396\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 1\ modulo\ 4"{}},\ Explain(m,\ 5));}
+\DoxyCodeLine{02397\ \}}
+\DoxyCodeLine{02398\ }
+\DoxyCodeLine{02399\ \textcolor{comment}{//\ Tests\ that\ when\ AllOf()\ fails,\ only\ the\ first\ failing\ matcher\ is}}
+\DoxyCodeLine{02400\ \textcolor{comment}{//\ asked\ to\ explain\ why.}}
+\DoxyCodeLine{02401\ TEST(ExplainMatchResultTest,\ AllOf\_False\_True)\ \{}
+\DoxyCodeLine{02402\ \ \ \textcolor{keyword}{const}\ Matcher<int>\ m\ =\ AllOf(DivisibleBy(4),\ DivisibleBy(3));}
+\DoxyCodeLine{02403\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 2\ modulo\ 4"{}},\ Explain(m,\ 6));}
+\DoxyCodeLine{02404\ \}}
+\DoxyCodeLine{02405\ }
+\DoxyCodeLine{02406\ \textcolor{comment}{//\ Tests\ that\ when\ AllOf()\ fails,\ only\ the\ first\ failing\ matcher\ is}}
+\DoxyCodeLine{02407\ \textcolor{comment}{//\ asked\ to\ explain\ why.}}
+\DoxyCodeLine{02408\ TEST(ExplainMatchResultTest,\ AllOf\_True\_False)\ \{}
+\DoxyCodeLine{02409\ \ \ \textcolor{keyword}{const}\ Matcher<int>\ m\ =\ AllOf(Ge(1),\ DivisibleBy(3));}
+\DoxyCodeLine{02410\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 2\ modulo\ 3"{}},\ Explain(m,\ 5));}
+\DoxyCodeLine{02411\ \}}
+\DoxyCodeLine{02412\ }
+\DoxyCodeLine{02413\ \textcolor{comment}{//\ Tests\ that\ when\ AllOf()\ succeeds,\ all\ matchers\ are\ asked\ to\ explain}}
+\DoxyCodeLine{02414\ \textcolor{comment}{//\ why.}}
+\DoxyCodeLine{02415\ TEST(ExplainMatchResultTest,\ AllOf\_True\_True)\ \{}
+\DoxyCodeLine{02416\ \ \ \textcolor{keyword}{const}\ Matcher<int>\ m\ =\ AllOf(DivisibleBy(2),\ DivisibleBy(3));}
+\DoxyCodeLine{02417\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 0\ modulo\ 2,\ and\ which\ is\ 0\ modulo\ 3"{}},\ Explain(m,\ 6));}
+\DoxyCodeLine{02418\ \}}
+\DoxyCodeLine{02419\ }
+\DoxyCodeLine{02420\ \textcolor{comment}{//\ Tests\ that\ when\ AllOf()\ succeeds,\ but\ matchers\ have\ no\ explanation,}}
+\DoxyCodeLine{02421\ \textcolor{comment}{//\ the\ matcher\ description\ is\ used.}}
+\DoxyCodeLine{02422\ TEST(ExplainMatchResultTest,\ AllOf\_True\_True\_2)\ \{}
+\DoxyCodeLine{02423\ \ \ \textcolor{keyword}{const}\ Matcher<int>\ m\ =\ AllOf(Ge(2),\ Le(3));}
+\DoxyCodeLine{02424\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}is\ >=\ 2,\ and\ is\ <=\ 3"{}},\ Explain(m,\ 2));}
+\DoxyCodeLine{02425\ \}}
+\DoxyCodeLine{02426\ }
+\DoxyCodeLine{02427\ \textcolor{comment}{//\ A\ matcher\ that\ records\ whether\ the\ listener\ was\ interested.}}
+\DoxyCodeLine{02428\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{02429\ \textcolor{keyword}{class\ }CountingMatcher\ :\ \textcolor{keyword}{public}\ MatcherInterface<T>\ \{}
+\DoxyCodeLine{02430\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{02431\ \ \ \textcolor{keyword}{explicit}\ CountingMatcher(\textcolor{keyword}{const}\ Matcher<T>\&\ base\_matcher,}
+\DoxyCodeLine{02432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<bool>*\ listener\_interested)}
+\DoxyCodeLine{02433\ \ \ \ \ \ \ :\ base\_matcher\_(base\_matcher),}
+\DoxyCodeLine{02434\ \ \ \ \ \ \ \ \ listener\_interested\_(listener\_interested)\ \{\}}
+\DoxyCodeLine{02435\ }
+\DoxyCodeLine{02436\ \ \ \textcolor{keywordtype}{bool}\ MatchAndExplain(T\ x,\ MatchResultListener*\ listener)\textcolor{keyword}{\ const\ override\ }\{}
+\DoxyCodeLine{02437\ \ \ \ \ listener\_interested\_-\/>push\_back(listener-\/>IsInterested());}
+\DoxyCodeLine{02438\ \ \ \ \ \textcolor{keywordflow}{return}\ base\_matcher\_.MatchAndExplain(x,\ listener);}
+\DoxyCodeLine{02439\ \ \ \}}
+\DoxyCodeLine{02440\ }
+\DoxyCodeLine{02441\ \ \ \textcolor{keywordtype}{void}\ DescribeTo(ostream*\ os)\textcolor{keyword}{\ const\ override\ }\{\ base\_matcher\_.DescribeTo(os);\ \}}
+\DoxyCodeLine{02442\ }
+\DoxyCodeLine{02443\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{02444\ \ \ Matcher<T>\ base\_matcher\_;}
+\DoxyCodeLine{02445\ \ \ std::vector<bool>*\ listener\_interested\_;}
+\DoxyCodeLine{02446\ \};}
+\DoxyCodeLine{02447\ }
+\DoxyCodeLine{02448\ TEST(AllOfTest,\ DoesNotFormatChildMatchersWhenNotInterested)\ \{}
+\DoxyCodeLine{02449\ \ \ std::vector<bool>\ listener\_interested;}
+\DoxyCodeLine{02450\ \ \ Matcher<int>\ matcher\ =}
+\DoxyCodeLine{02451\ \ \ \ \ \ \ MakeMatcher(\textcolor{keyword}{new}\ CountingMatcher<int>(Eq(1),\ \&listener\_interested));}
+\DoxyCodeLine{02452\ \ \ EXPECT\_TRUE(matcher.Matches(1));}
+\DoxyCodeLine{02453\ \ \ EXPECT\_THAT(listener\_interested,\ ElementsAre(\textcolor{keyword}{false}));}
+\DoxyCodeLine{02454\ \ \ listener\_interested.clear();}
+\DoxyCodeLine{02455\ \ \ Matcher<int>\ all\_of\_matcher\ =\ AllOf(matcher,\ matcher);}
+\DoxyCodeLine{02456\ \ \ EXPECT\_TRUE(all\_of\_matcher.Matches(1));}
+\DoxyCodeLine{02457\ \ \ EXPECT\_THAT(listener\_interested,\ ElementsAre(\textcolor{keyword}{false},\ \textcolor{keyword}{false}));}
+\DoxyCodeLine{02458\ \ \ listener\_interested.clear();}
+\DoxyCodeLine{02459\ \ \ EXPECT\_FALSE(all\_of\_matcher.Matches(0));}
+\DoxyCodeLine{02460\ \ \ EXPECT\_THAT(listener\_interested,\ ElementsAre(\textcolor{keyword}{false}));}
+\DoxyCodeLine{02461\ \}}
+\DoxyCodeLine{02462\ }
+\DoxyCodeLine{02463\ TEST(AnyOfTest,\ DoesNotFormatChildMatchersWhenNotInterested)\ \{}
+\DoxyCodeLine{02464\ \ \ std::vector<bool>\ listener\_interested;}
+\DoxyCodeLine{02465\ \ \ Matcher<int>\ matcher\ =}
+\DoxyCodeLine{02466\ \ \ \ \ \ \ MakeMatcher(\textcolor{keyword}{new}\ CountingMatcher<int>(Eq(1),\ \&listener\_interested));}
+\DoxyCodeLine{02467\ \ \ EXPECT\_TRUE(matcher.Matches(1));}
+\DoxyCodeLine{02468\ \ \ EXPECT\_THAT(listener\_interested,\ ElementsAre(\textcolor{keyword}{false}));}
+\DoxyCodeLine{02469\ \ \ listener\_interested.clear();}
+\DoxyCodeLine{02470\ \ \ Matcher<int>\ any\_of\_matcher\ =\ AnyOf(matcher,\ matcher);}
+\DoxyCodeLine{02471\ \ \ EXPECT\_TRUE(any\_of\_matcher.Matches(1));}
+\DoxyCodeLine{02472\ \ \ EXPECT\_THAT(listener\_interested,\ ElementsAre(\textcolor{keyword}{false}));}
+\DoxyCodeLine{02473\ \ \ listener\_interested.clear();}
+\DoxyCodeLine{02474\ \ \ EXPECT\_FALSE(any\_of\_matcher.Matches(0));}
+\DoxyCodeLine{02475\ \ \ EXPECT\_THAT(listener\_interested,\ ElementsAre(\textcolor{keyword}{false},\ \textcolor{keyword}{false}));}
+\DoxyCodeLine{02476\ \}}
+\DoxyCodeLine{02477\ }
+\DoxyCodeLine{02478\ TEST(OptionalTest,\ DoesNotFormatChildMatcherWhenNotInterested)\ \{}
+\DoxyCodeLine{02479\ \ \ std::vector<bool>\ listener\_interested;}
+\DoxyCodeLine{02480\ \ \ Matcher<int>\ matcher\ =}
+\DoxyCodeLine{02481\ \ \ \ \ \ \ MakeMatcher(\textcolor{keyword}{new}\ CountingMatcher<int>(Eq(1),\ \&listener\_interested));}
+\DoxyCodeLine{02482\ \ \ EXPECT\_TRUE(matcher.Matches(1));}
+\DoxyCodeLine{02483\ \ \ EXPECT\_THAT(listener\_interested,\ ElementsAre(\textcolor{keyword}{false}));}
+\DoxyCodeLine{02484\ \ \ listener\_interested.clear();}
+\DoxyCodeLine{02485\ \ \ Matcher<std::optional<int>>\ optional\_matcher\ =\ Optional(matcher);}
+\DoxyCodeLine{02486\ \ \ EXPECT\_FALSE(optional\_matcher.Matches(std::nullopt));}
+\DoxyCodeLine{02487\ \ \ EXPECT\_THAT(listener\_interested,\ ElementsAre());}
+\DoxyCodeLine{02488\ \ \ EXPECT\_TRUE(optional\_matcher.Matches(1));}
+\DoxyCodeLine{02489\ \ \ EXPECT\_THAT(listener\_interested,\ ElementsAre(\textcolor{keyword}{false}));}
+\DoxyCodeLine{02490\ \ \ listener\_interested.clear();}
+\DoxyCodeLine{02491\ \ \ EXPECT\_FALSE(matcher.Matches(0));}
+\DoxyCodeLine{02492\ \ \ EXPECT\_THAT(listener\_interested,\ ElementsAre(\textcolor{keyword}{false}));}
+\DoxyCodeLine{02493\ \}}
+\DoxyCodeLine{02494\ }
+\DoxyCodeLine{02495\ INSTANTIATE\_GTEST\_MATCHER\_TEST\_P(ExplainmatcherResultTest);}
+\DoxyCodeLine{02496\ }
+\DoxyCodeLine{02497\ TEST\_P(ExplainmatcherResultTestP,\ MonomorphicMatcher)\ \{}
+\DoxyCodeLine{02498\ \ \ \textcolor{keyword}{const}\ Matcher<int>\ m\ =\ GreaterThan(5);}
+\DoxyCodeLine{02499\ \ \ EXPECT\_EQ(\textcolor{stringliteral}{"{}which\ is\ 1\ more\ than\ 5"{}},\ Explain(m,\ 6));}
+\DoxyCodeLine{02500\ \}}
+\DoxyCodeLine{02501\ }
+\DoxyCodeLine{02502\ \textcolor{comment}{//\ Tests\ PolymorphicMatcher::mutable\_impl().}}
+\DoxyCodeLine{02503\ TEST(PolymorphicMatcherTest,\ CanAccessMutableImpl)\ \{}
+\DoxyCodeLine{02504\ \ \ PolymorphicMatcher<DivisibleByImpl>\ m(DivisibleByImpl(42));}
+\DoxyCodeLine{02505\ \ \ DivisibleByImpl\&\ impl\ =\ m.mutable\_impl();}
+\DoxyCodeLine{02506\ \ \ EXPECT\_EQ(42,\ impl.divider());}
+\DoxyCodeLine{02507\ }
+\DoxyCodeLine{02508\ \ \ impl.set\_divider(0);}
+\DoxyCodeLine{02509\ \ \ EXPECT\_EQ(0,\ m.mutable\_impl().divider());}
+\DoxyCodeLine{02510\ \}}
+\DoxyCodeLine{02511\ }
+\DoxyCodeLine{02512\ \textcolor{comment}{//\ Tests\ PolymorphicMatcher::impl().}}
+\DoxyCodeLine{02513\ TEST(PolymorphicMatcherTest,\ CanAccessImpl)\ \{}
+\DoxyCodeLine{02514\ \ \ \textcolor{keyword}{const}\ PolymorphicMatcher<DivisibleByImpl>\ m(DivisibleByImpl(42));}
+\DoxyCodeLine{02515\ \ \ \textcolor{keyword}{const}\ DivisibleByImpl\&\ impl\ =\ m.impl();}
+\DoxyCodeLine{02516\ \ \ EXPECT\_EQ(42,\ impl.divider());}
+\DoxyCodeLine{02517\ \}}
+\DoxyCodeLine{02518\ }
+\DoxyCodeLine{02519\ \}\ \ \textcolor{comment}{//\ namespace}}
+\DoxyCodeLine{02520\ \}\ \ \textcolor{comment}{//\ namespace\ gmock\_matchers\_test}}
+\DoxyCodeLine{02521\ \}\ \ \textcolor{comment}{//\ namespace\ testing}}
+\DoxyCodeLine{02522\ }
+\DoxyCodeLine{02523\ GTEST\_DISABLE\_MSC\_WARNINGS\_POP\_()\ \ \textcolor{comment}{//\ 4244\ 4100}}
+
+\end{DoxyCode}
