@@ -1,7 +1,0 @@
-<map id="DynamicUnitTestFixture" name="DynamicUnitTestFixture">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,184,104"/>
-<area shape="rect" id="Node000003" href="$classDynamicTest.html" title=" " alt="" coords="12,152,177,177"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="97,118,97,152,92,152,92,118"/>
-<area shape="rect" id="Node000002" href="$classtesting_1_1Test.html" title=" " alt="" coords="44,5,145,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,44,97,79,92,79,92,44"/>
-</map>
