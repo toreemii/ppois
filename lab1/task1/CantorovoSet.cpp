@@ -8,34 +8,6 @@ CantorovoSet::CantorovoSet(const char* cstr)
     elements = parseString(tempString);
 }
 
-
-// void CantorovoSet::nestingCheck(std::string &tempElement, int &depth, std::string &str, int &i)
-// {
-//     if (str[i] == '{')
-//     {
-//         depth++;
-//         ++i;
-//         while (!(str[i] == '}' && depth <= 2))
-//         {
-//             if (str[i] == '{')
-//             {
-//                 depth++;
-//             }
-//             else if (str[i] == '}')
-//             {
-//                 depth--;
-//             }
-//             tempElement += str[i];
-//             i++;
-//         }
-//         depth--;
-//     }
-//     else
-//     {
-//         tempElement += str[i];
-//     }
-// }
-
 void CantorovoSet::nestingCheck(std::string &tempElement, int &depth, std::string &str, int &i)
 {
     if (i >= str.length()) {
