@@ -1,5 +1,0 @@
-/home/vika/Рабочий стол/ppois/lab1/task2/CMakeFiles/tests.dir
-/home/vika/Рабочий стол/ppois/lab1/task2/CMakeFiles/coverage.dir
-/home/vika/Рабочий стол/ppois/lab1/task2/CMakeFiles/test.dir
-/home/vika/Рабочий стол/ppois/lab1/task2/CMakeFiles/edit_cache.dir
-/home/vika/Рабочий стол/ppois/lab1/task2/CMakeFiles/rebuild_cache.dir
