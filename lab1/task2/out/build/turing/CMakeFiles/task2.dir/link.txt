@@ -1,1 +1,0 @@
-/usr/bin/g++ -g CMakeFiles/task2.dir/main.cpp.o CMakeFiles/task2.dir/TuringMachine.cpp.o CMakeFiles/task2.dir/RulesTable.cpp.o CMakeFiles/task2.dir/Menu.cpp.o -o task2 

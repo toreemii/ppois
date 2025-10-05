@@ -1,1 +1,0 @@
-/usr/bin/g++ -g -fprofile-arcs -ftest-coverage -g -O0  -fprofile-arcs -lgcov CMakeFiles/tests.dir/TuringMachine.cpp.o CMakeFiles/tests.dir/RulesTable.cpp.o CMakeFiles/tests.dir/tests.cpp.o -o tests  /usr/local/lib/libgtest.a /usr/local/lib/libgtest_main.a -lpthread -lgcov /usr/local/lib/libgtest.a 

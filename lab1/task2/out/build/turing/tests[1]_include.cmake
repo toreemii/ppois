@@ -1,5 +1,0 @@
-if(EXISTS "/home/vika/Рабочий стол/ppois/lab1/task2/out/build/turing/tests[1]_tests.cmake")
-  include("/home/vika/Рабочий стол/ppois/lab1/task2/out/build/turing/tests[1]_tests.cmake")
-else()
-  add_test(tests_NOT_BUILT tests_NOT_BUILT)
-endif()

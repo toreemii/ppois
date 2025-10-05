@@ -1,5 +1,0 @@
-add_test([=[TuringMachineTest.ConstructorAndRead]=]  [==[/home/vika/Рабочий стол/ppois/lab1/task2/out/build/turing/tests]==] [==[--gtest_filter=TuringMachineTest.ConstructorAndRead]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[TuringMachineTest.ConstructorAndRead]=]  PROPERTIES WORKING_DIRECTORY [==[/home/vika/Рабочий стол/ppois/lab1/task2/out/build/turing]==] SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-add_test([=[TuringMachineTest.AddElement]=]  [==[/home/vika/Рабочий стол/ppois/lab1/task2/out/build/turing/tests]==] [==[--gtest_filter=TuringMachineTest.AddElement]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[TuringMachineTest.AddElement]=]  PROPERTIES WORKING_DIRECTORY [==[/home/vika/Рабочий стол/ppois/lab1/task2/out/build/turing]==] SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set(  tests_TESTS TuringMachineTest.ConstructorAndRead TuringMachineTest.AddElement)
