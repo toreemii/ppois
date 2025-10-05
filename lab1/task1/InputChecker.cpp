@@ -29,12 +29,9 @@ int InputChecker::inputInt(const std::string &message, int min, int max)
     while (true)
     {
         std::cout << message;
-
         if (!isNumericInput(number))
-
         if (!isInRange(number, min, max))
             continue;
-
         return number;
     }
 }
