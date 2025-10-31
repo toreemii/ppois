@@ -1,5 +1,0 @@
-if(EXISTS "/home/vika/Рабочий стол/lab4_4/Graph/build/GraphTests[1]_tests.cmake")
-  include("/home/vika/Рабочий стол/lab4_4/Graph/build/GraphTests[1]_tests.cmake")
-else()
-  add_test(GraphTests_NOT_BUILT GraphTests_NOT_BUILT)
-endif()

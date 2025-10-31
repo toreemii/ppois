@@ -1,6 +1,0 @@
-/home/vika/Рабочий стол/lab4_4/PatienceSort/build/CMakeFiles/test_runner.dir
-/home/vika/Рабочий стол/lab4_4/PatienceSort/build/CMakeFiles/coverage.dir
-/home/vika/Рабочий стол/lab4_4/PatienceSort/build/CMakeFiles/coverage-html.dir
-/home/vika/Рабочий стол/lab4_4/PatienceSort/build/CMakeFiles/test.dir
-/home/vika/Рабочий стол/lab4_4/PatienceSort/build/CMakeFiles/edit_cache.dir
-/home/vika/Рабочий стол/lab4_4/PatienceSort/build/CMakeFiles/rebuild_cache.dir

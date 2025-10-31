@@ -1,1 +1,0 @@
-/usr/bin/c++  -O0 -g --coverage -fprofile-arcs -ftest-coverage  --coverage CMakeFiles/GraphTests.dir/tests.cpp.o -o GraphTests  lib/libgtest_main.a lib/libgtest.a
