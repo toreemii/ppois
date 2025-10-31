@@ -5,17 +5,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# === Покрытие ===
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g --coverage -fprofile-arcs -ftest-coverage")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
 
-# === Google Test ===
 find_package(GTest REQUIRED)
 
-# === Заголовки в корне ===
 include_directories(${CMAKE_SOURCE_DIR})
 
-# === Тесты ===
 enable_testing()
 
 add_executable(test_runner
@@ -30,7 +26,6 @@ target_link_libraries(test_runner
 
 add_test(NAME BubbleSortTests COMMAND test_runner)
 
-# === GCOVR ===
 find_program(GCOVR gcovr)
 
 if(GCOVR)
