@@ -1,0 +1,2 @@
+PatienceSortTests 6 0.000530921
+---

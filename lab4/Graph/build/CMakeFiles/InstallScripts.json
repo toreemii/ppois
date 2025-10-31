@@ -1,0 +1,10 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/vika/\u0420\u0430\u0431\u043e\u0447\u0438\u0439 \u0441\u0442\u043e\u043b/lab4_4/Graph/build/cmake_install.cmake",
+		"/home/vika/\u0420\u0430\u0431\u043e\u0447\u0438\u0439 \u0441\u0442\u043e\u043b/lab4_4/Graph/build/googletest/cmake_install.cmake",
+		"/home/vika/\u0420\u0430\u0431\u043e\u0447\u0438\u0439 \u0441\u0442\u043e\u043b/lab4_4/Graph/build/googletest/googlemock/cmake_install.cmake",
+		"/home/vika/\u0420\u0430\u0431\u043e\u0447\u0438\u0439 \u0441\u0442\u043e\u043b/lab4_4/Graph/build/googletest/googletest/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

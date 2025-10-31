@@ -1,0 +1,1 @@
+/usr/bin/c++  -O0 -g --coverage -fprofile-arcs -ftest-coverage  --coverage CMakeFiles/GraphApp.dir/main.cpp.o -o GraphApp
