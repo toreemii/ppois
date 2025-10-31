@@ -9,12 +9,12 @@ void patienceSort(std::vector<T> &vec)
 
     std::vector<std::vector<T>> piles;
 
-    for (int i = 0; i < vec.size(); ++i)
+    for (int i = 0; i < vec.size(); i++)
     {
         T value = vec[i];
         int pile_index = -1;
 
-        for (int j = 0; j < piles.size(); ++j)
+        for (int j = 0; j < piles.size(); j++)
         {
             if (piles[j].back() > value)
             {
@@ -41,7 +41,7 @@ void patienceSort(std::vector<T> &vec)
         int min_index = 0;
         T min_value = piles[0].back();
 
-        for (int j = 1; j < piles.size(); ++j)
+        for (int j = 1; j < piles.size(); j++)
         {
             if (piles[j].back() < min_value)
             {
@@ -68,7 +68,7 @@ void patienceSort(T (&arr)[N])
 {
     std::vector<T> vec(arr, arr + N);
     patienceSort(vec);
-    for (int i = 0; i < N; ++i)
+    for (int i = 0; i < N; i++)
     {
         arr[i] = vec[i];
     }
