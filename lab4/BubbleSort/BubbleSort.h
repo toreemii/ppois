@@ -8,9 +8,9 @@ void bubbleSort(T first, T last)
 {
     if (first == last)
         return;
-    for (T i = first; i != last; ++i)
+    for (T i = first; i != last; i++)
     {
-        for (T j = first; j != std::prev(last); ++j)
+        for (T j = first; j != std::prev(last); j++)
         {
             if (*std::next(j) < *j)
             {
