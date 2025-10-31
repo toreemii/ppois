@@ -8,6 +8,5 @@ void Room::addShelfToRoom(Shelf& shelfToAdd) {
 
 void Room::cleanRoom() {
     if (!shelvesInRoom.empty()) {
-        // Уборка
     }
 }
