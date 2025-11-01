@@ -2,13 +2,7 @@
 
 Client::Client(std::string clientId, std::string name, std::string address,
                PaymentManager *pm, ClientActivityLogger *al, LoyaltyManager *lm)
-    : clientId(clientId), name(name), address(address), paymentManager(pm), activityLogger(al), loyaltyManager(lm)
-{
-    discountRate = 0.0;
-    loyaltyPoints = 0;
-    time_t now = time(0);
-    lastOrderDate = *localtime(&now);
-}
+    : clientId(clientId), name(name), address(address), paymentManager(pm), activityLogger(al), loyaltyManager(lm){}
 
 std::string Client::getClientId()
 {
