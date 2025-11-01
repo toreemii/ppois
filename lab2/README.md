@@ -26,7 +26,7 @@
 ## Классы
 Формат: Класс Поля Методы → Ассоциации (классы как поля/параметры)
 
-Client 16 20 → IClient, Order, PaymentManager, ClientActivityLogger, LoyaltyManager
+Client 15 20 → IClient, Order, PaymentManager, ClientActivityLogger, LoyaltyManager
 - Поля: clientId, name, address, phoneNumber, email, orders, discountRate, loyaltyPoints, lastOrderDate, preferredPaymentMethod, clientType, emergencyContact, paymentManager, activityLogger, loyaltyManager
 - Методы: getClientId, getName, getAddress, getPhoneNumber, getEmail, setEmail, setPhoneNumber, updateContactInfo, getOrders, placeOrder, getDiscountRate, setDiscountRate, getLoyaltyPoints, getLastOrderDate, makePayment, makeOrder, logClientActivity, applyLoyaltyDiscount, checkEligibilityForPriority
 
