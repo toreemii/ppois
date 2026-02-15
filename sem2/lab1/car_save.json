@@ -1,0 +1,27 @@
+{
+  "car": {
+    "brand": "Mercedes",
+    "brakes": "drum_brakes",
+    "lights": "head_lights",
+    "wheels": "all_season_tires",
+    "transmission": "continuously_variable",
+    "gastank": {
+      "amount": 17.6,
+      "max_value": 60.0
+    },
+    "engine": {
+      "fuel": "92",
+      "volume": 3.0,
+      "power": 600,
+      "oil": 8.0,
+      "launched": false
+    }
+  },
+  "driver": {
+    "name": "Иннокентий"
+  },
+  "gasstation": {
+    "fuel": "92",
+    "volume": 28.0
+  }
+}
