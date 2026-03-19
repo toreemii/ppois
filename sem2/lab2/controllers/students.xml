@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<students_database>
+    <student last_name="Андриевич" first_name="Виктория" group="421701" birth_date="2007-02-14">
+        <grades>
+            <grade subject="ППОИС" value="10"/>
+            <grade subject="АОИС" value="9"/>
+            <grade subject="ЛОИС" value="9"/>
+        </grades>
+    </student>
+     <student last_name="Балабенко" first_name="Анастасия" group="421701" birth_date="2006-12-16">
+        <grades>
+            <grade subject="ППОИС" value="10"/>
+            <grade subject="АОИС" value="9"/>
+            <grade subject="ЛОИС" value="9"/>
+        </grades>
+    </student>
+     <student last_name="Григорчик" first_name="Алина" group="421701" birth_date="2007-06-06">
+        <grades>
+            <grade subject="ППОИС" value="10"/>
+            <grade subject="АОИС" value="9"/>
+            <grade subject="ЛОИС" value="9"/>
+        </grades>
+    </student>
+     <student last_name="Петров" first_name="Петр" group="421703" birth_date="2005-07-15">
+        <grades>
+            <grade subject="ППОИС" value="6"/>
+            <grade subject="АОИС" value="8"/>
+            <grade subject="ЛОИС" value="4"/>
+        </grades>
+     </student>
+     <student last_name="Василевич" first_name="Герман" group="421701" birth_date="2006-11-08">
+        <grades>
+            <grade subject="ППОИС" value="4"/>
+            <grade subject="АОИС" value="4"/>
+            <grade subject="ЛОИС" value="10"/>
+        </grades>
+      </student>
+      <student last_name="Гришко" first_name="Денис" group="453501" birth_date="2006-12-08">
+        <grades>
+            <grade subject="АВС" value="4"/>
+            <grade subject="ИГИ" value="8"/>
+            <grade subject="МЧА" value="1"/>
+        </grades>
+      </student>
+      <student last_name="Буткевич" first_name="Екатерина" group="453501" birth_date="2006-11-29">
+        <grades>
+            <grade subject="АВС" value="10"/>
+            <grade subject="МЧА" value="9"/>
+            <grade subject="ИГИ" value="9"/>
+        </grades>
+      </student>
+      <student last_name="Филимонов" first_name="Филипп" group="453501" birth_date="2006-08-11">
+        <grades>
+            <grade subject="ИСП" value="7"/>
+            <grade subject="АИСТ" value="9"/>
+            <grade subject="АВС" value="2"/>
+        </grades>
+      </student>
+      <student last_name="Аникеенко" first_name="Андрей" group="421701" birth_date="2006-09-29">
+        <grades>
+            <grade subject="ППОИС" value="10"/>
+            <grade subject="АОИС" value="9"/>
+            <grade subject="ЛОИС" value="9"/>
+        </grades>
+      </student>
+      <student last_name="Забережный" first_name="Тимофей" group="453502" birth_date="2006-02-20">
+        <grades>
+            <grade subject="АВС" value="10"/>
+            <grade subject="ИГИ" value="9"/>
+            <grade subject="МЧА" value="10"/>
+        </grades>
+      </student>
+</students_database>
+
