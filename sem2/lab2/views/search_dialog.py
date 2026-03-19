@@ -56,7 +56,6 @@ class SearchDialog(QDialog):
         self.result_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         layout.addWidget(self.result_table)
 
-        # --- Пагинация внутри поиска ---
         nav_layout = QHBoxLayout()
         self.prev_btn = QPushButton("Пред.")
         self.next_btn = QPushButton("След.")
