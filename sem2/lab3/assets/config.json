@@ -1,0 +1,20 @@
+{
+    "screen": {
+        "width": 800,
+        "height": 600,
+        "fps": 60
+    },
+    "player": {
+        "speed": 2,
+        "lives": 3,
+        "size": 30
+    },
+    "ghosts": {
+        "speed": 2,
+        "colors": ["red", "pink", "cyan", "orange"]
+    },
+    "assets": {
+        "music": "assets/sounds/freesound_community-playing-pac-man-6783.mp3",
+        "death_sound": "assets/sounds/death.ogg"
+    }
+}
