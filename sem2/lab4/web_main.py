@@ -22,7 +22,6 @@ service = CarService()
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     status = service.get_status()
-    # Исправленная строка:
     return templates.TemplateResponse(
         request=request, 
         name="index.html", 
